@@ -59,7 +59,6 @@ plugins=(
     git 
     colorize
     brew 
-    osx 
     zsh-syntax-highlighting 
     docker
     docker-compose 
@@ -71,6 +70,7 @@ plugins=(
     macos
     colored-man-pages
     command-not-found
+    gnu-utils
 )
 
 #plugins=(git git-extras git-flow virtualenvwrapper pip python fabric django virtualenv)
@@ -82,7 +82,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 DEFAULT_USER=$(whoami)
 
 # Default editor
@@ -189,6 +189,7 @@ source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+
 # Use gnu utils
 PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
@@ -196,10 +197,9 @@ PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 PATH=$(brew --prefix)/opt/findutils/libexec/gnubin:$PATH
 
-eval $(thefuck --alias)
-
 # Open ID api key
-export OPENAI_API_KEY=$(cat ~/openapikey)
+#export OPENAI_API_KEY=$(cat ~/openapikey)
 
 # EKS autocomplete
 fpath=($fpath ~/.zsh/completion)
+source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
