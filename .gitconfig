@@ -1,6 +1,8 @@
 [user]
-    name = André Gaudêncio
-	email = andre@gaudencio.pt
+	name = Andre Gaudencio
+    #email = andre@gaudencio.pt
+    #TODO: Restore the first one
+	email = andre.gaudencio@one.network
 
 [alias]
     # Checkout branch
@@ -17,7 +19,6 @@
 
     # Show git history pretty format
 	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-
 
 	type = cat-file -t
 	dump = cat-file -p
@@ -167,7 +168,7 @@
     # Use the Git 1.x.x default to avoid errors on machines with old Git
     # installations. To use `simple` instead, add this to your `~/.extra` file:
     # `git config --global push.default simple`. See http://git.io/mMah-w.
-    default = matching
+	default = simple
     # Make `git push` push relevant annotated tags when pushing branches out.
     followTags = true
 
@@ -194,6 +195,10 @@
     insteadOf = "gist:"
 [commit]
 	template = /Users/USERNAME/.stCommitMsg
+
+# Always use ssh
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
 
 # Old mac configs
 

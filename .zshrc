@@ -70,7 +70,7 @@ plugins=(
     macos
     colored-man-pages
     command-not-found
-    gnu-utils
+    #gnu-utils
 )
 
 #plugins=(git git-extras git-flow virtualenvwrapper pip python fabric django virtualenv)
@@ -162,6 +162,9 @@ export PATH="/usr/local/sbin:$PATH"
 
 # GO
 export GOPATH="$HOME/go"
+#export GOROOT=/usr/local/opt/go/libexec
+# for homebrew
+export GOROOT="$(brew --prefix golang)/libexec"
 export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"
@@ -179,8 +182,10 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 
 # nvm configs
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+#  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+#  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+source $(brew --prefix nvm)/nvm.sh
+source $(brew --prefix nvm)/etc/bash_completion.d/nvm
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -191,15 +196,24 @@ source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 
 
 # Use gnu utils
-PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+#PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:$PATH"
+#PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+PATH="$(brew --prefix)/opt/gnu-tar/libexec/gnubin:$PATH"
+#PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
+#MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+MANPATH="$(brew --prefix)/opt/coreutils/libexec/gnuman:$MANPATH"
 PATH=$(brew --prefix)/opt/findutils/libexec/gnubin:$PATH
 
+
 # Open ID api key
-#export OPENAI_API_KEY=$(cat ~/openapikey)
+export OPENAI_API_KEY=$(cat ~/openapikey)
 
 # EKS autocomplete
 fpath=($fpath ~/.zsh/completion)
 source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
