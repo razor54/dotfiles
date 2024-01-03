@@ -84,6 +84,10 @@
     # a.k.a. ‘delete merged’
     dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
 
+    lg1b = "!cd -- \"${GIT_PREFIX:-.}\" && CURRENT_BRANCH=$(git branch --show-current) && git log $CURRENT_BRANCH --graph --abbrev-commit --pretty='format:%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %s %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --decorate --not $(git for-each-ref --format='%(refname)' refs/heads/ | grep -v refs/heads/$CURRENT_BRANCH) #"
+
+    lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+
     # List contributors with number of commits
     contributors = shortlog --summary --numbered
 
@@ -98,6 +102,8 @@
             git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
         fi \
     }; f"
+
+    nah = "!f(){ git reset --hard; git clean -df; if [ -d ".git/rebase-apply" ] || [ -d ".git/rebase-merge" ]; then git rebase --abort; fi; }; f"
 
 [apply]
 
@@ -219,3 +225,5 @@
 
 [interactive]
     diffFilter = delta --color-only
+[init]
+	defaultBranch = main
