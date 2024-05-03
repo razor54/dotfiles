@@ -9,6 +9,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+#source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -16,7 +17,7 @@ fi
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
+#ZSH_THEME="powerlevel10k/powerlevel10k"
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -189,7 +190,7 @@ source $(brew --prefix nvm)/etc/bash_completion.d/nvm
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
+#source $ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -206,14 +207,16 @@ PATH="$(brew --prefix)/opt/coreutils/libexec/gnubin:$PATH"
 MANPATH="$(brew --prefix)/opt/coreutils/libexec/gnuman:$MANPATH"
 PATH=$(brew --prefix)/opt/findutils/libexec/gnubin:$PATH
 
-
 # Open ID api key
-export OPENAI_API_KEY=$(cat ~/openapikey)
+#export OPENAI_API_KEY=$(cat ~/openapikey)
+
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+export PATH="/usr/local/opt/python/libexec/bin:$PATH"
 
 # EKS autocomplete
 fpath=($fpath ~/.zsh/completion)
-source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
