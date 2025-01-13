@@ -111,3 +111,5 @@ alias gitlog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Cres
 alias cat='bat'
 
 alias ping='prettyping --nolegend'
+
+alias vi='nvim'
