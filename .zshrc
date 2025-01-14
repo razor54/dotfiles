@@ -149,6 +149,7 @@ export PIP_RESPECT_VIRTUALENV=true
 
 ###########################
 
+export PATH="$HOME/.local/bin:$PATH"
 
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export JAVA_HOME=`/usr/libexec/java_home`
@@ -220,4 +221,13 @@ fpath=($fpath ~/.zsh/completion)
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+#export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+# Load pyenv automatically by appending
+# the following to
+# ~/.zprofile (for login shells)
+# and ~/.zshrc (for interactive shells) :
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
