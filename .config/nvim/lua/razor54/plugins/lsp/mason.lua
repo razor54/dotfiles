@@ -38,6 +38,10 @@ return {
 				"emmet_ls",
 				"prismals",
 				"pyright",
+				"terraformls",
+				"jdtls",
+				"gopls",
+				"templ",
 			},
 		})
 
@@ -49,6 +53,8 @@ return {
 				"black", -- python formatter
 				"pylint", -- python linter
 				"eslint_d", -- js linter
+				"tflint", -- terraform linter
+				"golangci_lint_ls", -- golang linter
 			},
 		})
 	end,
