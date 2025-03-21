@@ -8,7 +8,7 @@ local bufnr = vim.api.nvim_get_current_buf()
 local java_debug_path = vim.fn.stdpath "data" .. "/mason/packages/java-debug-adapter/"
 local java_test_path = vim.fn.stdpath "data" .. "/mason/packages/java-test/"
 local jdtls_path = vim.fn.stdpath "data" .. "/mason/packages/jdtls/"
-local lombok_path = vim.fn.stdpath "data" .. "/mason/packages/lombok-nightly/"
+local lombok_path = vim.fn.expand("$HOME/.local/share/java/lombok/")
 
 local bundles = {
   vim.fn.glob(java_debug_path .. "extension/server/com.microsoft.java.debug.plugin-*.jar", true),
