@@ -113,3 +113,9 @@ alias cat='bat'
 alias ping='prettyping --nolegend'
 
 alias vi='nvim'
+
+# eza
+alias ls='eza -lh --group-directories-first --icons --hyperlink'
+alias lsa='ls -a'
+alias lt='eza --tree --level=2 --long --icons --git'
+alias lta='lt -a'
