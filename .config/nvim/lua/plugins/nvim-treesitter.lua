@@ -77,6 +77,12 @@ return {
       "typescript",
       "vim",
       "vimdoc",
+      "terraform",
+      "go",
+      "gomod",
+      "gosum",
+      "gotmpl",
+      "json",
     },
     indent = {
       enable = false,

@@ -234,3 +234,5 @@ eval "$(pyenv init -)"
 
 # Add JBang to environment
 alias j!=jbang
+
+eval "$(starship init zsh)"

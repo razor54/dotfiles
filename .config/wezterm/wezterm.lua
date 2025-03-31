@@ -5,32 +5,32 @@ local config = {
   --font = wezterm.font('JetBrainsMono Nerd Font'),
   --font = wezterm.font('MesloLGS Nerd Font Mono'),
   font = wezterm.font_with_fallback({
-    --"JetBrainsMono Nerd Font", -- <built-in>, BuiltIn
-    "MesloLGS Nerd Font Mono",
-  }, { weight = "Bold", italic = false }),
+    "JetBrainsMono Nerd Font", -- <built-in>, BuiltIn
+    --"MesloLGS Nerd Font Mono",
+  }, { weight = "Medium", italic = false }),
 
-  font_rules= {
-    {
-      italic = true,
-      font = wezterm.font("MesloLGS Nerd Font Mono", {italic=true}),
-    },
+  --font_rules= {
+  --  {
+  --    italic = true,
+  --    font = wezterm.font("MesloLGS Nerd Font Mono", {italic=true}),
+  --  },
 
-    {
-      italic = true,
-      intensity = "Bold",
-      font = wezterm.font("MesloLGS Nerd Font Mono", {bold=true,italic=true}),
-    },
+  --  {
+  --    italic = true,
+  --    intensity = "Bold",
+  --    font = wezterm.font("MesloLGS Nerd Font Mono", {bold=true,italic=true}),
+  --  },
 
-    {
-      intensity = "Bold",
-      font = wezterm.font("MesloLGS Nerd Font Mono", {bold=true}),
-    },
-  },
+  --  {
+  --    intensity = "Bold",
+  --    font = wezterm.font("MesloLGS Nerd Font Mono", {bold=true}),
+  --  },
+  --},
 
   foreground_text_hsb = {
     hue = 1.0,
     saturation = 1.0,
-    brightness = 0.8,  -- default is 1.0
+    brightness = 1.0,  -- default is 1.0
   },
 
   audible_bell = 'Disabled',
@@ -41,11 +41,11 @@ local config = {
   --front_end = 'OpenGL',
 
   --freetype_load_target = 'Light',
-  freetype_load_target = 'HorizontalLcd',
+  --freetype_load_target = 'HorizontalLcd',
 
   --freetype_render_target = 'HorizontalLcd',
 
-  cell_width = 0.9,
+  --cell_width = 0.9,
 
   -- integrate the tabs into the window title bar
   window_decorations = "INTEGRATED_BUTTONS|RESIZE",
@@ -59,7 +59,6 @@ local config = {
   webgpu_power_preference = "HighPerformance",
   bold_brightens_ansi_colors = true,
 
-  hide_tab_bar_if_only_one_tab = true,
 
   keys = {
     {

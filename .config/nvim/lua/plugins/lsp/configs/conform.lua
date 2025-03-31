@@ -19,6 +19,7 @@ local formatters_by_ft = {
   typescript = { "prettier" },
   typescriptreact = { "prettier" },
   vue = { "prettier" },
+  terraform = { "terraform_fmt" },
 }
 
 ---@type NvPluginSpec

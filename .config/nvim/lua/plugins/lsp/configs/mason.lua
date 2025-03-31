@@ -20,10 +20,12 @@ return {
   },
   dependencies = {
     "williamboman/mason-lspconfig.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
     config = function()
       local mason = require "mason"
       -- local path = require "mason-core.path"
       local mason_lspconfig = require "mason-lspconfig"
+      local mason_tool_installer = require "mason-tool-installer"
       local on_attach = require("plugins.lsp.opts").on_attach
       local on_init = require("plugins.lsp.opts").on_init
       local capabilities = require("plugins.lsp.opts").capabilities
@@ -71,6 +73,40 @@ return {
           require("lspconfig")[server_name].setup(opts)
         end,
       }
+      -- TODO: Validate this next few lines
+      mason_lspconfig.setup({
+        -- list of servers for mason to install
+        automatic_installation = true,
+        ensure_installed = {
+          "ts_ls",
+          "html",
+          "cssls",
+          "tailwindcss",
+          "svelte",
+          "lua_ls",
+          "graphql",
+          "emmet_ls",
+          "prismals",
+          "pyright",
+          "terraformls",
+          "jdtls",
+          "gopls",
+          "templ",
+        },
+      })
+
+      mason_tool_installer.setup({
+        ensure_installed = {
+          "prettier", -- prettier formatter
+          "stylua", -- lua formatter
+          "isort", -- python formatter
+          "black", -- python formatter
+          "pylint", -- python linter
+          "eslint_d", -- js linter
+          "tflint", -- terraform linter
+          "golangci_lint_ls", -- golang linter
+        },
+      })
     end,
   },
   opts = {

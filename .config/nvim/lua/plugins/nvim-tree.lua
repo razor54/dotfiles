@@ -36,10 +36,10 @@ return {
         error = "",
       },
     },
-    sync_root_with_cwd = true,
+    sync_root_with_cwd = false,
     update_focused_file = {
       enable = true,
-      update_cwd = true,
+      update_cwd = false,
       ignore_list = {},
     },
     git = {
