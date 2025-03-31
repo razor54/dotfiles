@@ -80,7 +80,7 @@ keybinds clear-defaults=true {
         bind "Alt n" { SwitchToMode "Resize"; } 
     }
     shared_except "scroll" "locked" { 
-        bind "Alt s" { SwitchToMode "Scroll"; } 
+        bind "Ctro s" { SwitchToMode "Scroll"; } 
     }
     shared_except "session" "locked" { 
         bind "Alt o" { SwitchToMode "Session"; } 
