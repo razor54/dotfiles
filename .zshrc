@@ -9,6 +9,22 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# if you want to profile your zsh startup time
+# uncomment the following line and run zprof as the first command in a new shell
+zmodload zsh/zprof
+
+#------------------------------------------------------
+# Better History
+#------------------------------------------------------
+setopt SHARE_HISTORY        # share history between all sessions
+setopt HIST_IGNORE_SPACE    # don't record commands that start with a space
+setopt INC_APPEND_HISTORY   # write to $HISTFILE immediately, not just when exiting the shell
+setopt HIST_IGNORE_ALL_DUPS # remove old duplicates from history
+setopt HIST_VERIFY          # don't execute immediately when picking from history
+HISTSIZE=50000              # store more than the default 10_000 entries
+SAVEHIST=$HISTSIZE          # and also store all these entries in our $HISTFILE
+
+
 #source $HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # Set name of the theme to load.
@@ -90,7 +106,10 @@ DEFAULT_USER=$(whoami)
 export EDITOR=vi
 export VISUAL="$EDITOR"
 
+#------------------------------------------------------
 # Aliases
+#------------------------------------------------------
+
 
 alias gs='git status '
 alias ga='git add '
@@ -236,3 +255,31 @@ eval "$(pyenv init -)"
 alias j!=jbang
 
 eval "$(starship init zsh)"
+#------------------------------------------------------
+# Autocompletion
+#------------------------------------------------------
+
+zmodload zsh/complist
+autoload -U compinit; compinit
+_comp_options+=(globdots)   # include hidden files
+setopt MENU_COMPLETE        # Automatically highlight first element of completion menu
+setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
+
+
+# Use select menu for completions
+zstyle ':completion:*' menu select
+
+# Autocomplete options when completing a '-'
+zstyle ':completion:*' complete-options true
+
+# Style group names a little nicer
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}↓ %d %f'
+
+# Group completion results by type
+zstyle ':completion:*' group-name ''
+
+# Set up fzf for general auto-completion shenanigans, if it's installed
+FZF_CONFIG=~/.fzf.sh
+if [[ -x "$(command -v fzf)" ]] && [[ -f "$FZF_CONFIG" ]]; then
+  source "$FZF_CONFIG"
+fi
