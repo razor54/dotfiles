@@ -21,19 +21,18 @@ return {
 
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "gopls",       -- Go
-          "jdtls",       -- Java (requires manual setup, see below)
-          --"tsserver",       -- TypeScript/JavaScript
-          "ts_ls",       -- TypeScript/JavaScript
+          "gopls", -- Go
+          "jdtls", -- Java (requires manual setup, see below)
+          "ts_ls", -- TypeScript/JavaScript
           "terraformls", -- Terraform
-          "lua_ls",      -- Lua
+          "lua_ls", -- Lua
         },
         automatic_installation = true,
       })
 
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       local disabled_servers = {
-        --"jdtls", -- TODO: Re-test
+        --"jdtls",
         --"ts_ls",
       }
 
@@ -69,9 +68,6 @@ return {
 
         ["gopls"] = function()
           require("lspconfig").gopls.setup({
-            --on_attach = function(client)
-            --  client.server_capabilities.semanticTokensProvider = nil
-            --end,
             capabilities = capabilities,
             settings = {
               gopls = {
@@ -89,7 +85,7 @@ return {
             settings = {
               Lua = {
                 runtime = {
-                  version = "LuaJIT",                  -- Use LuaJIT
+                  version = "LuaJIT", -- Use LuaJIT
                   path = vim.split(package.path, ";"), -- Inherit Neovim's Lua paths
                 },
                 diagnostics = {
@@ -108,7 +104,6 @@ return {
             },
           })
         end,
-
       })
 
       vim.diagnostic.config({
@@ -129,7 +124,6 @@ return {
         "github:mason-org/mason-registry",
       },
     },
-
   },
   {
     "neovim/nvim-lspconfig",
@@ -150,6 +144,6 @@ return {
     config = function()
       -- LSP config
       vim.api.nvim_exec_autocmds("FileType", {})
-    end
+    end,
   },
 }

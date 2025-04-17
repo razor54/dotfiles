@@ -1,10 +1,10 @@
 return {
-	"echasnovski/mini.comment",
-	version = "*",
-	lazy = true,
-	event = {
-		"BufReadPre",
-		"BufNewFile",
-	},
-	opts = {},
+  "echasnovski/mini.comment",
+  version = "*",
+  lazy = true,
+  event = {
+    "BufReadPre",
+    "BufNewFile",
+  },
+  opts = {},
 }

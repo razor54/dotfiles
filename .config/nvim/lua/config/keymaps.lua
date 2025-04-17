@@ -47,10 +47,9 @@ set("n", "tg", ":bprev<CR>", { desc = "Go to previous buffer" })
 set("n", "<leader>bd", "<cmd>bd!<CR>", { desc = "Close current buffer" })
 
 -- Basic buffer close
-vim.keymap.set('n', '<leader>x', '<cmd>bp<bar>bd #<cr>', { desc = 'Close buffer' })
+vim.keymap.set("n", "<leader>x", "<cmd>bp<bar>bd #<cr>", { desc = "Close buffer" })
 -- New buffer
-vim.keymap.set('n', '<leader>n', '<cmd>enew<cr>', { desc = 'New buffer' })
-
+--vim.keymap.set('n', '<leader>n', '<cmd>enew<cr>', { desc = 'New buffer' })
 
 -- lsp keymaps
 set("n", "gd", lsp.definition, { desc = "Go to definition" })
@@ -69,16 +68,16 @@ set("n", "<leader>of", diagn.open_float, { desc = "Open diagnostic float window"
 --set("n", "g[", diagn.goto_prev, { desc = "Go to previous diagnostic" })
 
 set("n", "<leader>tl", function()
-    local val = (
-        vim.api.nvim_get_option_value("colorcolumn", {}) == ""
-        and tostring(vim.api.nvim_get_option_value("textwidth", {}))
-        or ""
-    )
-    vim.api.nvim_set_option_value("colorcolumn", val, {})
-    vim.cmd("set list!")
+  local val = (
+    vim.api.nvim_get_option_value("colorcolumn", {}) == ""
+      and tostring(vim.api.nvim_get_option_value("textwidth", {}))
+    or ""
+  )
+  vim.api.nvim_set_option_value("colorcolumn", val, {})
+  vim.cmd("set list!")
 end, { desc = "Toggle whitespace and line length display" })
 
 set("n", "<leader>tf", function()
-    vim.g.autoformat = not vim.g.autoformat
-    vim.cmd('echo "Autoformat ' .. (vim.g.autoformat and "true" or "false") .. '"')
+  vim.g.autoformat = not vim.g.autoformat
+  vim.cmd('echo "Autoformat ' .. (vim.g.autoformat and "true" or "false") .. '"')
 end, { desc = "Toggle format on save" })

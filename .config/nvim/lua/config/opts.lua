@@ -10,9 +10,6 @@ opt.number = true
 opt.relativenumber = true
 opt.signcolumn = "yes:1"
 
---opt.tabstop = 4
---opt.softtabstop = 4
---opt.shiftwidth = 4
 opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2
@@ -43,14 +40,7 @@ opt.updatetime = 100
 opt.termguicolors = true
 
 opt.sessionoptions = {
-    "buffers",
-    "globals",
-    "resize",
+  "buffers",
+  "globals",
+  "resize",
 }
-
---vim.cmd.colorscheme = "catppuccin"
-
--- TODO: Maybe change this to other place :(
---vim.cmd.colorscheme "catppuccin"
--- For Messages to stay longer. TODO: REVIEW
---vim.opt.cmdheight = 10

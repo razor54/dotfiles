@@ -4,7 +4,7 @@ return {
   lazy = false,
   priority = 1000,
   dependencies = {
-    "nvim-tree/nvim-web-devicons" -- For better icon compatibility
+    --"nvim-tree/nvim-web-devicons" -- For better icon compatibility
   },
   cmd = "Snacks",
   config = function()
@@ -17,10 +17,7 @@ return {
       gitbrowse = { enabled = true },
       indent = { enabled = true },
       scroll = { enabled = true },
-      explorer = {
-        enabled = true,
-        replace_netrw = true, -- Replace netrw with the snacks explorer
-      },
+      explorer = { enabled = true },
       picker = {
         sources = {
           explorer = {
@@ -34,23 +31,23 @@ return {
                   --["D"] = "diff",
                   --["o"] = false, -- this disables bind key
                 },
-
               },
             },
-            actions = {
-            },
+            hidden = true,
+            actions = {},
           },
+          files = { hidden = true },
+          grep = { hidden = true },
         },
-
       },
 
       statuscolumn = {
         enabled = true,
         left = { "mark", "sign" }, -- priority of signs on the left (high to low)
-        right = { "git" },         -- priority of signs on the right (high to low)
+        right = { "git" }, -- priority of signs on the right (high to low)
         folds = {
-          open = true,             -- show open fold icons
-          git_hl = true,           -- use Git Signs hl for fold icons
+          open = true, -- show open fold icons
+          git_hl = true, -- use Git Signs hl for fold icons
         },
         git = {
           patterns = { "GitSign", "MiniDiffSign" },
@@ -97,12 +94,12 @@ return {
           --    " 888     d8(  888   .d8P'  .P 888   888  888     o.   .88P       888   \n" ..
           --    "d888b    `Y888\"\"8o d8888888P  `Y8bod8P' d888b    `8bd88P'       o888o  "
           --,
-          header = "                          _____ _  _  \n" ..
-              "                         | ____| || | \n" ..
-              "  _ __ __ _ _______  _ __| |__ | || |_\n" ..
-              " | '__/ _` |_  / _ \\| '__|___ \\|__   _|\n" ..
-              " | | | (_| |/ / (_) | |   ___) |  | |  \n" ..
-              " |_|  \\__,_/___\\___/|_|  |____/   |_|  ",
+          header = "                          _____ _  _  \n"
+            .. "                         | ____| || | \n"
+            .. "  _ __ __ _ _______  _ __| |__ | || |_\n"
+            .. " | '__/ _` |_  / _ \\| '__|___ \\|__   _|\n"
+            .. " | | | (_| |/ / (_) | |   ___) |  | |  \n"
+            .. " |_|  \\__,_/___\\___/|_|  |____/   |_|  ",
 
           keys = {
             {
@@ -156,7 +153,7 @@ return {
             indent = 2,
             padding = { 2, 2 },
           },
-          { section = "keys",    gap = 1,     padding = 1 },
+          { section = "keys", gap = 1, padding = 1 },
           { title = "Bookmarks", padding = 1, pane = 2 },
           { section = "startup", pane = 1 },
         },

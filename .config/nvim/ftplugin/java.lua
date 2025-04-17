@@ -5,9 +5,9 @@ end
 
 local bufnr = vim.api.nvim_get_current_buf()
 
-local java_debug_path = vim.fn.stdpath "data" .. "/mason/packages/java-debug-adapter/"
-local java_test_path = vim.fn.stdpath "data" .. "/mason/packages/java-test/"
-local jdtls_path = vim.fn.stdpath "data" .. "/mason/packages/jdtls/"
+local java_debug_path = vim.fn.stdpath("data") .. "/mason/packages/java-debug-adapter/"
+local java_test_path = vim.fn.stdpath("data") .. "/mason/packages/java-test/"
+local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls/"
 local lombok_path = vim.fn.expand("$HOME/.local/share/java/lombok/")
 
 local bundles = {
@@ -17,17 +17,17 @@ vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "extension/serv
 
 -- NOTE: Decrease the amount of files to improve speed(Experimental).
 -- INFO: It's annoying to edit the version again and again.
-local equinox_path = vim.split(vim.fn.glob(vim.fn.stdpath "data" .. "/mason/packages/jdtls/plugins/*jar"), "\n")
+local equinox_path = vim.split(vim.fn.glob(vim.fn.stdpath("data") .. "/mason/packages/jdtls/plugins/*jar"), "\n")
 local equinox_launcher = ""
 
 for _, file in pairs(equinox_path) do
-  if file:match "launcher_" then
+  if file:match("launcher_") then
     equinox_launcher = file
     break
   end
 end
 
-WORKSPACE_PATH = vim.fn.stdpath "data" .. "/workspace/"
+WORKSPACE_PATH = vim.fn.stdpath("data") .. "/workspace/"
 if vim.g.os == "Darwin" then
   OS_NAME = "mac"
 elseif vim.g.os == "Linux" then
@@ -55,7 +55,7 @@ local config = {
     "-Declipse.product=org.eclipse.jdt.ls.core.product",
     "-Dlog.protocol=true",
     "-Dlog.level=ALL",
-    "-javaagent:" .. lombok_path  .. "lombok.jar",
+    "-javaagent:" .. lombok_path .. "lombok.jar",
     "-Xms1g",
     "--add-modules=ALL-SYSTEM",
     "--add-opens",
@@ -127,16 +127,16 @@ keymap("n", "crc", ":lua require'jdtls'.extract_constant()<cr>", { silent = true
 keymap("v", "crc", "<Esc>:lua require'jdtls'.extract_constant(true)<cr>", { silent = true, buffer = bufnr })
 keymap("v", "crm", "<Esc>:lua require'jdtls'.extract_method(true)<cr>", { silent = true, buffer = bufnr })
 
-vim.cmd [[
-    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
-    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
-    command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
-    command! -buffer JdtJol lua require('jdtls').jol()
-    command! -buffer JdtBytecode lua require('jdtls').javap()
-    command! -buffer JdtJshell lua require('jdtls').jshell()
-    command! -buffer JavaTestCurrentClass lua require('jdtls').test_class()
-    command! -buffer JavaTestNearestMethod lua require('jdtls').test_nearest_method()
-    ]]
+vim.cmd([[
+command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
+command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
+command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
+command! -buffer JdtJol lua require('jdtls').jol()
+command! -buffer JdtBytecode lua require('jdtls').javap()
+command! -buffer JdtJshell lua require('jdtls').jshell()
+command! -buffer JavaTestCurrentClass lua require('jdtls').test_class()
+command! -buffer JavaTestNearestMethod lua require('jdtls').test_nearest_method()
+]])
 
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
