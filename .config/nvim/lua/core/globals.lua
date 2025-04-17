@@ -5,7 +5,7 @@ local is_windows = os == "Windows"
 
 local global = {
   mkdp_auto_close = false, -- Don't Exit Preview When Switching Buffers
-  snipmate_snippets_path = vim.fn.stdpath "config" .. "/snippets/snipmate", -- path to snipmate snippets
+  --snipmate_snippets_path = vim.fn.stdpath "config" .. "/snippets/snipmate", -- path to snipmate snippets
   startup_message = false, -- Show startup message
   random_header = false, -- Show random header
   skip_ts_context_commentstring_module = true, -- disable treesitter context commentstring

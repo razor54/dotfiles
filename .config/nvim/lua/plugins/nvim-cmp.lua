@@ -45,12 +45,6 @@ return {
     end
   end,
   dependencies = {
-    -- For Rust
-    {
-      "saecki/crates.nvim",
-      tag = "v0.4.0",
-      opts = {},
-    },
     -- Commandline completions
     {
       "hrsh7th/cmp-cmdline",
@@ -75,10 +69,6 @@ return {
         enable_chat = true,
       },
     },
-    {
-      "L3MON4D3/LuaSnip",
-      dependencies = "rafamadriz/friendly-snippets",
-      build = "make install_jsregexp",
-    },
+
   },
 }

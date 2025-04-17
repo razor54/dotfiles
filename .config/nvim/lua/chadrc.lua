@@ -63,7 +63,7 @@ M.ui = {
 
 M.nvdash = {
   load_on_startup = true,
-  header = get_header "razor54_secondary",
+  header = get_header "razor54",
   buttons = {
     { txt = "  Find File", keys = "Spc f f", cmd = "Telescope find_files" },
     { txt = "󰈚  Recent Files", keys = "Spc f r", cmd = "Telescope oldfiles" },
@@ -126,7 +126,7 @@ M.mason = {
     -- "basedpyright",
 
     -- Go
-    -- "gopls",
+    --"gopls",
 
     -- C#
     -- "omnisharp",
