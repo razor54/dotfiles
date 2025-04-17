@@ -1,50 +1,19 @@
-require "core.globals"
-require "core.env"
-require "options"
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
-if vim.version().minor >= 11 then
-  vim.tbl_add_reverse_lookup = function(tbl)
-    for k, v in pairs(tbl) do
-      tbl[v] = k
-    end
-  end
-end
+vim.loader.enable()
 
--- bootstrap lazy and all plugins
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+require("config.opts")
+require("config.lazy")
 
-if not vim.loop.fs_stat(lazypath) then
-  local repo = "https://github.com/folke/lazy.nvim.git"
-  vim.fn.system { "git", "clone", "--filter=blob:none", repo, "--branch=stable", lazypath }
-end
+require("config.keymaps")
+require("config.autocmds")
 
-vim.opt.runtimepath:prepend(lazypath)
+-- Theme
+vim.cmd.colorscheme "catppuccin"
 
--- NOTE: lazy.nvim options
-local lazy_config = require "core.lazy"
-
--- NOTE: Load plugins
-require("lazy").setup({
-  {
-    "NvChad/NvChad",
-    lazy = false,
-    branch = "v2.5",
-    import = "nvchad.plugins",
-  },
-
-  { import = "plugins" },
-}, lazy_config)
-
--- Load the highlights
---for _, v in ipairs(vim.fn.readdir(vim.g.base46_cache)) do
---  dofile(vim.g.base46_cache .. v)
---end
-dofile(vim.g.base46_cache .. "defaults")
-dofile(vim.g.base46_cache .. "statusline")
-
-require "nvchad.autocmds"
-require "core.commands"
-require "core.autocommands"
-require "core.filetypes"
-require "core.utils"
-require "mappings"
+-- TODO: Remove
+--vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+--  pattern = '*.go',
+--  callback = function() vim.bo.filetype = 'go' end
+--})
