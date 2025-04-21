@@ -26,6 +26,7 @@ return {
           "ts_ls", -- TypeScript/JavaScript
           "terraformls", -- Terraform
           "lua_ls", -- Lua
+          "bashls", -- Bash
         },
         automatic_installation = true,
       })

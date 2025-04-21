@@ -46,7 +46,13 @@ return {
   },
 
   enabled = true,
-  config = true,
+  config = function(_, opts)
+    require("nvim-treesitter.configs").setup(opts)
+
+    -- register sh filetype to use bash parser
+    -- TODO: review if there is an easier way
+    vim.treesitter.language.register("bash", "sh")
+  end,
   --	--lazy = true,
   event = {
     --"BufReadPre",

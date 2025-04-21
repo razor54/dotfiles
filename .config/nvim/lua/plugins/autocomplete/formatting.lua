@@ -11,7 +11,7 @@ return {
     conform.setup({
       formatters_by_ft = {
         bash = { "beautysh" },
-        sh = { "beautysh" },
+        sh = { "beautysh", "shfmt" },
         python = { "black" },
         json = { "clang-format", "prettierd" },
         java = { "clang-format" },
