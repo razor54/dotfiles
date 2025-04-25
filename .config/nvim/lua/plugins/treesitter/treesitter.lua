@@ -82,6 +82,7 @@ return {
       "typescript",
       "json",
       "yaml",
+      "latex",
     },
     auto_install = true,
     sync_install = true,

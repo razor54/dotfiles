@@ -12,6 +12,7 @@ return {
       "mason", -- Mason UI
       "neo-tree", -- File explorer
       "TelescopePrompt",
+      "snacks-picker-list", -- the explorer list
     },
     buftype_exclude = {
       "help",

@@ -10,7 +10,7 @@ require("config.keymaps")
 require("config.autocmds")
 
 -- Theme
-vim.cmd.colorscheme("catppuccin")
+--vim.cmd.colorscheme("catppuccin")
 
 -- Format using conform
 --vim.lsp.buf.format = function(opts)

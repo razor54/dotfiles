@@ -2,9 +2,20 @@ return {
   "saghen/blink.cmp",
   lazy = true,
   event = { "InsertEnter" },
-  dependencies = { "rafamadriz/friendly-snippets" },
-
-  -- Use a release tag to download pre-built binaries
+  optional = true, -- todo: maybe just remove this
+  dependencies = {
+    "rafamadriz/friendly-snippets",
+    "saghen/blink.compat",
+    --"supermaven-nvim",
+    "huijiro/blink-cmp-supermaven",
+    {
+      "supermaven-inc/supermaven-nvim",
+      opts = {
+        disable_inline_completion = true,
+        disable_keymaps = true,
+      },
+    },
+  },
   version = "*",
   opts = {
     completion = {
@@ -12,41 +23,41 @@ return {
       menu = { auto_show = false },
       list = { selection = { preselect = true, auto_insert = true } },
     },
-    -- Key mappings preset
     keymap = {
       ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
       ["<C-e>"] = { "hide", "fallback" },
       ["<CR>"] = { "accept", "fallback" },
-
-      ["<Tab>"] = { "snippet_forward", "fallback" },
-      ["<S-Tab>"] = { "snippet_backward", "fallback" },
-
-      ["<Up>"] = { "select_prev", "fallback" },
-      ["<Down>"] = { "select_next", "fallback" },
+      --["<Tab>"] = { "snippet_forward", "fallback" },
+      --["<S-Tab>"] = { "snippet_backward", "fallback" },
+      --["<Up>"] = { "select_prev", "fallback" },
+      --["<Down>"] = { "select_next", "fallback" },
       ["<C-p>"] = { "select_prev", "fallback" },
       ["<C-n>"] = { "select_next", "fallback" },
       ["<A-k>"] = { "select_next", "fallback" },
       ["<A-j>"] = { "select_prev", "fallback" },
-
       ["<C-b>"] = { "scroll_documentation_up", "fallback" },
       ["<C-f>"] = { "scroll_documentation_down", "fallback" },
     },
-
     appearance = {
-      -- Use nvim-cmp highlight groups if the theme doesn't support blink.cmp
-      -- use_nvim_cmp_as_default = true,
-      -- Adjust spacing for Nerd Fonts
       nerd_font_variant = "mono",
     },
-
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      --compat = { "supermaven" },
+      default = { "supermaven", "lsp", "path", "snippets", "buffer" },
       providers = {
+        supermaven = {
+          -- kind = "Supermaven",
+          name = "supermaven",
+          --module = "blink.compat.source",
+          module = "blink-cmp-supermaven",
+          score_offset = 100,
+          async = true,
+        },
         lsp = {
           name = "lsp",
           enabled = true,
           module = "blink.cmp.sources.lsp",
-          score_offset = 90, -- Higher number = higher priority
+          score_offset = 50,
         },
         path = {
           name = "Path",

@@ -27,6 +27,7 @@ return {
           "terraformls", -- Terraform
           "lua_ls", -- Lua
           "bashls", -- Bash
+          "texlab", -- LaTeX
         },
         automatic_installation = true,
       })
