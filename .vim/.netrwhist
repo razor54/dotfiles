@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =7
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='/Users/andregaudencio/.config/tiny-nvim'
 let g:netrw_dirhist_7='/Users/andregaudencio/configs/mac-devops-setup/roles'
 let g:netrw_dirhist_6='/Users/andregaudencio/configs/mac-devops-setup/roles/setup_terminal'
 let g:netrw_dirhist_5='/Users/andregaudencio/configs/mac-devops-setup/roles/setup_terminal/tasks'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_2='/Users/andregaudencio/configs/mac-devops-setup/roles/setu
 let g:netrw_dirhist_1='/Users/andregaudencio/configs/mac-devops-setup/roles'
 let g:netrw_dirhist_0='/Users/andregaudencio/configs/mac-devops-setup/roles/setup_macos'
 let g:netrw_dirhist_9='/Users/andregaudencio/configs/mac-devops-setup/roles/setup_macos/files'
-let g:netrw_dirhist_8='/Users/andregaudencio/configs/mac-devops-setup/roles/setup_macos'

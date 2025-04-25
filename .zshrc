@@ -283,3 +283,4 @@ FZF_CONFIG=~/.fzf.sh
 if [[ -x "$(command -v fzf)" ]] && [[ -f "$FZF_CONFIG" ]]; then
   source "$FZF_CONFIG"
 fi
+eval "$(mise activate)"

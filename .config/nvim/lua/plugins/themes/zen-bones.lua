@@ -6,7 +6,6 @@ return {
     priority = 1000,
     config = function()
       vim.cmd.colorscheme("zenwritten") -- or "zenbones"
-      --vim.cmd.colorscheme("zenbones")
     end,
   },
 }

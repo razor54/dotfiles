@@ -5,6 +5,7 @@ local config = {
   --font = wezterm.font('JetBrainsMono Nerd Font'),
   --font = wezterm.font('MesloLGS Nerd Font Mono'),
   font = wezterm.font_with_fallback({
+    "Akkurat-Mono",
     "JetBrainsMono Nerd Font", -- <built-in>, BuiltIn
     --"MesloLGS Nerd Font Mono",
   }, { weight = "Medium", italic = false }),
