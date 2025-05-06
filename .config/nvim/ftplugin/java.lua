@@ -8,7 +8,7 @@ local bufnr = vim.api.nvim_get_current_buf()
 local java_debug_path = vim.fn.stdpath("data") .. "/mason/packages/java-debug-adapter/"
 local java_test_path = vim.fn.stdpath("data") .. "/mason/packages/java-test/"
 local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls/"
-local lombok_path = vim.fn.expand("$HOME/.local/share/java/lombok/")
+local lombok_path = vim.fn.stdpath("data") .. "/mason/packages/lombok-nightly/"
 
 local bundles = {
   vim.fn.glob(java_debug_path .. "extension/server/com.microsoft.java.debug.plugin-*.jar", true),
@@ -88,6 +88,9 @@ local config = {
     bundles = bundles,
   },
   settings = {
+    configuration = {
+      updateBuildConfiguration = "automatic", -- Automatic update class path
+    },
     eclipse = {
       downloadSources = true,
     },
@@ -105,6 +108,7 @@ local config = {
     },
 
     signatureHelp = { enabled = true },
+    contentProvider = { preferred = "fernflower" }, -- Better decompiler
     extendedClientCapabilities = require("jdtls").extendedClientCapabilities,
     sources = {
       organizeImports = {
@@ -128,15 +132,15 @@ keymap("v", "crc", "<Esc>:lua require'jdtls'.extract_constant(true)<cr>", { sile
 keymap("v", "crm", "<Esc>:lua require'jdtls'.extract_method(true)<cr>", { silent = true, buffer = bufnr })
 
 vim.cmd([[
-command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
-command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
-command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
-command! -buffer JdtJol lua require('jdtls').jol()
-command! -buffer JdtBytecode lua require('jdtls').javap()
-command! -buffer JdtJshell lua require('jdtls').jshell()
-command! -buffer JavaTestCurrentClass lua require('jdtls').test_class()
-command! -buffer JavaTestNearestMethod lua require('jdtls').test_nearest_method()
-]])
+    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
+    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
+    command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
+    command! -buffer JdtJol lua require('jdtls').jol()
+    command! -buffer JdtBytecode lua require('jdtls').javap()
+    command! -buffer JdtJshell lua require('jdtls').jshell()
+    command! -buffer JavaTestCurrentClass lua require('jdtls').test_class()
+    command! -buffer JavaTestNearestMethod lua require('jdtls').test_nearest_method()
+    ]])
 
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
