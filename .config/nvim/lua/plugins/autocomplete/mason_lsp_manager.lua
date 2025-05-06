@@ -34,7 +34,7 @@ return {
 
       local capabilities = require("blink.cmp").get_lsp_capabilities()
       local disabled_servers = {
-        --"jdtls",
+        "jdtls",
         --"ts_ls",
       }
 

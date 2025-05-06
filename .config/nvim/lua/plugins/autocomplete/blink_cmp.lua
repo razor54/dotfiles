@@ -15,6 +15,7 @@ return {
         disable_keymaps = true,
       },
     },
+    "hrsh7th/cmp-nvim-lsp", -- add this for LSP capabilities support
   },
   version = "*",
   opts = {
