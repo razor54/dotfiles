@@ -4,9 +4,9 @@ return {
   config = function()
     local conform = require("conform")
 
-    local format_root = vim.fs.find(function(name, path)
-      return name:match(".*%.clang-format$")
-    end, { limit = 1, type = "file", path = vim.fn.stdpath("config") })
+    --local format_root = vim.fs.find(function(name, path)
+    --  return name:match(".*%.clang-format$")
+    --end, { limit = 1, type = "file", path = vim.fn.stdpath("config") })
 
     conform.setup({
       formatters_by_ft = {
@@ -36,11 +36,11 @@ return {
         }
       end,
       formatters = {
-        clang_format = {
-          prepend_args = function()
-            return table.insert(format_root and { "--style-file:" .. format_root } or {}, "--fallback-style=webkit")
-          end,
-        },
+        --clang_format = {
+        --  prepend_args = function()
+        --    return table.insert(format_root and { "--style-file:" .. format_root } or {}, "--fallback-style=webkit")
+        --  end,
+        --},
       },
     })
   end,

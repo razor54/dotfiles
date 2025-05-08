@@ -1,8 +1,9 @@
 return {
   "saghen/blink.cmp",
   lazy = true,
-  event = { "InsertEnter" },
-  optional = true, -- todo: maybe just remove this
+  --event = { "InsertEnter" },
+  event = { "LspAttach" },
+  --optional = true, -- todo: maybe just remove this
   dependencies = {
     "rafamadriz/friendly-snippets",
     "saghen/blink.compat",
@@ -15,7 +16,8 @@ return {
         disable_keymaps = true,
       },
     },
-    "hrsh7th/cmp-nvim-lsp", -- add this for LSP capabilities support
+    --"hrsh7th/nvim-cmp", -- Required
+    --"hrsh7th/cmp-nvim-lsp", -- add this for LSP capabilities support
   },
   version = "*",
   opts = {

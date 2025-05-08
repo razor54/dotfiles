@@ -24,10 +24,23 @@ if root_dir == "" then
   return
 end
 
+-- simplified config
+local capabilities = require("blink.cmp").get_lsp_capabilities()
+
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+--
+--local capabilities = vim.lsp.protocol.make_client_capabilities()
+--capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+-- Old config
+--local cmp_nvim_lsp_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+--if not cmp_nvim_lsp_ok then
+--  vim.notify("cmp_nvim_lsp not found, please install nvim-cmp and cmp-nvim-lsp", vim.log.levels.ERROR)
+--  return
+--end
+
+--local capabilities = cmp_nvim_lsp.default_capabilities()
 
 local config = {
   cmd = {

@@ -58,6 +58,9 @@ set("n", "<leader>vs", lsp.workspace_symbol, { desc = "Search workspace symbols"
 set("n", "<leader>vd", diagn.open_float, { desc = "Open diagnostics float" })
 --set("n", "[d", diagn.goto_next, { desc = "Go to next diagnostic" })
 --set("n", "]d", diagn.goto_prev, { desc = "Go to previous diagnostic" })
+-- TODO: weird
+--vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "Go to next diagnostic" })
+--vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = -1, float = true }) end, { desc = "Go to previous diagnostic" })
 set("n", "<leader>ca", lsp.code_action, { desc = "Show code actions" })
 set({ "n", "v" }, "<leader>gr", lsp.references, { desc = "Find references" })
 set({ "n", "v" }, "<leader>rn", lsp.rename, { desc = "Rename symbol" })
@@ -66,6 +69,12 @@ set({ "n", "v" }, "<leader>rn", lsp.rename, { desc = "Rename symbol" })
 set("n", "<leader>of", diagn.open_float, { desc = "Open diagnostic float window" })
 --set("n", "g]", diagn.goto_next, { desc = "Go to next diagnostic" })
 --set("n", "g[", diagn.goto_prev, { desc = "Go to previous diagnostic" })
+vim.keymap.set("n", "g]", function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "Go to next diagnostic" })
+vim.keymap.set("n", "g[", function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "Go to previous diagnostic" })
 
 set("n", "<leader>tl", function()
   local val = (

@@ -20,6 +20,9 @@ return {
         "lua_ls",
         "bashls",
         "texlab",
+        "yamlls",
+        "dockerls",
+        "jsonls",
       },
       automatic_enable = {
         exclude = { "jdtls" }, -- Exclude servers you want manual control
