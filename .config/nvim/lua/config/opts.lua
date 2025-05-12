@@ -21,7 +21,10 @@ vim.smartindent = true
 
 opt.wrap = false
 
-opt.hlsearch = false
+-- Searching Behaviors
+opt.hlsearch = true -- highlight all matches in search
+opt.ignorecase = true -- ignore case in search
+opt.smartcase = true -- match case if explicitly stated
 opt.incsearch = true
 opt.inccommand = "split"
 

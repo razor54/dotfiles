@@ -46,7 +46,7 @@ return {
     },
     sources = {
       --compat = { "supermaven" },
-      default = { "supermaven", "lsp", "path", "snippets", "buffer" },
+      default = { "supermaven", "lazydev", "lsp", "path", "snippets", "buffer" },
       providers = {
         supermaven = {
           -- kind = "Supermaven",
@@ -55,6 +55,12 @@ return {
           module = "blink-cmp-supermaven",
           score_offset = 100,
           async = true,
+        },
+        lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          -- make lazydev completions top priority (see `:h blink.cmp`)
+          score_offset = 75,
         },
         lsp = {
           name = "lsp",
