@@ -2,7 +2,8 @@ return {
   "catppuccin/nvim",
   name = "catppuccin",
   priority = 1000,
-  lazy = false,
+  --lazy = false,
+  lazy = true, -- the theme is disabled so we don't want to load it
   config = function()
     require("catppuccin").setup({
       flavour = "mocha", -- latte, frappe, macchiato, mocha

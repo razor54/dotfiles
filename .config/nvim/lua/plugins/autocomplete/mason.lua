@@ -37,7 +37,15 @@ return {
     config = function()
       -- ensure the java debug adapter is installed
       require("mason-nvim-dap").setup({
-        ensure_installed = { "java-debug-adapter", "java-test" },
+        ensure_installed = { "java-debug-adapter", "java-test", "delve" },
+        automatic_installation = true,
+        handlers = {
+          --java = function(source_name)
+          --  -- Explicit handler for Java adapter
+          --  require("mason-nvim-dap").default_setup(source_name)
+          --end,
+          java = function() end, -- Disable Java handler completely
+        },
       })
     end,
   },

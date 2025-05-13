@@ -1,3 +1,107 @@
+-- Configure DAP FIRST
+local dap = require("dap")
+-- Resolve JAR path with exact version
+--local debug_adapter_jar =
+--  vim.fn.glob(vim.env.MASON .. "/share/java-debug-adapter/server/com.microsoft.java.debug.plugin-*.jar")
+
+-- 1. Resolve debug adapter JAR path correctly
+local debug_adapter_jar = vim.fn.glob(
+  vim.env.MASON .. "/share/java-debug-adapter/com.microsoft.java.debug.plugin-*.jar",
+  true -- Force exact match
+)
+
+-- Verify JAR exists before proceeding
+if debug_adapter_jar == "" then
+  vim.notify("Java debug adapter JAR missing! Run :MasonInstall java-debug-adapter", vim.log.levels.ERROR)
+  return
+end
+
+-- 2. Adapter configuration with proper JVM arguments
+dap.adapters.java = {
+  type = "server",
+  host = "127.0.0.1",
+  port = "${port}",
+  executable = {
+    command = "java",
+    args = {
+      "-jar",
+      debug_adapter_jar,
+      "-configuration",
+      vim.env.MASON .. "/share/java-debug-adapter/config",
+      "--port",
+      "${port}",
+    },
+    detached = false, -- Ensure process stays attached to Neovim
+  },
+}
+-- Base configurations (applies to all projects)
+dap.configurations.java = {
+  {
+    type = "java",
+    request = "launch",
+    name = "Launch (Auto Port)",
+    mainClass = "${file}",
+    projectName = "${workspaceFolder}",
+    cwd = "${workspaceFolder}",
+    vmArgs = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=${port}",
+  },
+  {
+    type = "java",
+    request = "launch",
+    name = "Auto Launch",
+    mainClass = "${file}",
+    projectName = "${workspaceFolder}",
+    cwd = "${workspaceFolder}",
+    vmArgs = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005",
+  },
+  {
+    type = "java",
+    request = "attach",
+    name = "Attach to Default Port (Port 5005)",
+    hostName = "localhost",
+    port = 5005,
+    sourcePaths = { "src/main/java" },
+  },
+}
+--dap.adapters.java = {
+--  type = "server",
+--  host = "127.0.0.1",
+--  port = "${port}",
+--  executable = {
+--    command = "java",
+--    --args = { "-data", vim.fn.getcwd() .. "/.dap" },
+--    args = {
+--      "-jar",
+--      debug_adapter_jar, -- Use resolved JAR path
+--      "-configuration",
+--      vim.env.MASON .. "/share/java-debug-adapter/config",
+--      "--port",
+--      "${port}",
+--    },
+--  },
+--}
+-- ftplugin/java.lua
+local jdtls = require("jdtls")
+
+-- Single client enforcement
+if vim.lsp.get_clients({ name = "jdtls" })[1] then
+  return
+end
+
+--local dap = require("dap")
+
+-- Adapter Configuration (Mason 2.0+)
+--dap.adapters.java = {
+--  type = "server",
+--  host = "127.0.0.1",
+--  executable = {
+--    command = vim.env.MASON .. "/bin/java-debug-adapter",
+--    args = { "-data", vim.fn.getcwd() .. "/.dap" },
+--  },
+--}
+
+-- Auto-generated Configurations
+--dap.configurations.java = require("jdtls.dap").setup_dap_main_class_configs()
 local function get_jdtls()
   -- Get the Mason Registry to gain access to downloaded binaries
   local mason_registry = require("mason-registry")
@@ -23,7 +127,7 @@ local function get_bundles()
   -- Find the Java Debug Adapter package in the Mason Registry
   --local java_debug = mason_registry.get_package("java-debug-adapter")
   local java_debug_path = vim.env.MASON .. "/share/java-debug-adapter"
-  vim.list_extend(bundles, vim.split(vim.fn.glob(java_debug_path .. "/server/*.jar"), "\n"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(java_debug_path .. "/*.jar"), "\n"))
   -- Obtain the full path to the directory where Mason has downloaded the Java Debug Adapter binaries
   --local java_debug_path = java_debug:get_install_path()
 
@@ -38,7 +142,7 @@ local function get_bundles()
   -- Add all of the Jars for running tests in debug mode to the bundles list
   --vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar", 1), "\n"))
   local java_test_path = vim.env.MASON .. "/share/java-test"
-  vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/server/*.jar"), "\n"))
+  vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/*.jar"), "\n"))
 
   return bundles
 end
@@ -365,13 +469,16 @@ local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+extendedClientCapabilities.resolveMainClass = true
+extendedClientCapabilities.progressReports = true
 
 local on_attach = function(_, bufnr)
   -- Map the Java specific key mappings once the server is attached
   java_keymaps()
 
   -- Setup the java debug adapter of the JDTLS server
-  require("jdtls.dap").setup_dap()
+  --require("jdtls.dap").setup_dap()
+  require("jdtls.dap").setup_dap({ hotcodereplace = "auto" })
 
   -- Find the main method(s) of the application so the debug adapter can successfully start up the application
   -- Sometimes this will randomly fail if language server takes to long to startup for the project, if a ClassDefNotFoundException occurs when running
@@ -391,6 +498,9 @@ local on_attach = function(_, bufnr)
       local _, _ = pcall(vim.lsp.codelens.refresh)
     end,
   })
+
+  -- Optional: Load project-specific launch.json
+  require("dap.ext.vscode").load_launchjs()
 end
 
 --
@@ -496,6 +606,15 @@ local config = {
   },
   on_attach = on_attach,
 }
-jdtls.start_or_attach(config)
 
-require("jdtls.setup").add_commands()
+--jdtls.start_or_attach(config)
+--require("jdtls.setup").add_commands()
+-- Enable LSP with single-instance check
+if not vim.lsp.get_clients({ name = "jdtls" })[1] then
+  vim.lsp.enable("jdtls")
+end
+
+-- Load .vscode/launch.json configurations
+--require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } })
+-- Load project-specific configs from .vscode/launch.json
+require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } })

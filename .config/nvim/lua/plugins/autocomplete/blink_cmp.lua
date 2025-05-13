@@ -5,7 +5,8 @@ return {
   event = { "LspAttach" },
   --optional = true, -- todo: maybe just remove this
   dependencies = {
-    "rafamadriz/friendly-snippets",
+    { "L3MON4D3/LuaSnip", version = "v2.*" },
+    --"rafamadriz/friendly-snippets",
     "saghen/blink.compat",
     --"supermaven-nvim",
     "huijiro/blink-cmp-supermaven",
@@ -19,7 +20,7 @@ return {
     --"hrsh7th/nvim-cmp", -- Required
     --"hrsh7th/cmp-nvim-lsp", -- add this for LSP capabilities support
   },
-  version = "*",
+  version = "1.*",
   opts = {
     completion = {
       ghost_text = { enabled = true, show_with_menu = false },
@@ -99,6 +100,7 @@ return {
         },
       },
     },
+    snippets = { preset = "luasnip" },
   },
   opts_extend = { "sources.default" },
 }
