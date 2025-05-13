@@ -3,15 +3,138 @@ if not status_ok then
   return
 end
 
+local function java_keymaps()
+  -- Allow yourself to run JdtCompile as a Vim command
+  vim.cmd(
+    "command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)"
+  )
+  -- Allow yourself/register to run JdtUpdateConfig as a Vim command
+  vim.cmd("command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()")
+  -- Allow yourself/register to run JdtBytecode as a Vim command
+  vim.cmd("command! -buffer JdtBytecode lua require('jdtls').javap()")
+  -- Allow yourself/register to run JdtShell as a Vim command
+  vim.cmd("command! -buffer JdtJshell lua require('jdtls').jshell()")
+
+  -- Set a Vim motion to <Space> + <Shift>J + o to organize imports in normal mode
+  vim.keymap.set(
+    "n",
+    "<leader>Jo",
+    "<Cmd> lua require('jdtls').organize_imports()<CR>",
+    { desc = "[J]ava [O]rganize Imports" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + v to extract the code under the cursor to a variable
+  vim.keymap.set(
+    "n",
+    "<leader>Jv",
+    "<Cmd> lua require('jdtls').extract_variable()<CR>",
+    { desc = "[J]ava Extract [V]ariable" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + v to extract the code selected in visual mode to a variable
+  vim.keymap.set(
+    "v",
+    "<leader>Jv",
+    "<Esc><Cmd> lua require('jdtls').extract_variable(true)<CR>",
+    { desc = "[J]ava Extract [V]ariable" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + <Shift>C to extract the code under the cursor to a static variable
+  vim.keymap.set(
+    "n",
+    "<leader>JC",
+    "<Cmd> lua require('jdtls').extract_constant()<CR>",
+    { desc = "[J]ava Extract [C]onstant" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + <Shift>C to extract the code selected in visual mode to a static variable
+  vim.keymap.set(
+    "v",
+    "<leader>JC",
+    "<Esc><Cmd> lua require('jdtls').extract_constant(true)<CR>",
+    { desc = "[J]ava Extract [C]onstant" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + t to run the test method currently under the cursor
+  vim.keymap.set(
+    "n",
+    "<leader>Jt",
+    "<Cmd> lua require('jdtls').test_nearest_method()<CR>",
+    { desc = "[J]ava [T]est Method" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + t to run the test method that is currently selected in visual mode
+  vim.keymap.set(
+    "v",
+    "<leader>Jt",
+    "<Esc><Cmd> lua require('jdtls').test_nearest_method(true)<CR>",
+    { desc = "[J]ava [T]est Method" }
+  )
+  -- Set a Vim motion to <Space> + <Shift>J + <Shift>T to run an entire test suite (class)
+  vim.keymap.set("n", "<leader>JT", "<Cmd> lua require('jdtls').test_class()<CR>", { desc = "[J]ava [T]est Class" })
+  -- Set a Vim motion to <Space> + <Shift>J + u to update the project configuration
+  vim.keymap.set("n", "<leader>Ju", "<Cmd> JdtUpdateConfig<CR>", { desc = "[J]ava [U]pdate Config" })
+end
+
+local on_attach = function(_, bufnr)
+  -- Map the Java specific key mappings once the server is attached
+  java_keymaps()
+
+  -- Setup the java debug adapter of the JDTLS server
+  --require("jdtls.dap").setup_dap()
+  require("jdtls.dap").setup_dap({ hotcodereplace = "auto" })
+
+  -- Find the main method(s) of the application so the debug adapter can successfully start up the application
+  -- Sometimes this will randomly fail if language server takes to long to startup for the project, if a ClassDefNotFoundException occurs when running
+  -- the debug tool, attempt to run the debug tool while in the main class of the application, or restart the neovim instance
+  -- Unfortunately I have not found an elegant way to ensure this works 100%
+  --require("jdtls.dap").setup_dap_main_class_configs()
+  -- Enable jdtls commands to be used in Neovim
+  require("jdtls.setup").add_commands()
+  -- Refresh the codelens
+  -- Code lens enables features such as code reference counts, implemenation counts, and more.
+  vim.lsp.codelens.refresh()
+
+  -- Setup a function that automatically runs every time a java file is saved to refresh the code lens
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = { "*.java" },
+    callback = function()
+      local _, _ = pcall(vim.lsp.codelens.refresh)
+    end,
+  })
+
+  -- Load .vscode/launch.json configurations
+  --require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } }) -- <-- HERE
+
+  require("jdtls.dap").setup_dap_main_class_configs()
+
+  -- Delay config generation to ensure LSP is fully initialized
+  -- vim.defer_fn(function()
+  --   require("jdtls.dap").setup_dap_main_class_configs()
+  --   --vim.cmd("JdtUpdateDebugConfigs") -- Now works after LSP init
+  -- end, 3000) -- 3-second delay
+
+  -- Your existing jdtls config
+
+  -- Optional: Load project-specific launch.json
+  --require("dap.ext.vscode").load_launchjs()
+end
+
 local bufnr = vim.api.nvim_get_current_buf()
 
 local java_debug_path = vim.fn.stdpath("data") .. "/mason/packages/java-debug-adapter/"
 local java_test_path = vim.fn.stdpath("data") .. "/mason/packages/java-test/"
 local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls/"
-local lombok_path = vim.fn.stdpath("data") .. "/mason/packages/lombok-nightly/"
+--local lombok_path = vim.fn.stdpath("data") .. "/mason/packages/lombok-nightly/"
+
+local lombok_jar = vim.fn.stdpath("data") .. "/mason/packages/lombok-nightly/lombok.jar"
+--if vim.fn.empty(vim.fn.glob(lombok_jar)) > 0 then
+--  vim.fn.system({
+--    "curl",
+--    "-L",
+--    "https://projectlombok.org/downloads/lombok.jar",
+--    "-o",
+--    lombok_jar,
+--  })
+--end
 
 local bundles = {
   vim.fn.glob(java_debug_path .. "extension/server/com.microsoft.java.debug.plugin-*.jar", true),
+  vim.fn.glob(java_test_path .. "/extension/server/*.jar", true),
 }
 vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "extension/server/*.jar", true), "\n"))
 
@@ -28,14 +151,10 @@ for _, file in pairs(equinox_path) do
 end
 
 WORKSPACE_PATH = vim.fn.stdpath("data") .. "/workspace/"
-if vim.g.os == "Darwin" then
-  OS_NAME = "mac"
-elseif vim.g.os == "Linux" then
-  OS_NAME = "linux"
-elseif vim.g.os == "Windows" then
-  OS_NAME = "win"
-else
-  vim.notify("Unsupported OS", vim.log.levels.WARN, { title = "Jdtls" })
+--WORKSPACE_PATH = vim.fn.stdpath("data")
+local SYSTEM = "linux"
+if vim.fn.has("mac") == 1 then
+  SYSTEM = "mac"
 end
 
 local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
@@ -55,7 +174,8 @@ local config = {
     "-Declipse.product=org.eclipse.jdt.ls.core.product",
     "-Dlog.protocol=true",
     "-Dlog.level=ALL",
-    "-javaagent:" .. lombok_path .. "lombok.jar",
+    --"-javaagent:" .. lombok_path .. "lombok.jar",
+    "-javaagent:" .. lombok_jar,
     "-Xms1g",
     "--add-modules=ALL-SYSTEM",
     "--add-opens",
@@ -70,7 +190,8 @@ local config = {
     -- eclipse.jdt.ls installation                                           the actual version
     -- 💀
     "-configuration",
-    jdtls_path .. "config_" .. OS_NAME,
+    jdtls_path .. "config_" .. SYSTEM,
+
     -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
     -- Must point to the                      Change to one of `linux`, `win` or `mac`
     -- eclipse.jdt.ls installation            Depending on your system.
@@ -78,8 +199,14 @@ local config = {
     "-data",
     workspace_dir,
   },
-  on_attach = require("plugins.lsp.opts").on_attach,
-  capabilities = require("plugins.lsp.opts").capabilities,
+  --on_attach = require("plugins.lsp.opts").on_attach,
+  on_attach = on_attach,
+
+  --capabilities = require("plugins.lsp.opts").capabilities,
+  --capabilities = vim.lsp.protocol.make_client_capabilities(),
+  --capabilities = require("cmp_nvim_lsp").default_capabilities(),
+  capabilities = require("blink.cmp").get_lsp_capabilities(),
+
   -- 💀
   -- This is the default if not provided, you can remove it. Or adjust as needed.
   -- One dedicated LSP server & client will be started per unique root_dir
@@ -118,26 +245,26 @@ local config = {
   },
 }
 
-local keymap = vim.keymap.set
-
-keymap("n", "A-o", ":lua require'jdtls'.organize_imports()<cr>", { silent = true, buffer = bufnr })
-keymap("n", "crv", ":lua require'jdtls'.extract_variable()<cr>", { silent = true, buffer = bufnr })
-keymap("v", "crv", "<Esc>:lua require'jdtls'.extract_variable(true)<cr>", { silent = true, buffer = bufnr })
-keymap("n", "crc", ":lua require'jdtls'.extract_constant()<cr>", { silent = true, buffer = bufnr })
-keymap("v", "crc", "<Esc>:lua require'jdtls'.extract_constant(true)<cr>", { silent = true, buffer = bufnr })
-keymap("v", "crm", "<Esc>:lua require'jdtls'.extract_method(true)<cr>", { silent = true, buffer = bufnr })
-
-vim.cmd([[
-    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
-    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
-    command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
-    command! -buffer JdtJol lua require('jdtls').jol()
-    command! -buffer JdtBytecode lua require('jdtls').javap()
-    command! -buffer JdtJshell lua require('jdtls').jshell()
-    command! -buffer JavaTestCurrentClass lua require('jdtls').test_class()
-    command! -buffer JavaTestNearestMethod lua require('jdtls').test_nearest_method()
-    ]])
-
+--local keymap = vim.keymap.set
+--
+--keymap("n", "A-o", ":lua require'jdtls'.organize_imports()<cr>", { silent = true, buffer = bufnr })
+--keymap("n", "crv", ":lua require'jdtls'.extract_variable()<cr>", { silent = true, buffer = bufnr })
+--keymap("v", "crv", "<Esc>:lua require'jdtls'.extract_variable(true)<cr>", { silent = true, buffer = bufnr })
+--keymap("n", "crc", ":lua require'jdtls'.extract_constant()<cr>", { silent = true, buffer = bufnr })
+--keymap("v", "crc", "<Esc>:lua require'jdtls'.extract_constant(true)<cr>", { silent = true, buffer = bufnr })
+--keymap("v", "crm", "<Esc>:lua require'jdtls'.extract_method(true)<cr>", { silent = true, buffer = bufnr })
+--
+--vim.cmd([[
+--    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_compile JdtCompile lua require('jdtls').compile(<f-args>)
+--    command! -buffer -nargs=? -complete=custom,v:lua.require'jdtls'._complete_set_runtime JdtSetRuntime lua require('jdtls').set_runtime(<f-args>)
+--    command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()
+--    command! -buffer JdtJol lua require('jdtls').jol()
+--    command! -buffer JdtBytecode lua require('jdtls').javap()
+--    command! -buffer JdtJshell lua require('jdtls').jshell()
+--    command! -buffer JavaTestCurrentClass lua require('jdtls').test_class()
+--    command! -buffer JavaTestNearestMethod lua require('jdtls').test_nearest_method()
+--    ]])
+--
 -- This starts a new client & server,
 -- or attaches to an existing client & server depending on the `root_dir`.
 jdtls.start_or_attach(config)
@@ -581,7 +708,7 @@ jdtls.start_or_attach(config)
 --  -- Optional: Load project-specific launch.json
 --  --require("dap.ext.vscode").load_launchjs()
 --end
---
+
 ----
 ----local capabilities = vim.lsp.protocol.make_client_capabilities()
 ----capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
