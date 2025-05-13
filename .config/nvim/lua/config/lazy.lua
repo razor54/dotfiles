@@ -29,6 +29,7 @@ require("lazy").setup({
     { import = "plugins.whichkey" },
     { import = "plugins.themes" },
     { import = "plugins.editor" },
+    { import = "plugins.dap" },
     -- TODO: Clean up this next part
     { import = "plugins.bloat-detection" },
   },
