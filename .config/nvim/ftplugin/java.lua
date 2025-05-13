@@ -5,88 +5,6 @@ local dap = require("dap")
 --  vim.fn.glob(vim.env.MASON .. "/share/java-debug-adapter/server/com.microsoft.java.debug.plugin-*.jar")
 
 -- 1. Resolve debug adapter JAR path correctly
-local debug_adapter_jar = vim.fn.glob(
-  vim.env.MASON .. "/share/java-debug-adapter/com.microsoft.java.debug.plugin-*.jar",
-  true -- Force exact match
-)
-
--- Verify JAR exists before proceeding
-if debug_adapter_jar == "" then
-  vim.notify("Java debug adapter JAR missing! Run :MasonInstall java-debug-adapter", vim.log.levels.ERROR)
-  return
-end
-
--- 2. Adapter configuration with proper JVM arguments
-dap.adapters.java = {
-  type = "server",
-  host = "127.0.0.1",
-  port = "${port}",
-  executable = {
-    command = "java",
-    args = {
-      "-jar",
-      debug_adapter_jar,
-      "-configuration",
-      vim.env.MASON .. "/share/java-debug-adapter/config",
-      "--port",
-      "${port}",
-    },
-    detached = false, -- Ensure process stays attached to Neovim
-  },
-}
--- Base configurations (applies to all projects)
-dap.configurations.java = {
-  {
-    type = "java",
-    request = "launch",
-    name = "Launch (Auto Port)",
-    mainClass = "${file}",
-    projectName = "${workspaceFolder}",
-    cwd = "${workspaceFolder}",
-    vmArgs = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=${port}",
-  },
-  {
-    type = "java",
-    request = "launch",
-    name = "Auto Launch",
-    mainClass = "${file}",
-    projectName = "${workspaceFolder}",
-    cwd = "${workspaceFolder}",
-    vmArgs = "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005",
-  },
-  {
-    type = "java",
-    request = "attach",
-    name = "Attach to Default Port (Port 5005)",
-    hostName = "localhost",
-    port = 5005,
-    sourcePaths = { "src/main/java" },
-  },
-}
---dap.adapters.java = {
---  type = "server",
---  host = "127.0.0.1",
---  port = "${port}",
---  executable = {
---    command = "java",
---    --args = { "-data", vim.fn.getcwd() .. "/.dap" },
---    args = {
---      "-jar",
---      debug_adapter_jar, -- Use resolved JAR path
---      "-configuration",
---      vim.env.MASON .. "/share/java-debug-adapter/config",
---      "--port",
---      "${port}",
---    },
---  },
---}
--- ftplugin/java.lua
-local jdtls = require("jdtls")
-
--- Single client enforcement
-if vim.lsp.get_clients({ name = "jdtls" })[1] then
-  return
-end
 
 --local dap = require("dap")
 
@@ -118,6 +36,17 @@ local function get_jdtls()
   -- Obtain the path to the Lomboc jar
   local lombok = jdtls_path .. "/lombok.jar"
   return launcher, config, lombok
+end
+
+local bundles = {
+  vim.fn.glob(vim.env.MASON .. "/share/java-debug-adapter/server/*.jar", true),
+  vim.fn.glob(vim.env.MASON .. "/share/java-test/server/*.jar", true),
+}
+
+-- Validate bundles exist
+if #bundles == 0 then
+  vim.notify("Missing Java debug bundles! Run :MasonInstall java-debug-adapter java-test", vim.log.levels.ERROR)
+  return
 end
 
 local function get_bundles()
@@ -484,7 +413,7 @@ local on_attach = function(_, bufnr)
   -- Sometimes this will randomly fail if language server takes to long to startup for the project, if a ClassDefNotFoundException occurs when running
   -- the debug tool, attempt to run the debug tool while in the main class of the application, or restart the neovim instance
   -- Unfortunately I have not found an elegant way to ensure this works 100%
-  require("jdtls.dap").setup_dap_main_class_configs()
+  --require("jdtls.dap").setup_dap_main_class_configs()
   -- Enable jdtls commands to be used in Neovim
   require("jdtls.setup").add_commands()
   -- Refresh the codelens
@@ -499,8 +428,14 @@ local on_attach = function(_, bufnr)
     end,
   })
 
+  -- Delay config generation to ensure LSP is fully initialized
+  vim.defer_fn(function()
+    require("jdtls.dap").setup_dap_main_class_configs()
+    --vim.cmd("JdtUpdateDebugConfigs") -- Now works after LSP init
+  end, 3000) -- 3-second delay
+
   -- Optional: Load project-specific launch.json
-  require("dap.ext.vscode").load_launchjs()
+  --require("dap.ext.vscode").load_launchjs()
 end
 
 --
@@ -602,19 +537,19 @@ local config = {
   },
   init_options = {
     --bundles = {},
-    bundles = get_bundles(),
+    bundles = bundles, --get_bundles(),
   },
   on_attach = on_attach,
 }
 
---jdtls.start_or_attach(config)
+jdtls.start_or_attach(config)
 --require("jdtls.setup").add_commands()
 -- Enable LSP with single-instance check
-if not vim.lsp.get_clients({ name = "jdtls" })[1] then
-  vim.lsp.enable("jdtls")
-end
+--if not vim.lsp.get_clients({ name = "jdtls" })[1] then
+--  vim.lsp.enable("jdtls")
+--end
 
 -- Load .vscode/launch.json configurations
 --require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } })
 -- Load project-specific configs from .vscode/launch.json
-require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } })
+--require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } })
