@@ -1,7 +1,7 @@
 -- Using Lazy
 return {
   "webhooked/kanso.nvim",
-  lazy = false,
+  --lazy = false,
   priority = 1000,
   config = function()
     -- Default options:
@@ -32,6 +32,6 @@ return {
     })
 
     -- setup must be called before loading
-    vim.cmd("colorscheme kanso")
+    --vim.cmd("colorscheme kanso")
   end,
 }

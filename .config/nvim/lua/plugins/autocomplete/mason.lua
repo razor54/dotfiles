@@ -37,7 +37,8 @@ return {
     config = function()
       -- ensure the java debug adapter is installed
       require("mason-nvim-dap").setup({
-        ensure_installed = { "java-debug-adapter", "java-test", "delve", "lombok-nightly" },
+        -- TODO: Apparently this is not installing automatically
+        ensure_installed = { "java-debug-adapter", "java-test", "delve", "lombok-nightly", "go-debug-adapter", "delve" },
         automatic_installation = true,
         handlers = {
           --java = function(source_name)

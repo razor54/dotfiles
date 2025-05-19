@@ -34,10 +34,29 @@ return {
               },
             },
             hidden = true,
+            ignored = true,
             actions = {},
           },
-          files = { hidden = true },
-          grep = { hidden = true },
+          files = { hidden = true, ignored = false },
+          grep = { hidden = true, ignored = false },
+        },
+      },
+
+      terminal = {
+        win = {
+          keys = {
+            term_normal = {
+              "<esc><esc>",
+              function()
+                return "<C-\\><C-n>"
+              end,
+              mode = "t",
+              expr = true,
+              desc = "Double escape to normal mode",
+            },
+            q = "hide",
+            ["<esc>"] = "hide",
+          },
         },
       },
 
