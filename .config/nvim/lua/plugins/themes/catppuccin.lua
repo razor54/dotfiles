@@ -2,8 +2,7 @@ return {
   "catppuccin/nvim",
   name = "catppuccin",
   priority = 1000,
-  --lazy = false,
-  lazy = true, -- the theme is disabled so we don't want to load it
+  lazy = false,
   config = function()
     require("catppuccin").setup({
       flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -37,7 +36,14 @@ return {
         operators = {},
         -- miscs = {}, -- Uncomment to turn off hard-coded styles
       },
-      color_overrides = {},
+      --color_overrides = {},
+      color_overrides = {
+        mocha = {
+          base = "#000000",
+          mantle = "#000000",
+          crust = "#000000",
+        },
+      },
       custom_highlights = {},
       default_integrations = true,
       integrations = {
@@ -54,6 +60,6 @@ return {
         -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
       },
     })
-    --vim.cmd.colorscheme("catppuccin")
+    vim.cmd.colorscheme("catppuccin")
   end,
 }

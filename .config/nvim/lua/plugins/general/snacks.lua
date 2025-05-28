@@ -60,6 +60,12 @@ return {
         },
       },
 
+      styles = {
+        terminal = {
+          height = 15,
+        },
+      },
+
       statuscolumn = {
         enabled = true,
         left = { "mark", "sign" }, -- priority of signs on the left (high to low)

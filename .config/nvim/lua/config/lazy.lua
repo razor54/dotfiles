@@ -30,6 +30,7 @@ require("lazy").setup({
     { import = "plugins.themes" },
     { import = "plugins.editor" },
     { import = "plugins.dap" },
+    { import = "plugins.sql" },
     -- TODO: Clean up this next part
     { import = "plugins.bloat-detection" },
   },

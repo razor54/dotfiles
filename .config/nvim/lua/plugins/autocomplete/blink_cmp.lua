@@ -9,14 +9,14 @@ return {
     --"rafamadriz/friendly-snippets",
     "saghen/blink.compat",
     --"supermaven-nvim",
-    "huijiro/blink-cmp-supermaven",
-    {
-      "supermaven-inc/supermaven-nvim",
-      opts = {
-        disable_inline_completion = true,
-        disable_keymaps = true,
-      },
-    },
+    --"huijiro/blink-cmp-supermaven",
+    --{
+    --  "supermaven-inc/supermaven-nvim",
+    --  opts = {
+    --    disable_inline_completion = true,
+    --    disable_keymaps = true,
+    --  },
+    --},
     --"hrsh7th/nvim-cmp", -- Required
     --"hrsh7th/cmp-nvim-lsp", -- add this for LSP capabilities support
   },
@@ -47,16 +47,18 @@ return {
     },
     sources = {
       --compat = { "supermaven" },
-      default = { "supermaven", "lazydev", "lsp", "path", "snippets", "buffer" },
+      --default = { "supermaven", "lazydev", "lsp", "path", "snippets", "buffer" },
+      default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+
       providers = {
-        supermaven = {
-          -- kind = "Supermaven",
-          name = "supermaven",
-          --module = "blink.compat.source",
-          module = "blink-cmp-supermaven",
-          score_offset = 100,
-          async = true,
-        },
+        --supermaven = {
+        --  -- kind = "Supermaven",
+        --  name = "supermaven",
+        --  --module = "blink.compat.source",
+        --  module = "blink-cmp-supermaven",
+        --  score_offset = 100,
+        --  async = true,
+        --},
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",
