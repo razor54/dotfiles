@@ -8,6 +8,10 @@ return {
     { "L3MON4D3/LuaSnip", version = "v2.*" },
     --"rafamadriz/friendly-snippets",
     "saghen/blink.compat",
+    -- copilot
+    {
+      "giuxtaposition/blink-cmp-copilot",
+    },
     --"supermaven-nvim",
     --"huijiro/blink-cmp-supermaven",
     --{
@@ -35,10 +39,13 @@ return {
       --["<S-Tab>"] = { "snippet_backward", "fallback" },
       --["<Up>"] = { "select_prev", "fallback" },
       --["<Down>"] = { "select_next", "fallback" },
-      ["<C-p>"] = { "select_prev", "fallback" },
-      ["<C-n>"] = { "select_next", "fallback" },
-      ["<A-k>"] = { "select_next", "fallback" },
-      ["<A-j>"] = { "select_prev", "fallback" },
+      -- ["<Tab>"] = { "select_next", "snippet_forward", "fallback" }, -- Use Tab for Blink’s selections
+      -- ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+      -- ["<CR>"] = { "accept", "fallback" }, -- Enter to accept Blink’s suggestion
+      ["<C-p>"] = { "select_prev", "snippet_backward", "fallback" },
+      ["<C-n>"] = { "select_next", "snippet_forward", "fallback" },
+      ["<A-k>"] = { "select_next", "snippet_forward", "fallback" },
+      ["<A-j>"] = { "select_prev", "snippet_backward", "fallback" },
       ["<C-b>"] = { "scroll_documentation_up", "fallback" },
       ["<C-f>"] = { "scroll_documentation_down", "fallback" },
     },
@@ -48,7 +55,7 @@ return {
     sources = {
       --compat = { "supermaven" },
       --default = { "supermaven", "lazydev", "lsp", "path", "snippets", "buffer" },
-      default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+      default = { "copilot", "lazydev", "lsp", "path", "snippets", "buffer" },
 
       providers = {
         --supermaven = {
@@ -59,6 +66,12 @@ return {
         --  score_offset = 100,
         --  async = true,
         --},
+        copilot = {
+          name = "copilot",
+          module = "blink-cmp-copilot",
+          score_offset = 100,
+          async = true,
+        },
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",

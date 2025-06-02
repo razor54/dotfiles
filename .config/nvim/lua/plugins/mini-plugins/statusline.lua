@@ -1,7 +1,7 @@
 return {
-  "echasnovski/mini.statusline",
-  version = "*",
-  lazy = true,
-  event = "UIEnter",
-  opts = {},
+  --"echasnovski/mini.statusline",
+  --version = "*",
+  --lazy = true,
+  --event = "UIEnter",
+  --opts = {},
 }

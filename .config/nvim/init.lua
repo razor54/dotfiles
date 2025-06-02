@@ -8,3 +8,6 @@ require("config.lazy")
 
 require("config.keymaps")
 require("config.autocmds")
+
+-- Require status line
+require("config.statusline")
