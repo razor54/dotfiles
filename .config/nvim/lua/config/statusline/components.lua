@@ -204,21 +204,33 @@ end
 ---@param opts? {mono:boolean}
 function M.file_icon(opts)
   opts = opts or { mono = true }
-  local devicons = require("nvim-web-devicons")
-  local icon, icon_highlight_group = devicons.get_icon(vim.fn.expand("%:t"))
-  if icon == nil then
-    icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
-  end
-
-  if icon == nil and icon_highlight_group == nil then
-    icon = "󰈚"
-    icon_highlight_group = "DevIconDefault"
-  end
-
+  local mini_icons = require("mini.icons")
+  local filename = vim.fn.expand("%:t")
+  local extension = vim.fn.expand("%:e")
+  local icon = (mini_icons.file and mini_icons.file[extension])
+    or (mini_icons.file and mini_icons.file.default)
+    or "󰈚"
+  local icon_highlight_group = "MiniIconsFile" -- You can define this highlight group as needed
   if not vim.bo.modifiable then
     icon = ""
     icon_highlight_group = "SLNotModifiable"
   end
+  -- local devicons = require("nvim-web-devicons")
+  -- local devicons = require("mini.icons")
+  -- local icon, icon_highlight_group = devicons.get_icon(vim.fn.expand("%:t"))
+  -- if icon == nil then
+  --   icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+  -- end
+  --
+  -- if icon == nil and icon_highlight_group == nil then
+  --   icon = "󰈚"
+  --   icon_highlight_group = "DevIconDefault"
+  -- end
+  --
+  -- if not vim.bo.modifiable then
+  --   icon = ""
+  --   icon_highlight_group = "SLNotModifiable"
+  -- end
 
   return hl_str(icon_highlight_group, icon)
 end

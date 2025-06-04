@@ -17,29 +17,30 @@ return {
     local custom_bg = { attribute = "bg", highlight = fill_hl }
     return {
       highlights = {
-        fill = { bg = custom_bg },
-        background = { bg = custom_bg },
-        close_button = { bg = custom_bg },
-        offset_separator = { bg = custom_bg },
-        trunc_marker = { bg = custom_bg },
-        duplicate = { bg = custom_bg },
-        close_button_selected = { fg = "#B55A67" }, -- *
-        separator = { fg = custom_bg, bg = custom_bg },
-        modified = { fg = "#B55A67", bg = custom_bg },
-        hint = { bg = custom_bg },
-        hint_diagnostic = { bg = custom_bg },
-        info = { bg = custom_bg },
-        info_diagnostic = { bg = custom_bg },
-        warning = { bg = custom_bg },
-        warning_diagnostic = { bg = custom_bg },
-        error = { bg = custom_bg },
-        error_diagnostic = { bg = custom_bg },
+        -- fill = { bg = custom_bg },
+        -- background = { bg = custom_bg },
+        -- close_button = { bg = custom_bg },
+        -- offset_separator = { bg = custom_bg },
+        -- trunc_marker = { bg = custom_bg },
+        -- duplicate = { bg = custom_bg },
+        -- close_button_selected = { fg = "#B55A67" }, -- *
+        -- separator = { fg = custom_bg, bg = custom_bg },
+        -- modified = { fg = "#B55A67", bg = custom_bg },
+        -- hint = { bg = custom_bg },
+        -- hint_diagnostic = { bg = custom_bg },
+        -- info = { bg = custom_bg },
+        -- info_diagnostic = { bg = custom_bg },
+        -- warning = { bg = custom_bg },
+        -- warning_diagnostic = { bg = custom_bg },
+        -- error = { bg = custom_bg },
+        -- error_diagnostic = { bg = custom_bg },
       },
       options = {
+        color_icons = false,
         show_buffer_close_icons = false,
-        show_buffer_icons = false, -- disable filetype icons for buffers
+        show_buffer_icons = true, -- disable filetype icons for buffers
         show_close_icon = true,
-        show_tab_indicators = false,
+        show_tab_indicators = true,
         buffer_close_icon = "",
         modified_icon = "",
         diagnostics = "nvim_lsp",
@@ -76,6 +77,18 @@ return {
           bufferline.style_preset.no_italic,
           bufferline.style_preset.no_bold,
         },
+        -- get_element_icon = function(element)
+        --   -- element consists of {filetype: string, path: string, extension: string, directory: string}
+        --   -- This can be used to change how bufferline fetches the icon
+        --   -- for an element e.g. a buffer or a tab.
+        --   -- e.g.
+        --   -- local icon, hl = require("nvim-web-devicons").get_icon_by_filetype(element.filetype, { default = false })
+        --   -- return icon, hl
+        --   local icons = require("mini.icons").file or {}
+        --   local icon = icons[element.extension] or icons.default or "󰈚"
+        --   local hl = "MiniIconsFile"
+        --   return icon, hl
+        -- end,
       },
     }
   end,

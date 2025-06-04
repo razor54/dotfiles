@@ -10,6 +10,19 @@ return {
     opts = {
       -- See Configuration section for options
     },
+    keys = {
+      -- { "<leader>cc", "<cmd>CopilotChat<cr>", desc = "Copilot Chat" },
+      { "<leader>co", "<cmd>CopilotChatOpen<cr>", desc = "Copilot Chat Open" },
+      -- { "<leader>cq", "<cmd>CopilotChatClose<cr>", desc = "Copilot Chat Close" },
+      -- { "<leader>ct", "<cmd>CopilotChatToggle<cr>", desc = "Copilot Chat Toggle" },
+      -- { "<leader>cs", "<cmd>CopilotChatStop<cr>", desc = "Copilot Chat Stop" },
+      -- { "<leader>cr", "<cmd>CopilotChatReset<cr>", desc = "Copilot Chat Reset" },
+      -- { "<leader>cS", "<cmd>CopilotChatSave<cr>", desc = "Copilot Chat Save" },
+      -- { "<leader>cL", "<cmd>CopilotChatLoad<cr>", desc = "Copilot Chat Load" },
+      -- { "<leader>cp", "<cmd>CopilotChatPrompts<cr>", desc = "Copilot Chat Prompts" },
+      -- { "<leader>cm", "<cmd>CopilotChatModels<cr>", desc = "Copilot Chat Models" },
+      -- { "<leader>ca", "<cmd>CopilotChatAgents<cr>", desc = "Copilot Chat Agents" },
+    },
     -- See Commands section for default commands if you want to lazy load on them
     --
     --Commands are used to control the chat interface:
