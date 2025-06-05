@@ -17,6 +17,21 @@ nvim_create("User", {
     end)
   end,
 })
+
+-- TODO: Find out why we need this to fix the filetype detection
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function(args)
+    local ft = vim.bo[args.buf].filetype
+    local name = vim.api.nvim_buf_get_name(args.buf)
+    if ft == "" and name ~= "" then
+      vim.api.nvim_buf_call(args.buf, function()
+        vim.cmd("filetype detect")
+      end)
+    end
+  end,
+  desc = "Force filetype detection for Snacks explorer buffers",
+})
+
 -- TODO: Check
 --nvim_create("FileType", {
 --  pattern = "go",

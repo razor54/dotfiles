@@ -5,13 +5,13 @@ return {
     "AndreM222/copilot-lualine",
   },
   keys = {
-    {
-      "<leader>cp",
-      function()
-        vim.cmd("Copilot toggle")
-      end,
-      desc = "Copilot Toggle",
-    },
+    -- {
+    --   "<leader>cp",
+    --   function()
+    --     vim.cmd("Copilot toggle")
+    --   end,
+    --   desc = "Copilot Toggle",
+    -- },
   },
   opts = {
     panel = {

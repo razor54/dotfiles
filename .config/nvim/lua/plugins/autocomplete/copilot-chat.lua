@@ -8,7 +8,60 @@ return {
     },
     build = "make tiktoken", -- Only on MacOS or Linux
     opts = {
-      -- See Configuration section for options
+
+      mappings = {
+        complete = {
+          insert = "<Tab>",
+        },
+        close = {
+          normal = "q",
+          insert = "<C-c>",
+        },
+        reset = {
+          normal = "<C-r>",
+          insert = "<C-r>",
+        },
+        submit_prompt = {
+          normal = "<CR>",
+          insert = "<C-s>",
+        },
+        toggle_sticky = {
+          normal = "grr",
+        },
+        clear_stickies = {
+          normal = "grx",
+        },
+        accept_diff = {
+          normal = "<C-y>",
+          insert = "<C-y>",
+        },
+        jump_to_diff = {
+          normal = "gj",
+        },
+        quickfix_answers = {
+          normal = "gqa",
+        },
+        quickfix_diffs = {
+          normal = "gqd",
+        },
+        yank_diff = {
+          normal = "gy",
+          register = '"', -- Default register to use for yanking
+        },
+        show_diff = {
+          normal = "gd",
+          full_diff = false, -- Show full diff instead of unified diff when showing diff window
+        },
+        show_info = {
+          normal = "gi",
+        },
+        show_context = {
+          normal = "gc",
+        },
+        show_help = {
+          normal = "gh",
+        },
+      },
     },
     keys = {
       -- { "<leader>cc", "<cmd>CopilotChat<cr>", desc = "Copilot Chat" },
@@ -16,7 +69,7 @@ return {
       -- { "<leader>cq", "<cmd>CopilotChatClose<cr>", desc = "Copilot Chat Close" },
       -- { "<leader>ct", "<cmd>CopilotChatToggle<cr>", desc = "Copilot Chat Toggle" },
       -- { "<leader>cs", "<cmd>CopilotChatStop<cr>", desc = "Copilot Chat Stop" },
-      -- { "<leader>cr", "<cmd>CopilotChatReset<cr>", desc = "Copilot Chat Reset" },
+      { "<leader>cr", "<cmd>CopilotChatReset<cr>", desc = "Copilot Chat Reset" },
       -- { "<leader>cS", "<cmd>CopilotChatSave<cr>", desc = "Copilot Chat Save" },
       -- { "<leader>cL", "<cmd>CopilotChatLoad<cr>", desc = "Copilot Chat Load" },
       -- { "<leader>cp", "<cmd>CopilotChatPrompts<cr>", desc = "Copilot Chat Prompts" },

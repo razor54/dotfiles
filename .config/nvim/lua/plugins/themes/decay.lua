@@ -28,6 +28,6 @@ return {
       },
     })
 
-    cmd.colorscheme("decay")
+    -- cmd.colorscheme("decay")
   end,
 }
