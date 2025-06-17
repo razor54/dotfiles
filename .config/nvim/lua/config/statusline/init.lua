@@ -75,7 +75,7 @@ function Status_line()
     c.padding(2),
     c.scrollbar2(),
     c.padding(),
-    c.lsp_diagnostics_simple(),
+    -- c.lsp_diagnostics_simple(),
     c.git_status_simple(),
     -- c.padding(3),
   }

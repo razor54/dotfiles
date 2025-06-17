@@ -1,6 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
+palette = "catppuccin_macchiato"
 add_newline = true
-palette = "tailwind"
+command_timeout = 2000
+
 format = """
 $status\
 ${custom.git_host}\
@@ -12,70 +14,27 @@ $git_state\
 $git_commit\
 $git_metrics\
 $git_status\
-$git_commit\
 $lua\
 $nodejs\
-$deno\
+$golang\
+$java\
 $package\
-$dotnet\
 $docker_context\
 $cmd_duration\
 $line_break\
 $character\
 """
 
-[palettes.tailwind]
-fg = "#ffffff"
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
-
-[docker_context]
-format = '[ $context](sky) '
-
-[lua]
-format = '[󰢱 $version](blue) '
-
-[package]
-symbol = " "
-style = "teal"
-disabled = false
-display_private = true
-format = '[$symbol$version]($style) '
-
 [fill]
 symbol = " "
-style = 'white'
+style = 'text'
 disabled = false
 
 [status]
 symbol = ' '
 disabled = false
 map_symbol = true
-style = 'fg:blue'
+style = 'blue'
 success_symbol = ''
 format = '[$symbol](yellow)$status ($style)'
 
@@ -89,15 +48,15 @@ format = '[$path]($style)[$read_only]($read_only_style) '
 [character]
 error_symbol = "[❯](red)"
 vimcmd_symbol = "[❮](green)"
-success_symbol = "[[>_](fg)](fg)"
+success_symbol = "[[>_](text)](text)"
 
 [git_branch]
-style = "white"
+style = "text"
 symbol = ' '
 format = '[$symbol$branch(:$remote_branch)]($style) '
 
 [git_status]
-style = "white"
+style = "text"
 up_to_date = ''
 renamed = '👅'
 conflicted = '🏳'
@@ -112,7 +71,7 @@ diverged = '⇕⇡${ahead_count}⇣${behind_count} '
 format = "[[($conflicted$modified$staged$renamed$deleted)](218)($ahead_behind$stashed)]($style)"
 
 [git_state]
-style = "fg"
+style = "text"
 cherry_pick = '[🍒PICK](red)'
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
 
@@ -129,16 +88,32 @@ min_time_to_notify = 10000
 show_notifications = false
 format = "[ ⏰ $duration]($style) "
 
-[dotnet]
-symbol = ' '
-disabled = false
-format = '[$symbol($version)]($style) '
+[lua]
+format = '[󰢱 $version](blue) '
 
-[deno]
+[package]
+symbol = " "
+style = "teal"
 disabled = false
-symbol = '🦕'
+display_private = true
+format = '[$symbol$version]($style) '
+
+[docker_context]
+format = '[ $context](sky) '
+
+[java]
+symbol = " "
+style = "mauve"
 format = '[$symbol($version)]($style) '
-detect_files = ['deno.json']
+detect_extensions = ["java", "class", "jar"]
+detect_files = ["pom.xml", "build.gradle", "build.gradle.kts"]
+
+[golang]
+symbol = " "
+style = "teal"
+format = '[$symbol($version)]($style) '
+detect_extensions = ["go"]
+detect_files = ["go.mod", "go.sum"]
 
 [nodejs]
 symbol = ' '
@@ -155,13 +130,56 @@ format = "[󰚰 $output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 description = "Show time since last commit"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/relative-time-commit"""
+command = """echo "n/a" """
 
 [custom.git_host]
-style = "white"
+style = "text"
 directories = [".git"]
 format = "[$output]($style) "
 shell = ["bash", "--norc", "--noprofile"]
 description = "Show icon of git host platform"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-command = """deno --allow-sys --allow-run --allow-read $HOME/dotfiles/bin/github-icon"""
+command = """echo "" """
+
+[palettes.catppuccin_macchiato]
+bg = "#000000"
+background = "#000000"
+split = "#000000"
+tab_bar_bg = "#000000"
+tab_bar_inactive_bg = "#000000"
+tab_bar_inactive_fg = "#b7bdf8"
+tab_bar_active_bg = "#000000"
+tab_bar_active_fg = "#8aadf4"
+tab_bar_active_intensity = "Bold"
+tab_bar_new_tab_bg = "#000000"
+tab_bar_border_left = "#C093B7"
+tab_bar_border_right = "#C093B7"
+tab_bar_border_top = "#C093B7"
+tab_bar_border_bottom = "#C093B7"
+rosewater = "#f4dbd6"
+flamingo = "#f0c6c6"
+pink = "#f5bde6"
+mauve = "#c6a0f6"
+red = "#ed8796"
+maroon = "#ee99a0"
+peach = "#f5a97f"
+yellow = "#eed49f"
+green = "#a6da95"
+teal = "#8bd5ca"
+sky = "#91d7e3"
+sapphire = "#7dc4e4"
+blue = "#8aadf4"
+lavender = "#b7bdf8"
+text = "#cad3f5"
+subtext1 = "#b8c0e0"
+subtext0 = "#a5adcb"
+overlay2 = "#939ab7"
+overlay1 = "#8087a2"
+overlay0 = "#6e738d"
+surface2 = "#5b6078"
+surface1 = "#494d64"
+surface0 = "#363a4f"
+base = "#24273a"
+mantle = "#1e2030"
+crust = "#181926"
+

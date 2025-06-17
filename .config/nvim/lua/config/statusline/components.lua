@@ -84,24 +84,17 @@ local isDark = vim.o.background == "dark"
 ---@param mode "insert"|nil
 ---@return string
 local function get_theme_color(mode)
-  if vim.g.colors_name == "tokyonight-moon" then
-    local colors = require("tokyonight.colors").setup()
-    return mode == "insert" and colors.green1 or "#9580FF"
-  elseif vim.g.colors_name == "cyberdream" then
-    local c_cyberdream = require("cyberdream.colors").default
-    return mode == "insert" and c_cyberdream.green or c_cyberdream.magenta
-  elseif vim.g.colors_name == "dracula" then
-    local c_dracula = require("dracula").colors()
-    return mode == "insert" and c_dracula.green or c_dracula.purple
-  elseif vim.g.colors_name == "catppuccin-mocha" then
-    local cp = require("catppuccin.palettes").get_palette("mocha")
-    return mode == "insert" and cp.mauve or cp.blue
-  elseif string.match(vim.g.colors_name, "^github%-monochrome%-(.+)$") then
-    local style = string.match(vim.g.colors_name, "^github%-monochrome%-(.+)$")
-    local colors = require("github-monochrome.colors").setup({ style = style })
-    return mode == "insert" and colors.magenta or colors.blue
+  -- Use the current lualine theme colors if available
+  local ok, lualine = pcall(require, "lualine.themes." .. (vim.g.colors_name or "auto"))
+  if ok and lualine and lualine.normal and lualine.insert then
+    if mode == "insert" then
+      return lualine.insert.a.bg or "#4FD6BE"
+    else
+      return lualine.normal.a.bg or "#9580FF"
+    end
   end
 
+  -- Fallbacks
   if mode == "insert" then
     return isDark and "#4FD6BE" or "#1E1E1E"
   end
@@ -109,16 +102,19 @@ local function get_theme_color(mode)
   return isDark and "#9580FF" or "#9A5BFF"
 end
 
-M.colors = {
-  yellow = "#E2B86B",
-  red = isDark and "#DE6E7C" or "#D73A4A",
-  blue = get_theme_color(),
-  insert = get_theme_color("insert"),
-  select = isDark and "#FCA7EA" or "#2188FF",
-  stealth = isDark and "#4E546B" or "#A7ACBF",
-  fg_hl = isDark and "#FFAFF3" or "#9A5BFF",
-  bg_hl = get_hl_hex("Normal").bg and utils.lighten(get_hl_hex("Normal").bg, 0.93) or "none",
-}
+M.colors = setmetatable({}, {
+  __index = function(_, key)
+    local ok, lualine = pcall(require, "lualine.themes." .. (vim.g.colors_name or "auto"))
+    if ok and lualine then
+      if key == "blue" and lualine.normal and lualine.normal.a then
+        return lualine.normal.a.bg
+      elseif key == "insert" and lualine.insert and lualine.insert.a then
+        return lualine.insert.a.bg
+      end
+    end
+    return nil
+  end,
+})
 
 ---Get a status decorator for some filetypes such as Nvimtree
 ---@return string

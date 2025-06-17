@@ -1,92 +1,5 @@
 local M = {}
 
--- from https://github.com/NvChad/ui/blob/main/lua/nvchad_ui/icons.lua
-M.nvchad_icons = {
-  Array = "[]",
-  Boolean = "",
-  Calendar = "",
-  Class = "",
-  Codeium = "",
-  Color = "󰏘",
-  Constant = "",
-  Constructor = "",
-  Copilot = "",
-  Enum = "",
-  EnumMember = "",
-  Event = "",
-  Field = "󰜢",
-  File = "󰈙",
-  Folder = "󰉋",
-  Function = "󰊕",
-  Interface = "",
-  Keyword = "󰌋",
-  Method = "󰊕",
-  Module = "",
-  Namespace = "󰌗",
-  Null = "󰟢",
-  Number = "",
-  Object = "󰅩",
-  Operator = "󰆕",
-  Package = "",
-  Property = "󰜢",
-  Reference = "󰈇",
-  Snippet = "",
-  String = "󰉿",
-  Struct = "󰙅",
-  Table = "",
-  TabNine = "",
-  Tag = "",
-  Text = "",
-  TypeParameter = "",
-  Unit = "󰑭",
-  Value = "󰎠",
-  Version = "",
-  Variable = "",
-  Watch = "󰥔",
-}
-
-M.lazyvim_icons = {
-  Array = "",
-  Boolean = "󰨙",
-  Class = "",
-  Codeium = "󰘦",
-  Color = "",
-  Control = "",
-  Collapsed = "",
-  Constant = "󰏿",
-  Constructor = "",
-  Copilot = "",
-  Enum = "",
-  EnumMember = "",
-  Event = "",
-  Field = "",
-  File = "",
-  Folder = "",
-  Function = "󰊕",
-  Interface = "",
-  Key = "",
-  Keyword = "",
-  Method = "󰊕",
-  Module = "",
-  Namespace = "󰦮",
-  Null = "",
-  Number = "󰎠",
-  Object = "",
-  Operator = "",
-  Package = "",
-  Property = "",
-  Reference = "",
-  Snippet = "",
-  String = "",
-  Struct = "󰆼",
-  TabNine = "󰏚",
-  Text = "",
-  TypeParameter = "",
-  Unit = "",
-  Value = "",
-  Variable = "󰀫",
-}
-
 M.git_icons = {
   added = " ",
   modified = " ",
@@ -336,6 +249,13 @@ function M.get_hl_hex(hl_group)
     fg = hl.fg and ("#%06x"):format(hl.fg) or nil,
     bg = hl.bg and ("#%06x"):format(hl.bg) or nil,
   }
+end
+
+---Creates an augroup while clearing previous autocmds
+---@param name string The name of the augroup
+---@return number augroup_id The augroup id
+function M.augroup(name)
+  return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
 return M

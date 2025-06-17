@@ -51,13 +51,9 @@ return {
 
     vim.api.nvim_create_autocmd("ColorScheme", {
       group = "lualine_augroup",
-      pattern = { "dracula", "nord", "*" },
+      pattern = { "*" },
       callback = function()
-        if vim.g.colors_name == "nord" then
-          require("lualine").setup({ options = { theme = "nord" } })
-        else
-          require("lualine").setup({ options = { theme = theme[vim.g.colors_name] or "auto" } })
-        end
+        require("lualine").setup({ options = { theme = theme[vim.g.colors_name] or "auto" } })
       end,
     })
 
@@ -114,19 +110,19 @@ return {
             symbols = { added = "▪", modified = "▪", removed = "▪" },
             padding = { left = 0, right = 1 },
           },
-          {
-            "diagnostics",
-            symbols = { error = "◦", warn = "◦", info = "◦", hint = "◦" },
-            -- symbols = { error = "◌", warn = "◌", info = "◌", hint = "◌" },
-            padding = { left = 0, right = 1 },
-            fmt = function(str)
-              local count = str:match("%d+")
-              if count then
-                return str:gsub("%d+%s*", "")
-              end
-              return str
-            end,
-          },
+          -- {
+          --   "diagnostics",
+          --   symbols = { error = "◦", warn = "◦", info = "◦", hint = "◦" },
+          --   -- symbols = { error = "◌", warn = "◌", info = "◌", hint = "◌" },
+          --   padding = { left = 0, right = 1 },
+          --   fmt = function(str)
+          --     local count = str:match("%d+")
+          --     if count then
+          --       return str:gsub("%d+%s*", "")
+          --     end
+          --     return str
+          --   end,
+          -- },
         },
         lualine_c = {
           -- { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },

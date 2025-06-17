@@ -10,6 +10,9 @@ export LANG="en_US.UTF-8"
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 
+# vim mode
+source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
 # --- History Options ---
 setopt SHARE_HISTORY        # share history between all sessions
 setopt HIST_IGNORE_SPACE    # don't record commands that start with a space
@@ -51,7 +54,7 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 # --- Source Personal Aliases and Functions ---
 for file in ~/.{aliases,functions}; do
-    [ -r "$file" ] && [ -f "$file" ] && source "$file"
+  [ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 unset file
 
@@ -131,7 +134,7 @@ setopt HIST_IGNORE_SPACE
 # >>> bindkey tip: to discovery the code of your keys, execute "$ cat -v" and press the key, the code will be printed in your shell.
 
 # use the ZLE (zsh line editor) in emacs mode. Useful to move the cursor in large commands
-bindkey -e
+bindkey -v
 
 # navigate words using Ctrl + arrow keys
 # >>> CRTL + right arrow | CRTL + left arrow
@@ -139,7 +142,7 @@ bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
 # macosx override
-if [[ "$OSTYPE" == "darwin"* ]]; then 
+if [[ "$OSTYPE" == "darwin"* ]]; then
   # >>> OPT + right arrow | OPT + left arrow
   bindkey "^[^[[C" forward-word
   bindkey "^[^[[D" backward-word
@@ -173,4 +176,3 @@ bindkey "^@" fzf-file-widget
 # --- Final Profiling Output (optional) ---
 # zprof
 # --- End of .zshrc ---
-

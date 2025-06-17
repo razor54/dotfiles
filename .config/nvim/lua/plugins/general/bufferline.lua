@@ -77,18 +77,6 @@ return {
           bufferline.style_preset.no_italic,
           bufferline.style_preset.no_bold,
         },
-        -- get_element_icon = function(element)
-        --   -- element consists of {filetype: string, path: string, extension: string, directory: string}
-        --   -- This can be used to change how bufferline fetches the icon
-        --   -- for an element e.g. a buffer or a tab.
-        --   -- e.g.
-        --   -- local icon, hl = require("nvim-web-devicons").get_icon_by_filetype(element.filetype, { default = false })
-        --   -- return icon, hl
-        --   local icons = require("mini.icons").file or {}
-        --   local icon = icons[element.extension] or icons.default or "󰈚"
-        --   local hl = "MiniIconsFile"
-        --   return icon, hl
-        -- end,
       },
     }
   end,
