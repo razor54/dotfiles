@@ -11,7 +11,7 @@ return {
     build = "make tiktoken", -- Only on MacOS or Linux
     opts = {
       -- https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task
-      model = "claude-3.5-sonnet",
+      -- model = "claude-3.5-sonnet",
       question_header = "  User ",
       answer_header = "  Copilot ",
       error_header = "  Error ",

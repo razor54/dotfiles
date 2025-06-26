@@ -2,10 +2,36 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = { inlay_hints = { enabled = true } },
-    --event = "BufEnter",
     event = "BufReadPost",
     config = function()
       --require("nvim-highlight-colors").turnOn()
+      local lspconfig = require("lspconfig")
+
+      -- Common LSP setup
+      -- local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+      -- OmniSharp setup
+      lspconfig.omnisharp.setup({
+        capabilities = capabilities,
+        cmd = {
+          "/usr/local/share/dotnet/dotnet",
+          vim.fn.stdpath("data") .. "/mason/packages/omnisharp/OmniSharp.dll",
+          "--languageserver",
+          "--hostPID",
+          tostring(vim.fn.getpid()),
+        },
+        enable_import_completion = true,
+        organize_imports_on_format = true,
+        enable_roslyn_analyzers = true,
+        root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj", ".git"),
+        -- Add environment settings
+        cmd_env = {
+          DOTNET_ROOT = "/usr/local/share/dotnet",
+          MSBuildSDKsPath = "/usr/local/share/dotnet/sdk/9.0.301/Sdks",
+          PATH = "/usr/local/share/dotnet:" .. vim.env.PATH,
+        },
+      })
     end,
     dependencies = {
       "mason-org/mason-lspconfig.nvim",
@@ -31,33 +57,6 @@ return {
           end,
         },
       },
-      --"hrsh7th/cmp-nvim-lsp",
-      --{ -- install ufo for better code folding support
-      --  "kevinhwang91/nvim-ufo",
-      --  lazy = false,
-      --  dependencies = {
-      --    "kevinhwang91/promise-async",
-      --    { "luukvbaal/statuscol.nvim", lazy = false, config = true },
-      --  },
-      --},
-      --{
-      --  "brenoprata10/nvim-highlight-colors",
-      --  config = true,
-      --  opts = {
-      --    render = "background",
-      --    enable_hex = true,
-      --    enable_hsl = true,
-      --    enable_rgb = true,
-      --    enable_tailwind = true,
-      --    enable_var_usage = true,
-      --    enable_short_hex = true,
-      --    enable_named_colors = true,
-      --    virtual_symbol = "■",
-      --    virtual_symbol_prefix = "",
-      --    virtual_symbol_suffix = " ",
-      --    virtual_symbol_position = "inline",
-      --  },
-      --},
     },
   },
   -- Lsp notifications

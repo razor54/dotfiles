@@ -1,9 +1,10 @@
 return {
   "nvzone/floaterm",
+  -- event = "VeryLazy",
   dependencies = "nvzone/volt",
   opts = {},
   cmd = "FloatermToggle",
   keys = {
-    { "<leader>to", "<cmd>FloatTermToggle<cr>", desc = "Copilot Chat Open" },
+    { "<leader>to", "<cmd>FloatermToggle<cr>", desc = "Open Float Term" },
   },
 }

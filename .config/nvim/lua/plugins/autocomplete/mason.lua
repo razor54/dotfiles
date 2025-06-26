@@ -23,6 +23,7 @@ return {
         "yamlls",
         "dockerls",
         "jsonls",
+        "omnisharp",
       },
       automatic_enable = {
         exclude = { "jdtls" }, -- Exclude servers you want manual control
