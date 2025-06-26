@@ -83,6 +83,7 @@ return {
       "json",
       "yaml",
       "latex",
+      "c_sharp",
     },
     auto_install = true,
     sync_install = true,
