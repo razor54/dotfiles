@@ -46,6 +46,11 @@ export GOPATH="$HOME/go"
 export GOROOT="$(brew --prefix golang)/libexec"
 export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 
+# --- DotNet Environment ---
+export DOTNET_ROOT="/usr/local/share/dotnet"
+export MSBuildSDKsPath="$DOTNET_ROOT/sdk/$(dotnet --version)/Sdks"
+export PATH="$DOTNET_ROOT:$PATH"
+
 # --- Additional PATH additions ---
 export PATH="$HOME/.local/bin:/usr/local/sbin:/usr/local/opt/python/libexec/bin:$PATH"
 
