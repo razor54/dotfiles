@@ -37,6 +37,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     "*.vue",
     "*ex",
     "*exs",
+    "*.cs",
   },
   callback = function()
     local filetype = vim.bo.filetype

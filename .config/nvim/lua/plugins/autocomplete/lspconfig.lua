@@ -62,8 +62,8 @@ return {
       },
     },
   },
-  {
-    "Decodetalkers/csharpls-extended-lsp.nvim",
-    ft = { "cs" },
-  },
+  -- {
+  --   "Decodetalkers/csharpls-extended-lsp.nvim",
+  --   ft = { "cs" },
+  -- },
 }

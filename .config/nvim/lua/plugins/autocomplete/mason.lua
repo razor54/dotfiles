@@ -6,6 +6,7 @@ return {
       registries = {
         "github:nvim-java/mason-registry",
         "github:mason-org/mason-registry",
+        "github:Crashdummyy/mason-registry",
       },
     },
   },
@@ -23,7 +24,8 @@ return {
         "yamlls",
         "dockerls",
         "jsonls",
-        "csharp_ls",
+        -- "csharp_ls",
+        -- "roslyn", -- Apparently we have to install this manually:w
       },
       automatic_enable = {
         exclude = { "jdtls" }, -- Exclude servers you want manual control
