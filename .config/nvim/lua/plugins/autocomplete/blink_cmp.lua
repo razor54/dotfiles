@@ -27,8 +27,8 @@ return {
   version = "1.*",
   opts = {
     completion = {
-      ghost_text = { enabled = true, show_with_menu = false },
-      menu = { auto_show = false },
+      ghost_text = { enabled = true, show_with_menu = true },
+      menu = { auto_show = true },
       list = { selection = { preselect = true, auto_insert = true } },
     },
     keymap = {
@@ -49,6 +49,10 @@ return {
       ["<C-b>"] = { "scroll_documentation_up", "fallback" },
       ["<C-f>"] = { "scroll_documentation_down", "fallback" },
     },
+    -- win = {
+    --   documentation = { border = "rounded" },
+    --   completion = { border = "rounded", max_height = 20, max_width = 50 },
+    -- },
     appearance = {
       nerd_font_variant = "mono",
     },

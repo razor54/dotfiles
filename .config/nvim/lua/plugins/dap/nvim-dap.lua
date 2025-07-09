@@ -37,3 +37,5 @@ return {
     --require("plugins.dap.settings.js-debug")
   end,
 }
+
+-- TODO: test different UIs other than nvim-dap-ui, like miroshQa/debugmaster.nvim and possibly igorlfs/nvim-dap-view.nvim

@@ -3,6 +3,52 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       inlay_hints = { enabled = true },
+      -- Add floating window configuration
+      -- window = {
+      --   completion = {
+      --     border = "rounded",
+      --     winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+      --     zindex = 1001,
+      --     scrolloff = 0,
+      --     col_offset = 0,
+      --     side_padding = 1,
+      --   },
+      --   documentation = {
+      --     border = "rounded",
+      --     winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+      --     zindex = 1002,
+      --     max_width = 80,
+      --     min_width = 60,
+      --     max_height = math.floor(vim.o.lines * 0.3),
+      --   },
+      -- },
+      -- -- Configure floating preview behavior
+      -- hover = {
+      --   enabled = true,
+      --   silent = true,
+      --   view = nil, -- when nil, use defaults from documentation
+      --   opts = {
+      --     border = "rounded",
+      --     max_width = 80,
+      --     position = "auto",
+      --   },
+      -- },
+      --
+      -- -- Add completion formatting configuration
+      -- formatting = {
+      --   format = function(entry, vim_item)
+      --     -- Customize how completion items are displayed
+      --     vim_item.kind = string.format("%s %s", vim_item.kind, vim_item.abbr)
+      --     vim_item.menu = ({
+      --       buffer = "[Buffer]",
+      --       nvim_lsp = "[LSP]",
+      --       luasnip = "[Snippet]",
+      --       path = "[Path]",
+      --     })[entry.source.name]
+      --     return vim_item
+      --   end,
+      -- },
+
       -- servers = {
       --   csharp_ls = {
       --     cmd = { "csharp-ls" },

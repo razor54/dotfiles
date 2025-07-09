@@ -10,7 +10,7 @@ return {
   config = function()
     require("snacks").setup({
       words = { enabled = false },
-      notifier = { enabled = false },
+      notifier = { enabled = true },
 
       bigfile = { enabled = true, disabled = { "latex", "markdown" } },
       quickfile = { enabled = true },
@@ -38,7 +38,25 @@ return {
             actions = {},
           },
           files = { hidden = true, ignored = false },
-          grep = { hidden = true, ignored = false },
+          grep = {
+            hidden = true,
+            ignored = false,
+            show_context = true,
+            search_dirs = {
+              -- Search in git root or current directory
+              function()
+                local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+                return git_root or vim.fn.getcwd()
+              end,
+            },
+            on_start = function(search_query, opts)
+              local search_dir = opts.cwd or vim.fn.getcwd()
+              vim.notify(string.format("Searching for '%s' in %s", search_query, search_dir), "info", {
+                title = "Grep Search",
+                timeout = 2000,
+              })
+            end,
+          },
         },
       },
 
