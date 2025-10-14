@@ -11,3 +11,5 @@ require("config.autocmds")
 
 -- Require status line
 require("config.statusline")
+
+vim.lsp.set_log_level("WARN")

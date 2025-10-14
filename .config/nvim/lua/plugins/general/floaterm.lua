@@ -1,10 +1,99 @@
-return {
-  "nvzone/floaterm",
-  -- event = "VeryLazy",
-  dependencies = "nvzone/volt",
-  opts = {},
-  cmd = "FloatermToggle",
-  keys = {
-    { "<leader>to", "<cmd>FloatermToggle<cr>", desc = "Open Float Term" },
-  },
-}
+return {}
+-- TODO: Fix
+-- return {
+--   "nvzone/floaterm",
+--   dependencies = "nvzone/volt",
+--   opts = {},
+--   --   cmd = "FloatermToggle",
+--
+--   config = function()
+--     local floaterm = require("floaterm")
+--     floaterm.setup({
+--       width = 0.8,
+--       height = 0.8,
+--       border = "rounded",
+--       enter = true,
+--       title = false,
+--       on_exit = function()
+--         -- Cleanup any remaining windows
+--         vim.schedule(function()
+--           for _, win in ipairs(vim.api.nvim_list_wins()) do
+--             if pcall(vim.api.nvim_win_get_config, win) and vim.api.nvim_win_get_config(win).relative ~= "" then
+--               pcall(vim.api.nvim_win_close, win, true)
+--             end
+--           end
+--         end)
+--       end,
+--     })
+--
+--     -- vim.keymap.set({ "n", "t" }, "<C-t>", floaterm.toggle, { silent = true })
+--     vim.keymap.set({ "n", "t" }, "<leader>to", floaterm.toggle, { silent = true })
+--   end,
+-- }
+--
+--
+-- this also doesn't work well, so I'll just comment it for now
+-- return {
+--   "nvzone/floaterm",
+--   -- event = "VeryLazy",
+--   dependencies = "nvzone/volt",
+--   opts = {},
+--   cmd = "FloatermToggle",
+--   keys = {
+--     { "<leader>to", "<cmd>FloatermToggle<cr>", desc = "Open Float Term" },
+--   },
+-- }
+--
+--
+--
+
+-- TODO: Maybe test this one
+-- return {
+--   "voldikss/vim-floaterm",
+--   keys = {
+--     { "<C-t>", desc = "Toggle Terminal" },
+--     { "<leader>tt", desc = "Toggle Terminal" },
+--   },
+--   cmd = { "FloatermNew", "FloatermToggle", "FloatermKill" },
+--   config = function()
+--     vim.g.floaterm_width = 0.8
+--     vim.g.floaterm_height = 0.8
+--     vim.g.floaterm_title = ""
+--     vim.g.floaterm_borderchars = "─│─│╭╮╯╰"
+--     vim.g.floaterm_autoclose = 1
+--
+--     -- Better window management
+--     local group = vim.api.nvim_create_augroup("FloatermCustom", { clear = true })
+--
+--     -- Handle cleanup when terminal window is closed
+--     vim.api.nvim_create_autocmd("TermClose", {
+--       group = group,
+--       pattern = "term://*",
+--       callback = function()
+--         vim.schedule(function()
+--           -- Clean any remaining floaterm windows
+--           for _, win in ipairs(vim.api.nvim_list_wins()) do
+--             local buf = vim.api.nvim_win_get_buf(win)
+--             if vim.bo[buf].ft == "floaterm" then
+--               pcall(vim.api.nvim_win_close, win, true)
+--             end
+--           end
+--         end)
+--       end,
+--     })
+--
+--     -- Ensure proper cleanup when exiting terminal
+--     vim.api.nvim_create_autocmd("TermEnter", {
+--       group = group,
+--       pattern = "term://*",
+--       callback = function()
+--         vim.keymap.set("t", "<C-t>", [[<C-\><C-n>:FloatermHide<CR>]], { buffer = true })
+--         vim.keymap.set("t", "<Esc>", [[<C-\><C-n>:FloatermHide<CR>]], { buffer = true })
+--       end,
+--     })
+--
+--     -- Set keymaps
+--     vim.keymap.set("n", "<C-t>", ":FloatermToggle<CR>", { silent = true })
+--     vim.keymap.set("n", "<leader>tt", ":FloatermToggle<CR>", { silent = true })
+--   end,
+-- }

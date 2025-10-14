@@ -3,6 +3,7 @@ return {
   "folke/snacks.nvim",
   lazy = false,
   priority = 1000,
+  enabled = false,
   dependencies = {
     --"nvim-tree/nvim-web-devicons" -- For better icon compatibility
   },

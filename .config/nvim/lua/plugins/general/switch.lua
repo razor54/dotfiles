@@ -1,5 +1,6 @@
 return {
   "AndrewRadev/switch.vim",
+  enabled = false,
   version = false, -- just use the latest commit
   keys = {
     { "gs", nil, { "n", "v" }, desc = "Switch" },

@@ -11,7 +11,8 @@ return {
     build = "make tiktoken", -- Only on MacOS or Linux
     opts = {
       -- https://docs.github.com/en/copilot/using-github-copilot/ai-models/choosing-the-right-ai-model-for-your-task
-      model = "claude-3.5-sonnet",
+      -- model = "claude-3.5-sonnet",
+      model = "gpt-4.1",
       question_header = "  User ",
       answer_header = "  Copilot ",
       error_header = "  Error ",
@@ -70,6 +71,37 @@ return {
         },
       },
     },
+    config = function(_, opts)
+      local vectorcode_ctx = require("vectorcode.integrations.copilotchat").make_context_provider({
+        prompt_header = "Here are relevant files from the repository:", -- Customize header text
+        prompt_footer = "\nConsider this context when answering:", -- Customize footer text
+        skip_empty = true, -- Skip adding context when no files are retrieved
+      })
+
+      require("CopilotChat").setup({
+        -- Your other CopilotChat options...
+
+        contexts = {
+          -- Add the VectorCode context provider
+          vectorcode = vectorcode_ctx,
+        },
+
+        -- Enable VectorCode context in your prompts
+        prompts = {
+          Explain = {
+            prompt = "Explain the following code in detail:\n$input",
+            context = { "selection", "vectorcode" }, -- Add vectorcode to the context
+          },
+          -- Other prompts...
+        },
+
+        sticky = {
+          "Using the model $claude-3.7-sonnet-thought",
+          "#vectorcode", -- Automatically includes repository context in every conversation
+        },
+      })
+    end,
+
     keys = {
       -- { "<leader>cc", "<cmd>CopilotChat<cr>", desc = "Copilot Chat" },
       { "<leader>co", "<cmd>CopilotChatOpen<cr>", desc = "Copilot Chat Open" },

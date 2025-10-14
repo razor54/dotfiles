@@ -264,13 +264,21 @@ end
 ---Get wordcount for current buffer or visual selection
 --- @return string word count
 function M.get_fileinfo_widget()
-  -- Early return for terminal buffers
+  -- Early return for terminal buffers or if buffer doesn't exist
   if vim.bo.buftype == "terminal" then
+    local mode = vim.api.nvim_get_mode().mode
+    if mode == "v" or mode == "V" or mode == "\22" then
+      return hl_str("DiagnosticInfo", "‹›") .. " terminal selection"
+    end
     return hl_str("DiagnosticInfo", "≡") .. " terminal"
   end
 
-  local ft = get_opt("filetype", {})
-  local lines = group_number(vim.api.nvim_buf_line_count(0), ",")
+  -- Protected call to get buffer line count
+  local lines = vim.api.nvim_buf_line_count(0)
+  if not lines then
+    return ""
+  end
+  lines = group_number(lines, ",")
 
   -- Protected call to wordcount
   local wc_ok, wc_table = pcall(vim.fn.wordcount)
