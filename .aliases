@@ -136,3 +136,6 @@ alias ls='eza -lh --group-directories-first --icons --hyperlink'
 alias lsa='ls -a'
 alias lt='eza --tree --level=2 --long --icons --git'
 alias lta='lt -a'
+
+# docker -> podman
+# alias docker='podman'

@@ -5,8 +5,8 @@ return {
     dependencies = {
       --{ "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
       { "zbirenbaum/copilot.lua" },
-
       { "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+      { "Davidyz/VectorCode" }, -- Ensure VectorCode loads first
     },
     build = "make tiktoken", -- Only on MacOS or Linux
     opts = {
@@ -16,92 +16,51 @@ return {
       question_header = "  User ",
       answer_header = "  Copilot ",
       error_header = "  Error ",
-
       mappings = {
-        complete = {
-          insert = "<Tab>",
+        complete = { insert = "<Tab>" },
+        close = { normal = "q", insert = "<C-c>" },
+        -- reset = { normal = "<C-r>", insert = "<C-r>" },
+        reset = { normal = "<leader>cr", insert = "<C-r>" },
+        submit_prompt = { normal = "<CR>", insert = "<C-s>" },
+        toggle_sticky = { normal = "grr" },
+        clear_stickies = { normal = "grx" },
+        accept_diff = { normal = "<C-y>", insert = "<C-y>" },
+        jump_to_diff = { normal = "gj" },
+        quickfix_answers = { normal = "gqa" },
+        quickfix_diffs = { normal = "gqd" },
+        yank_diff = { normal = "gy", register = '"' },
+        show_diff = { normal = "gd", full_diff = false },
+        show_info = { normal = "gi" },
+        show_context = { normal = "gc" },
+        show_help = { normal = "gh" },
+      },
+      contexts = {}, -- Will be filled in config
+      prompts = {
+        Explain = {
+          prompt = "Explain the following code in detail:\n$input",
+          context = { "selection", "vectorcode" }, -- Add vectorcode to the context
         },
-        close = {
-          normal = "q",
-          insert = "<C-c>",
-        },
-        reset = {
-          normal = "<C-r>",
-          insert = "<C-r>",
-        },
-        submit_prompt = {
-          normal = "<CR>",
-          insert = "<C-s>",
-        },
-        toggle_sticky = {
-          normal = "grr",
-        },
-        clear_stickies = {
-          normal = "grx",
-        },
-        accept_diff = {
-          normal = "<C-y>",
-          insert = "<C-y>",
-        },
-        jump_to_diff = {
-          normal = "gj",
-        },
-        quickfix_answers = {
-          normal = "gqa",
-        },
-        quickfix_diffs = {
-          normal = "gqd",
-        },
-        yank_diff = {
-          normal = "gy",
-          register = '"', -- Default register to use for yanking
-        },
-        show_diff = {
-          normal = "gd",
-          full_diff = false, -- Show full diff instead of unified diff when showing diff window
-        },
-        show_info = {
-          normal = "gi",
-        },
-        show_context = {
-          normal = "gc",
-        },
-        show_help = {
-          normal = "gh",
-        },
+        -- Other prompts...
+      },
+      sticky = {
+        "Using the model $claude-3.7-sonnet-thought",
+        "#vectorcode", -- Automatically includes repository context in every conversation
       },
     },
     config = function(_, opts)
-      local vectorcode_ctx = require("vectorcode.integrations.copilotchat").make_context_provider({
-        prompt_header = "Here are relevant files from the repository:", -- Customize header text
-        prompt_footer = "\nConsider this context when answering:", -- Customize footer text
-        skip_empty = true, -- Skip adding context when no files are retrieved
-      })
-
-      require("CopilotChat").setup({
-        -- Your other CopilotChat options...
-
-        contexts = {
-          -- Add the VectorCode context provider
-          vectorcode = vectorcode_ctx,
-        },
-
-        -- Enable VectorCode context in your prompts
-        prompts = {
-          Explain = {
-            prompt = "Explain the following code in detail:\n$input",
-            context = { "selection", "vectorcode" }, -- Add vectorcode to the context
-          },
-          -- Other prompts...
-        },
-
-        sticky = {
-          "Using the model $claude-3.7-sonnet-thought",
-          "#vectorcode", -- Automatically includes repository context in every conversation
-        },
-      })
+      -- Setup VectorCode context provider and inject into opts
+      local ok, vectorcode = pcall(require, "vectorcode.integrations.copilotchat")
+      if ok and vectorcode then
+        opts.contexts.vectorcode = vectorcode.make_context_provider({
+          prompt_header = "Here are relevant files from the repository:", -- Customize header text
+          prompt_footer = "\nConsider this context when answering:", -- Customize footer text
+          skip_empty = true, -- Skip adding context when no files are retrieved
+        })
+      else
+        vim.notify("VectorCode integration not found!", vim.log.levels.WARN)
+      end
+      require("CopilotChat").setup(opts)
     end,
-
     keys = {
       -- { "<leader>cc", "<cmd>CopilotChat<cr>", desc = "Copilot Chat" },
       { "<leader>co", "<cmd>CopilotChatOpen<cr>", desc = "Copilot Chat Open" },

@@ -183,3 +183,7 @@ bindkey "^@" fzf-file-widget
 # --- Final Profiling Output (optional) ---
 # zprof
 # --- End of .zshrc ---
+
+# Add JBang to environment
+alias j!=jbang
+export PATH="$HOME/.jbang/bin:$PATH"
