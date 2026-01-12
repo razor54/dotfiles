@@ -1,0 +1,52 @@
+{
+  "console.log": {
+    "prefix": "cl",
+    "body": ["console.log($1)"],
+    "description": "Log to console"
+  },
+  "console.log variable": {
+    "prefix": "clv",
+    "body": ["console.log('${1:variable}:', $1)"],
+    "description": "Log variable with label"
+  },
+  "arrow function": {
+    "prefix": "af",
+    "body": ["const ${1:name} = ($2) => {", "\t$3", "}"],
+    "description": "Arrow function"
+  },
+  "async arrow function": {
+    "prefix": "aaf",
+    "body": ["const ${1:name} = async ($2) => {", "\t$3", "}"],
+    "description": "Async arrow function"
+  },
+  "promise": {
+    "prefix": "prom",
+    "body": [
+      "new Promise((resolve, reject) => {",
+      "\t$1",
+      "})"
+    ],
+    "description": "Create a new Promise"
+  },
+  "try catch": {
+    "prefix": "tryc",
+    "body": [
+      "try {",
+      "\t$1",
+      "} catch (error) {",
+      "\tconsole.error(error)",
+      "}"
+    ],
+    "description": "Try catch block"
+  },
+  "import": {
+    "prefix": "imp",
+    "body": ["import ${2:module} from '${1:path}'"],
+    "description": "Import module"
+  },
+  "import destructured": {
+    "prefix": "impd",
+    "body": ["import { $2 } from '${1:path}'"],
+    "description": "Import destructured"
+  }
+}

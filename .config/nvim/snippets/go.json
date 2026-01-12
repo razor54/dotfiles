@@ -1,0 +1,47 @@
+{
+  "main function": {
+    "prefix": "main",
+    "body": [
+      "func main() {",
+      "\t$1",
+      "}"
+    ],
+    "description": "Main function"
+  },
+  "function": {
+    "prefix": "fn",
+    "body": [
+      "func ${1:name}($2) $3 {",
+      "\t$4",
+      "}"
+    ],
+    "description": "Function"
+  },
+  "method": {
+    "prefix": "meth",
+    "body": [
+      "func (${1:receiver} ${2:Type}) ${3:name}($4) $5 {",
+      "\t$6",
+      "}"
+    ],
+    "description": "Method"
+  },
+  "if error": {
+    "prefix": "iferr",
+    "body": [
+      "if err != nil {",
+      "\t$1",
+      "}"
+    ],
+    "description": "If error check"
+  },
+  "struct": {
+    "prefix": "struct",
+    "body": [
+      "type ${1:Name} struct {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Struct definition"
+  }
+}

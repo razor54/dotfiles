@@ -1,0 +1,47 @@
+{
+  "print": {
+    "prefix": "pr",
+    "body": ["print($1)"],
+    "description": "Print statement"
+  },
+  "print formatted": {
+    "prefix": "prf",
+    "body": ["print(f'${1:text}: {$2}')"],
+    "description": "Print f-string"
+  },
+  "def": {
+    "prefix": "def",
+    "body": [
+      "def ${1:function_name}($2):",
+      "\t$3"
+    ],
+    "description": "Function definition"
+  },
+  "class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName}:",
+      "\tdef __init__(self$2):",
+      "\t\t$3"
+    ],
+    "description": "Class definition"
+  },
+  "if main": {
+    "prefix": "ifmain",
+    "body": [
+      "if __name__ == '__main__':",
+      "\t$1"
+    ],
+    "description": "If main block"
+  },
+  "try except": {
+    "prefix": "try",
+    "body": [
+      "try:",
+      "\t$1",
+      "except ${2:Exception} as ${3:e}:",
+      "\t$4"
+    ],
+    "description": "Try except block"
+  }
+}

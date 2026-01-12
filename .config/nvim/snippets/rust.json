@@ -1,0 +1,44 @@
+{
+  "function": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:name}($2) ${3:-> ${4:ReturnType} }{",
+      "\t$5",
+      "}"
+    ],
+    "description": "Function"
+  },
+  "println": {
+    "prefix": "pl",
+    "body": ["println!(\"$1\");"],
+    "description": "println! macro"
+  },
+  "struct": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name} {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Struct definition"
+  },
+  "impl": {
+    "prefix": "impl",
+    "body": [
+      "impl ${1:Type} {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Implementation block"
+  },
+  "match": {
+    "prefix": "match",
+    "body": [
+      "match ${1:value} {",
+      "\t${2:pattern} => ${3:expression},",
+      "\t_ => ${4:default},",
+      "}"
+    ],
+    "description": "Match expression"
+  }
+}

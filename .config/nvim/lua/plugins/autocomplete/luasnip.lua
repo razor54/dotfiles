@@ -134,8 +134,12 @@ return {
     local mappable = snippets
 
     -- loads snippets from path/of/nvim/config/
-    require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
-    -- require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+    -- Load custom VSCode-style snippets from ~/.config/nvim/snippets/
+    require("luasnip.loaders.from_vscode").lazy_load({ 
+      paths = { vim.fn.stdpath("config") .. "/snippets" } 
+    })
+    -- Uncomment below to load Lua-style snippets
+    -- require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets" } })
     -- require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" } })
 
     -- Settings --

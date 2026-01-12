@@ -1,0 +1,38 @@
+{
+  "interface": {
+    "prefix": "int",
+    "body": [
+      "interface ${1:Name} {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Create an interface"
+  },
+  "type alias": {
+    "prefix": "typ",
+    "body": [
+      "type ${1:Name} = {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Create a type alias"
+  },
+  "export interface": {
+    "prefix": "eint",
+    "body": [
+      "export interface ${1:Name} {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Export an interface"
+  },
+  "export type": {
+    "prefix": "etyp",
+    "body": [
+      "export type ${1:Name} = {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Export a type"
+  }
+}
