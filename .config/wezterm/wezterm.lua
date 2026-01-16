@@ -74,6 +74,14 @@ local config = {
       action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
     },
     {
+      key = "e",
+      mods = "CMD",
+      action = wezterm.action.SplitPane({
+        direction = "Down",
+        size = { Percent = 15 },
+      }),
+    },
+    {
       key = "LeftArrow",
       mods = "OPT",
       action = wezterm.action({ SendString = "\x1bb" }),
