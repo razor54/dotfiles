@@ -1,5 +1,8 @@
 local nvim_create = vim.api.nvim_create_autocmd
 
+-- TODO: Revise copilot LSP setup after fixing global node configuration
+-- vim.lsp.enable("copilot")
+
 nvim_create("TextYankPost", {
   callback = function()
     vim.highlight.on_yank({})
