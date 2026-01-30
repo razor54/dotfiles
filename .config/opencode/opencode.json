@@ -1,0 +1,150 @@
+{
+  "plugin": [
+    "oh-my-opencode",
+    "opencode-antigravity-auth@1.4.3",
+    "opencode-anthropic-auth@latest",
+    "cc-safety-net",
+    "opencode-agent-skills",
+    "opencode-agent-memory"
+  ],
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "github-copilot": {
+      "name": "GitHub Copilot",
+      "models": {
+        "claude-opus-4.5": {
+          "name": "Claude Opus 4.5 (Copilot)",
+          "thinking": true,
+          "attachment": true,
+          "limit": {
+            "context": 200000,
+            "output": 16384
+          }
+        },
+        "gpt-5.2": {
+          "name": "GPT-5.2 (Copilot)",
+          "thinking": true,
+          "limit": {
+            "context": 128000,
+            "output": 16384
+          }
+        },
+        "grok-code-fast-1": {
+          "name": "Grok Code Fast (Copilot)",
+          "limit": {
+            "context": 128000,
+            "output": 16384
+          }
+        },
+        "gemini-3-pro": {
+          "name": "Gemini 3 Pro (Copilot)",
+          "thinking": true,
+          "attachment": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          }
+        }
+      }
+    },
+    "google": {
+      "name": "Google",
+      "models": {
+        "antigravity-gemini-3-pro-high": {
+          "name": "Gemini 3 Pro High (Antigravity)",
+          "thinking": true,
+          "attachment": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        },
+        "antigravity-gemini-3-pro-low": {
+          "name": "Gemini 3 Pro Low (Antigravity)",
+          "thinking": true,
+          "attachment": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        },
+        "antigravity-gemini-3-flash": {
+          "name": "Gemini 3 Flash (Antigravity)",
+          "attachment": true,
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": ["text", "image", "pdf"],
+            "output": ["text"]
+          }
+        }
+      }
+    }
+  },
+  "mcp": {
+    "terraform": {
+      "command": [
+        "docker",
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server:0.2.3"
+      ],
+      "enabled": false,
+      "type": "local"
+    },
+    "opentofu": {
+      "command": ["npx", "-y", "@opentofu/opentofu-mcp-server"],
+      "enabled": false,
+      "type": "local"
+    },
+    "code-search": {
+      "command": [
+        "uv",
+        "run",
+        "--directory",
+        "/Users/andregaudencio/.local/share/claude-context-local",
+        "python",
+        "mcp_server/server.py"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "atlassian": {
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "enabled": false,
+      "type": "remote"
+    },
+    "aws-mcp": {
+      "command": [
+        "uvx",
+        "mcp-proxy-for-aws@latest",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--metadata",
+        "AWS_REGION=eu-west-2"
+      ],
+      "enabled": false,
+      "type": "local"
+    },
+    "memory": {
+      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+      "enabled": true,
+      "type": "local"
+    },
+    "fetch": {
+      "command": ["uvx", "mcp-server-fetch"],
+      "enabled": true,
+      "type": "local"
+    }
+  }
+}
