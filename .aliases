@@ -132,6 +132,7 @@ alias ping='prettyping --nolegend'
 alias vi='nvim'
 
 # eza
+export EZA_CONFIG_DIR="$HOME/.config/eza"
 alias ls='eza -lh --group-directories-first --icons --hyperlink'
 alias lsa='ls -a'
 alias lt='eza --tree --level=2 --long --icons --git'
@@ -139,3 +140,6 @@ alias lta='lt -a'
 
 # docker -> podman
 # alias docker='podman'
+
+# opencode
+alias oc='opencode'
