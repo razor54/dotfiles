@@ -30,6 +30,7 @@ return {
       ghost_text = { enabled = true, show_with_menu = true },
       menu = { auto_show = true },
       list = { selection = { preselect = true, auto_insert = true } },
+      trigger = { prefetch_on_insert = false },
     },
     keymap = {
       ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
@@ -59,6 +60,7 @@ return {
     sources = {
       --compat = { "supermaven" },
       --default = { "supermaven", "lazydev", "lsp", "path", "snippets", "buffer" },
+      --default = { "minuet", "lazydev", "lsp", "path", "snippets", "buffer" },
       default = { "copilot", "lazydev", "lsp", "path", "snippets", "buffer" },
 
       providers = {
@@ -116,6 +118,13 @@ return {
           min_keyword_length = 2,
           module = "blink.cmp.sources.snippets",
           score_offset = 85,
+        },
+        minuet = {
+          name = "minuet",
+          module = "minuet.blink",
+          async = true,
+          timeout_ms = 3000,
+          score_offset = 50,
         },
       },
     },

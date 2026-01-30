@@ -1,0 +1,37 @@
+-- TODO: Enable when API key management is sorted out
+-- return {
+--   "milanglacier/minuet-ai.nvim",
+--   dependencies = {
+--     "nvim-lua/plenary.nvim",
+--   },
+--   config = function()
+--     require("minuet").setup({
+--       provider = "claude",
+--       throttle = 1500,
+--       debounce = 600,
+--       provider_options = {
+--         claude = {
+--           api_key = "ANTHROPIC_API_KEY",
+--           model = "claude-sonnet-4-20250514",
+--           max_tokens = 512,
+--           optional = {
+--             max_tokens = 56,
+--             top_p = 0.9,
+--           },
+--         },
+--       },
+--       virtualtext = {
+--         auto_trigger_ft = {},
+--         keymap = {
+--           accept = "<A-a>",
+--           accept_line = "<A-l>",
+--           accept_n_lines = "<A-z>",
+--           prev = "<A-[>",
+--           next = "<A-]>",
+--           dismiss = "<A-e>",
+--         },
+--       },
+--     })
+--   end,
+-- }
+return {}
