@@ -1,0 +1,27 @@
+# Aesthetics
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13
+font-style = "Medium"
+font-style-italic = "Medium Italic"
+adjust-cell-height = 11%
+
+# Font rendering (sharp/crisp)
+font-thicken = true
+font-thicken-strength = 100
+font-feature = zero
+font-feature = ss04
+font-feature = cv16
+font-feature = cv14
+
+# Catppuccin Macchiato with OLED black background
+theme = Catppuccin Macchiato
+background = #000000
+
+# macOS settings
+macos-option-as-alt = left
+macos-titlebar-style = hidden
+window-padding-y = 0,16
+
+# Others
+copy-on-select = true
+working-directory = ~/.dotfiles
