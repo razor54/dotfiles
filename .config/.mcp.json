@@ -1,0 +1,83 @@
+{
+  "mcpServers": {
+    "code-search": {
+      "type": "stdio",
+      "command": "/Users/andregaudencio/.local/bin/uv",
+      "args": [
+        "run",
+        "--directory",
+        "/Users/andregaudencio/.local/share/claude-context-local",
+        "python",
+        "mcp_server/server.py"
+      ],
+      "env": {}
+    },
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {}
+    },
+    "fetch": {
+      "type": "stdio",
+      "command": "/Users/andregaudencio/.local/bin/uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {}
+    },
+    "terraform": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server:0.2.3"
+      ],
+      "env": {},
+      "disabled": true
+    },
+    "opentofu": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@opentofu/opentofu-mcp-server"
+      ],
+      "env": {},
+      "disabled": true
+    },
+    "atlassian": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.atlassian.com/v1/mcp"
+      ],
+      "env": {},
+      "disabled": false
+    },
+    "aws-mcp": {
+      "type": "stdio",
+      "command": "/Users/andregaudencio/.local/bin/uvx",
+      "args": [
+        "mcp-proxy-for-aws@latest",
+        "https://aws-mcp.us-east-1.api.aws/mcp",
+        "--metadata",
+        "AWS_REGION=eu-west-2"
+      ],
+      "env": {},
+      "disabled": true
+    },
+    "skillsmp": {
+      "type": "sse",
+      "url": "https://skillsmp.com/mcp",
+      "disabled": true
+    }
+  }
+}
