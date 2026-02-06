@@ -1,5 +1,6 @@
 return {
   "decaycs/decay.nvim",
+  enabled = false, -- Disabled: using catppuccin
   name = "decay",
   --lazy = false,
   priority = 1000,

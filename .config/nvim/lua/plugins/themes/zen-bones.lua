@@ -1,6 +1,7 @@
 return {
   {
     "mcchrish/zenbones.nvim",
+    enabled = false, -- Disabled: using catppuccin
     dependencies = { "rktjmp/lush.nvim" },
     --lazy = false,
     lazy = true, -- the theme is disabled so we don't want to load it

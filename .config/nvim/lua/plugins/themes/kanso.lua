@@ -1,6 +1,7 @@
 -- Using Lazy
 return {
   "webhooked/kanso.nvim",
+  enabled = false, -- Disabled: using catppuccin
   --lazy = false,
   priority = 1000,
   config = function()
