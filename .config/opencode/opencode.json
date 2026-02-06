@@ -2,10 +2,8 @@
   "plugin": [
     "oh-my-opencode",
     "opencode-antigravity-auth@1.4.3",
-    "opencode-anthropic-auth@latest",
     "cc-safety-net",
-    "opencode-agent-skills",
-    "opencode-agent-memory"
+    "opencode-agent-skills"
   ],
   "$schema": "https://opencode.ai/config.json",
   "provider": {

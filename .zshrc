@@ -187,3 +187,8 @@ bindkey "^@" fzf-file-widget
 # Add JBang to environment
 alias j!=jbang
 export PATH="$HOME/.jbang/bin:$PATH"
+
+alias claude-mem='bun "/Users/andregaudencio/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+
+# Source private secrets (gitignored)
+[ -f ~/.secrets ] && source ~/.secrets
