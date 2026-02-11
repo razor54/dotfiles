@@ -1,6 +1,9 @@
 # --- Startup Profiling (optional, remove after tuning) ---
 # zmodload zsh/zprof
 
+# --- Cache brew prefix (avoid repeated subshell calls) ---
+BREW_PREFIX="/opt/homebrew"
+
 # --- PATH and MANPATH: GNU Utilities First ---
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/opt/grep/libexec/gnubin:$PATH"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
@@ -10,8 +13,17 @@ export LANG="en_US.UTF-8"
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 
+# --- Zsh Completion System (early, so SDKMAN/plugins skip their own compinit) ---
+autoload -Uz compinit
+# Only do full compinit once a day; otherwise use cached dump
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
 # vim mode
-source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+source "$BREW_PREFIX/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 
 # --- History Options ---
 setopt SHARE_HISTORY        # share history between all sessions
@@ -19,19 +31,27 @@ setopt HIST_IGNORE_SPACE    # don't record commands that start with a space
 setopt INC_APPEND_HISTORY   # write to $HISTFILE immediately, not just when exiting the shell
 setopt HIST_IGNORE_ALL_DUPS # remove old duplicates from history
 setopt HIST_VERIFY          # don't execute immediately when picking from history
+setopt APPEND_HISTORY       # append new history entries to the history file
+setopt HIST_IGNORE_DUPS     # ignore recording duplicate consecutive commands
+setopt INTERACTIVE_COMMENTS # enable comments "#" expressions in the prompt shell
 export HISTSIZE=100000
 export SAVEHIST=$HISTSIZE
 
-# --- SDKMAN (must be at the end for SDKMAN to work) ---
+# --- Lazy-load SDKMAN ---
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+export PATH="$SDKMAN_DIR/candidates/java/current/bin:$SDKMAN_DIR/candidates/gradle/current/bin:$SDKMAN_DIR/candidates/maven/current/bin:$PATH"
+sdk() {
+  unset -f sdk
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  sdk "$@"
+}
 
 # --- Lazy-load NVM ---
 nvm() {
   unset -f nvm node npm npx
   export NVM_DIR="$HOME/.nvm"
-  [ -s "$(brew --prefix nvm)/nvm.sh" ] && . "$(brew --prefix nvm)/nvm.sh"
-  [ -s "$(brew --prefix nvm)/etc/bash_completion.d/nvm" ] && . "$(brew --prefix nvm)/etc/bash_completion.d/nvm"
+  [ -s "$BREW_PREFIX/opt/nvm/nvm.sh" ] && . "$BREW_PREFIX/opt/nvm/nvm.sh"
+  [ -s "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && . "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
   nvm "$@"
 }
 node() { nvm "$@"; }
@@ -39,11 +59,11 @@ npm() { nvm "$@"; }
 npx() { nvm "$@"; }
 
 # --- fzf Integration ---
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
 
 # --- Go Environment ---
 export GOPATH="$HOME/go"
-export GOROOT="$(brew --prefix golang)/libexec"
+export GOROOT="$BREW_PREFIX/opt/go/libexec"
 export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 
 # --- DotNet Environment ---
@@ -65,78 +85,31 @@ for file in ~/.{aliases,functions}; do
 done
 unset file
 
-# --- Zsh Completion System ---
-autoload -Uz compinit
-compinit
-
-# Optional: Enhanced completion styles
+# Enhanced completion styles
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:*:*:*:descriptions' format '%F{green}↓ %d%f'
 zstyle ':completion:*' complete-options true
 
-# Homebrew plugin locations
-#
-# --- Autosuggestions (ghost text) ---
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-# --- Syntax Highlighting ---
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# --- History Substring Search ---
-source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+# --- Zsh plugins (from Homebrew) ---
+source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$BREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-# --- Starship Prompt ---
-eval "$(starship init zsh)"
+# --- Oh My Posh prompt ---
+eval "$(oh-my-posh init zsh --config "$HOME/.config/oh-my-posh/theme.omp.json")"
 
-# --- Completion System ---
-autoload -Uz compinit
-compinit
-
-# --- zsh-autosuggestions and zsh-syntax-highlighting (if installed) ---
-# Make sure you have these plugins installed somewhere (e.g., ~/.zsh_plugins/)
-# and update the paths below as needed.
-if [ -f "${HOME}/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
-  source "${HOME}/.zsh_plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
-if [ -f "${HOME}/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
-  source "${HOME}/.zsh_plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
-
-# --- Optional: FZF key bindings/config (if you want) ---
-# FZF_CONFIG=~/.fzf.sh
-# [ -x "$(command -v fzf)" ] && [ -f "$FZF_CONFIG" ] && source "$FZF_CONFIG"
-
-# fzf parameters used in all widgets - configure layout and wrapped the preview results (useful in large command rendering)
+# --- FZF configuration ---
 export FZF_DEFAULT_OPTS="--height 100% --layout reverse --preview-window=wrap"
-
-# CTRL + R: put the selected history command in the preview window - "{}" will be replaced by item selected in fzf execution runtime
 export FZF_CTRL_R_OPTS="--preview 'echo {}'"
-
-# CTRL + T: set "fd-find" as search engine instead of "find" and exclude .git for the results
 export FZF_CTRL_T_COMMAND="fd --exclude .git --ignore-file $HOME/.my-custom-zsh/.fd-fzf-ignore"
-
-# CTRL + T: put the file content if item select is a file, or put tree command output if item selected is directory
 export FZF_CTRL_T_OPTS="--preview '[ -d {} ] && tree -C {} || bat --color=always --style=numbers {}'"
 
 # disable CTRL + S and CTRL + Q
 stty -ixon
-
-# enable comments "#" expressions in the prompt shell
-setopt INTERACTIVE_COMMENTS
-
-# append new history entries to the history file
-setopt APPEND_HISTORY
-
-# save each command to the history file as soon as it is executed
-setopt INC_APPEND_HISTORY
-
-# ignore recording duplicate consecutive commands in the history
-setopt HIST_IGNORE_DUPS
-
-# ignore commands that start with a space in the history
-setopt HIST_IGNORE_SPACE
 
 # >>> bindkey tip: to discovery the code of your keys, execute "$ cat -v" and press the key, the code will be printed in your shell.
 
@@ -178,17 +151,14 @@ bindkey "^[[3~" delete-char
 # fzf alias: CTRL + SPACE (gadget parameters configured in the FZF_CTRL_T_COMMAND environment variable)
 bindkey "^@" fzf-file-widget
 
-# >>> load ZSH plugin
-
-# --- Final Profiling Output (optional) ---
-# zprof
-# --- End of .zshrc ---
-
-# Add JBang to environment
+# --- JBang ---
 alias j!=jbang
 export PATH="$HOME/.jbang/bin:$PATH"
 
 alias claude-mem='bun "/Users/andregaudencio/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 
 # Source private secrets (gitignored)
-[ -f ~/.secrets ] && source ~/.secrets
+[ -f ~/.secrets ] && source ~/.secrets || true
+
+# --- Final Profiling Output (optional) ---
+# zprof

@@ -8,5 +8,10 @@
     "atlassian",
     "aws-mcp",
     "skillsmp"
-  ]
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)"
+    ]
+  }
 }
