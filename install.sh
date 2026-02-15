@@ -69,8 +69,9 @@ link_file "$DOTFILES_DIR/.config/oh-my-posh"       "$HOME_DIR/.config/oh-my-posh
 # ── ~/.claude ──────────────────────────────────────────────────
 echo ""
 echo "~/.claude:"
-link_file "$DOTFILES_DIR/.claude/settings.json"    "$HOME_DIR/.claude/settings.json"
-link_file "$DOTFILES_DIR/.claude/CLAUDE.md"        "$HOME_DIR/.claude/CLAUDE.md"
+link_file "$DOTFILES_DIR/.claude/settings.json"        "$HOME_DIR/.claude/settings.json"
+link_file "$DOTFILES_DIR/.claude/settings.local.json"  "$HOME_DIR/.claude/settings.local.json"
+link_file "$DOTFILES_DIR/.claude/CLAUDE.md"            "$HOME_DIR/.claude/CLAUDE.md"
 
 # ── Summary ─────────────────────────────────────────────────────
 echo ""
