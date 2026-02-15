@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Resolve dotfiles directory from script location
+DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
+HOME_DIR="$HOME"
+
+linked=0
+skipped=0
+backed_up=0
+
+link_file() {
+  local src="$1"
+  local dest="$2"
+
+  # Create parent directory if needed
+  mkdir -p "$(dirname "$dest")"
+
+  # Already correctly linked
+  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+    printf "  skip  %s (already linked)\n" "$dest"
+    skipped=$((skipped + 1))
+    return
+  fi
+
+  # Existing file/dir/broken symlink — back it up
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    mv "$dest" "${dest}.backup"
+    printf "  backup %s → %s.backup\n" "$dest" "$dest"
+    backed_up=$((backed_up + 1))
+  fi
+
+  ln -s "$src" "$dest"
+  printf "  link  %s → %s\n" "$dest" "$src"
+  linked=$((linked + 1))
+}
+
+echo "Dotfiles: $DOTFILES_DIR"
+echo ""
+
+# ── Home directory ──────────────────────────────────────────────
+echo "Home directory:"
+link_file "$DOTFILES_DIR/.aliases"           "$HOME_DIR/.aliases"
+link_file "$DOTFILES_DIR/.functions"         "$HOME_DIR/.functions"
+link_file "$DOTFILES_DIR/.gitconfig"         "$HOME_DIR/.gitconfig"
+link_file "$DOTFILES_DIR/.gitignore_global"  "$HOME_DIR/.gitignore_global"
+link_file "$DOTFILES_DIR/.osx"               "$HOME_DIR/.osx"
+link_file "$DOTFILES_DIR/.vim"               "$HOME_DIR/.vim"
+link_file "$DOTFILES_DIR/.vimrc"             "$HOME_DIR/.vimrc"
+link_file "$DOTFILES_DIR/.zshrc"             "$HOME_DIR/.zshrc"
+link_file "$DOTFILES_DIR/.tmux.conf"         "$HOME_DIR/.tmux.conf"
+link_file "$DOTFILES_DIR/CLAUDE.md"          "$HOME_DIR/CLAUDE.md"
+
+# ── ~/.config ───────────────────────────────────────────────────
+echo ""
+echo "~/.config:"
+link_file "$DOTFILES_DIR/.config/alacritty"       "$HOME_DIR/.config/alacritty"
+link_file "$DOTFILES_DIR/.config/nvim"             "$HOME_DIR/.config/nvim"
+link_file "$DOTFILES_DIR/.config/wezterm"          "$HOME_DIR/.config/wezterm"
+link_file "$DOTFILES_DIR/.config/.mcp.json"        "$HOME_DIR/.config/.mcp.json"
+link_file "$DOTFILES_DIR/starship.toml"            "$HOME_DIR/.config/starship.toml"
+link_file "$DOTFILES_DIR/.config/zellij"           "$HOME_DIR/.config/zellij"
+link_file "$DOTFILES_DIR/.config/eza/theme.yml"    "$HOME_DIR/.config/eza/theme.yml"
+link_file "$DOTFILES_DIR/.config/bat/config"       "$HOME_DIR/.config/bat/config"
+link_file "$DOTFILES_DIR/.config/bat/themes"       "$HOME_DIR/.config/bat/themes"
+link_file "$DOTFILES_DIR/.config/ghostty/config"   "$HOME_DIR/.config/ghostty/config"
+link_file "$DOTFILES_DIR/.config/oh-my-posh"       "$HOME_DIR/.config/oh-my-posh"
+
+# ── Summary ─────────────────────────────────────────────────────
+echo ""
+echo "Done: $linked linked, $skipped skipped, $backed_up backed up"
