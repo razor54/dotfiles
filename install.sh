@@ -117,6 +117,17 @@ else
   echo "  skip  (claude CLI not found — install Claude Code first)"
 fi
 
+# ── Post-install hooks ────────────────────────────────────────
+echo ""
+echo "Post-install:"
+
+if command -v bat &>/dev/null; then
+  bat cache --build &>/dev/null
+  printf "  done  bat cache rebuilt (themes loaded)\n"
+else
+  printf "  skip  bat (not installed)\n"
+fi
+
 # ── Summary ─────────────────────────────────────────────────────
 echo ""
 echo "Done: $linked linked, $skipped skipped, $backed_up backed up"
