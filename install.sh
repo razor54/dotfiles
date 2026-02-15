@@ -91,8 +91,11 @@ sys.exit(0 if '$name' in data.get('mcpServers', {}) else 1)
 " 2>/dev/null; then
       printf "  skip  %s (already registered)\n" "$name"
     else
-      CLAUDECODE= claude mcp add "$name" "$@" 2>/dev/null
-      printf "  add   %s\n" "$name"
+      if CLAUDECODE= claude mcp add "$name" "$@" 2>/dev/null; then
+        printf "  add   %s\n" "$name"
+      else
+        printf "  FAIL  %s (claude mcp add returned an error)\n" "$name"
+      fi
     fi
   }
 
