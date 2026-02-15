@@ -72,6 +72,7 @@ echo "~/.claude:"
 link_file "$DOTFILES_DIR/.claude/settings.json"        "$HOME_DIR/.claude/settings.json"
 link_file "$DOTFILES_DIR/.claude/settings.local.json"  "$HOME_DIR/.claude/settings.local.json"
 link_file "$DOTFILES_DIR/.claude/CLAUDE.md"            "$HOME_DIR/.claude/CLAUDE.md"
+link_file "$DOTFILES_DIR/.config/.mcp.json"            "$HOME_DIR/.claude/.mcp.json"
 
 # ── Summary ─────────────────────────────────────────────────────
 echo ""
