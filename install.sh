@@ -66,6 +66,12 @@ link_file "$DOTFILES_DIR/.config/bat/themes"       "$HOME_DIR/.config/bat/themes
 link_file "$DOTFILES_DIR/.config/ghostty/config"   "$HOME_DIR/.config/ghostty/config"
 link_file "$DOTFILES_DIR/.config/oh-my-posh"       "$HOME_DIR/.config/oh-my-posh"
 
+# ── ~/.claude ──────────────────────────────────────────────────
+echo ""
+echo "~/.claude:"
+link_file "$DOTFILES_DIR/.claude/settings.json"    "$HOME_DIR/.claude/settings.json"
+link_file "$DOTFILES_DIR/.claude/CLAUDE.md"        "$HOME_DIR/.claude/CLAUDE.md"
+
 # ── Summary ─────────────────────────────────────────────────────
 echo ""
 echo "Done: $linked linked, $skipped skipped, $backed_up backed up"
