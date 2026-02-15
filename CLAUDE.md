@@ -96,6 +96,15 @@ Tell the user upfront: "This task involves processing [X files / Y tokens]. I re
 
 ---
 
+## Workflow Rules
+
+### Jira Ticket Requirement
+- **All branches and PRs MUST have an associated Jira ticket.** If none exists, create one before creating the branch or PR.
+- Branch naming convention: `TICKET-ID/description` (e.g., `HSI-637/ecs-managed-instances-support`)
+- PR titles should reference the ticket (e.g., `HSI-637: Add feature X`)
+
+---
+
 ## Quality Checks
 
 Before delivering any output:
