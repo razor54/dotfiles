@@ -74,6 +74,46 @@ link_file "$DOTFILES_DIR/.claude/settings.local.json"  "$HOME_DIR/.claude/settin
 link_file "$DOTFILES_DIR/.claude/CLAUDE.md"            "$HOME_DIR/.claude/CLAUDE.md"
 link_file "$DOTFILES_DIR/.config/.mcp.json"            "$HOME_DIR/.claude/.mcp.json"
 
+# ── Claude MCP servers ────────────────────────────────────────
+echo ""
+echo "Claude MCP servers:"
+
+if command -v claude &>/dev/null; then
+  add_mcp() {
+    local name="$1"
+    shift
+    # Check if server already exists in ~/.claude.json
+    if [ -f "$HOME_DIR/.claude.json" ] && python3 -c "
+import json, sys
+with open('$HOME_DIR/.claude.json') as f:
+    data = json.load(f)
+sys.exit(0 if '$name' in data.get('mcpServers', {}) else 1)
+" 2>/dev/null; then
+      printf "  skip  %s (already registered)\n" "$name"
+    else
+      CLAUDECODE= claude mcp add "$name" "$@" 2>/dev/null
+      printf "  add   %s\n" "$name"
+    fi
+  }
+
+  add_mcp memory -- npx -y @modelcontextprotocol/server-memory
+  add_mcp fetch -- uvx mcp-server-fetch
+  add_mcp terraform --disabled -- docker run -i --rm hashicorp/terraform-mcp-server:0.2.3
+  add_mcp opentofu --disabled -- npx -y @opentofu/opentofu-mcp-server
+  add_mcp atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/mcp
+  add_mcp aws-mcp --disabled -- uvx mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata AWS_REGION=eu-west-2
+  add_mcp skillsmp --disabled -- npx -y mcp-remote https://skillsmp.com/mcp
+
+  # code-search requires code-search-mcp binary
+  if command -v code-search-mcp &>/dev/null; then
+    add_mcp code-search -- code-search-mcp
+  else
+    printf "  skip  code-search (code-search-mcp not installed)\n"
+  fi
+else
+  echo "  skip  (claude CLI not found — install Claude Code first)"
+fi
+
 # ── Summary ─────────────────────────────────────────────────────
 echo ""
 echo "Done: $linked linked, $skipped skipped, $backed_up backed up"
