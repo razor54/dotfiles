@@ -99,17 +99,17 @@ sys.exit(0 if '$name' in data.get('mcpServers', {}) else 1)
     fi
   }
 
-  add_mcp memory -- npx -y @modelcontextprotocol/server-memory
-  add_mcp fetch -- uvx mcp-server-fetch
-  add_mcp terraform --disabled -- docker run -i --rm hashicorp/terraform-mcp-server:0.2.3
-  add_mcp opentofu --disabled -- npx -y @opentofu/opentofu-mcp-server
-  add_mcp atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/mcp
-  add_mcp aws-mcp --disabled -- uvx mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata AWS_REGION=eu-west-2
-  add_mcp skillsmp --disabled -- npx -y mcp-remote https://skillsmp.com/mcp
+  add_mcp memory -s user -- npx -y @modelcontextprotocol/server-memory
+  add_mcp fetch -s user -- uvx mcp-server-fetch
+  add_mcp terraform -s user -- docker run -i --rm hashicorp/terraform-mcp-server:0.2.3
+  add_mcp opentofu -s user -- npx -y @opentofu/opentofu-mcp-server
+  add_mcp atlassian -s user -t http https://mcp.atlassian.com/v1/mcp
+  add_mcp aws-mcp -s user -- uvx mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata AWS_REGION=eu-west-2
+  add_mcp skillsmp -s user -t http https://skillsmp.com/mcp
 
   # code-search requires code-search-mcp binary
   if command -v code-search-mcp &>/dev/null; then
-    add_mcp code-search -- code-search-mcp
+    add_mcp code-search -s user -- code-search-mcp
   else
     printf "  skip  code-search (code-search-mcp not installed)\n"
   fi
