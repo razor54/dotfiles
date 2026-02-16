@@ -103,9 +103,9 @@ sys.exit(0 if '$name' in data.get('mcpServers', {}) else 1)
   add_mcp fetch -s user -- uvx mcp-server-fetch
   add_mcp terraform -s user -- docker run -i --rm hashicorp/terraform-mcp-server:0.2.3
   add_mcp opentofu -s user -- npx -y @opentofu/opentofu-mcp-server
-  add_mcp atlassian -s user -t http https://mcp.atlassian.com/v1/mcp
+  add_mcp atlassian -s user -- npx -y mcp-remote https://mcp.atlassian.com/v1/mcp
   add_mcp aws-mcp -s user -- uvx mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata AWS_REGION=eu-west-2
-  add_mcp skillsmp -s user -t http https://skillsmp.com/mcp
+  add_mcp skillsmp -s user -- npx -y mcp-remote https://skillsmp.com/mcp
 
   # code-search requires code-search-mcp binary
   if command -v code-search-mcp &>/dev/null; then
