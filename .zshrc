@@ -175,5 +175,5 @@ alias claude-2="CLAUDE_CONFIG_DIR=~/.claude-2 command claude"
 # source "/Users/andregaudencio/.openclaw/completions/openclaw.zsh"
 #
 # OpenClaw Completion (only if installed)
-command -v openclaw &>/dev/null && source <(openclaw completion --shell zsh)
+command -v openclaw &>/dev/null && source <(openclaw completion --shell zsh) || true
 
