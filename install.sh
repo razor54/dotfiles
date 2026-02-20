@@ -99,13 +99,40 @@ sys.exit(0 if '$name' in data.get('mcpServers', {}) else 1)
     fi
   }
 
+  # Register HTTP-type MCP servers directly (claude mcp add only supports stdio)
+  add_mcp_http() {
+    local name="$1"
+    local url="$2"
+    if [ -f "$HOME_DIR/.claude.json" ] && python3 -c "
+import json, sys
+with open('$HOME_DIR/.claude.json') as f:
+    data = json.load(f)
+sys.exit(0 if '$name' in data.get('mcpServers', {}) else 1)
+" 2>/dev/null; then
+      printf "  skip  %s (already registered)\n" "$name"
+    else
+      python3 -c "
+import json
+path = '$HOME_DIR/.claude.json'
+try:
+    with open(path) as f:
+        data = json.load(f)
+except (FileNotFoundError, json.JSONDecodeError):
+    data = {}
+data.setdefault('mcpServers', {})['$name'] = {'type': 'http', 'url': '$url'}
+with open(path, 'w') as f:
+    json.dump(data, f, indent=4)
+" && printf "  add   %s (http)\n" "$name" || printf "  FAIL  %s\n" "$name"
+    fi
+  }
+
   add_mcp memory -s user -- npx -y @modelcontextprotocol/server-memory
   add_mcp fetch -s user -- uvx mcp-server-fetch
   add_mcp terraform -s user -- docker run -i --rm hashicorp/terraform-mcp-server:0.2.3
   add_mcp opentofu -s user -- npx -y @opentofu/opentofu-mcp-server
-  add_mcp atlassian -s user -- npx -y mcp-remote https://mcp.atlassian.com/v1/mcp
+  add_mcp_http atlassian https://mcp.atlassian.com/v1/mcp
   add_mcp aws-mcp -s user -- uvx mcp-proxy-for-aws@latest https://aws-mcp.us-east-1.api.aws/mcp --metadata AWS_REGION=eu-west-2
-  add_mcp skillsmp -s user -- npx -y mcp-remote https://skillsmp.com/mcp
+  add_mcp_http skillsmp https://skillsmp.com/mcp
 
   # code-search requires code-search-mcp binary
   if command -v code-search-mcp &>/dev/null; then

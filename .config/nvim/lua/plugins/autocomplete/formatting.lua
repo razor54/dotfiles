@@ -25,6 +25,7 @@ return {
         terraform = { "terraform_fmt" },
         tex = { "latexindent" },
         cs = { "csharpier" },
+        xml = { "xmllint" },
       },
       format_on_save = function()
         if not vim.g.autoformat then

@@ -24,3 +24,6 @@ Thumbs.db
 scratch/
 
 .idea
+
+# Claude Code MCP config
+.mcp.json

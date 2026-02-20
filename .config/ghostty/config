@@ -19,9 +19,12 @@ background = #000000
 
 # macOS settings
 macos-option-as-alt = left
-macos-titlebar-style = hidden
+#macos-titlebar-style = hidden
 window-padding-y = 0,16
 
 # Others
 copy-on-select = true
 working-directory = ~/.dotfiles
+
+# adjustment cell width
+adjust-cell-width = "-1%"

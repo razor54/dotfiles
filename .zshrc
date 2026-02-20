@@ -157,8 +157,8 @@ export PATH="$HOME/.jbang/bin:$PATH"
 
 alias claude-mem='bun "/Users/andregaudencio/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 
-# OpenClaw Completion
-source <(openclaw completion --shell zsh)
+# OpenClaw Completion (only if installed)
+command -v openclaw &>/dev/null && source <(openclaw completion --shell zsh)
 
 # Source private secrets (gitignored)
 [ -f ~/.secrets ] && source ~/.secrets || true

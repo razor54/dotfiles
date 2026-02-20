@@ -38,6 +38,7 @@ return {
       zsh = { "shellcheck" },
       tf = { "tflint" },
       go = { "golangci_lint_ls" },
+      xml = { "xmllint" },
     },
   },
   keys = {
