@@ -17,7 +17,8 @@ opt.shiftwidth = 2
 opt.textwidth = 200
 opt.expandtab = true
 
-vim.smartindent = true
+opt.smartindent = true
+opt.autoindent = true
 
 opt.wrap = false
 

@@ -88,7 +88,10 @@ return {
     auto_install = true,
     sync_install = true,
     highlight = { enable = true },
-    indent = { enable = true },
+    indent = {
+      enable = true,
+      disable = { "yaml" },
+    },
     ignore_install = {},
 
     textobjects = {

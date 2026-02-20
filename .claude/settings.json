@@ -1,9 +1,15 @@
 {
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c '\"/opt/homebrew/bin/bun\" \"$(ls -td ~/.claude/plugins/cache/claude-hud/claude-hud/*/ 2>/dev/null | head -1)src/index.ts\"'"
+  },
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
     "claude-mem@thedotmack": true,
     "lua-lsp@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true
+    "gopls-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-hud@claude-hud": true
   },
   "hooks": {
     "PreToolUse": [

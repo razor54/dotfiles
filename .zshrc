@@ -1,6 +1,3 @@
-# --- Startup Profiling (optional, remove after tuning) ---
-# zmodload zsh/zprof
-
 # --- Cache brew prefix (avoid repeated subshell calls) ---
 BREW_PREFIX="/opt/homebrew"
 
@@ -17,9 +14,9 @@ export VISUAL="$EDITOR"
 autoload -Uz compinit
 # Only do full compinit once a day; otherwise use cached dump
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit
+  compinit -u
 else
-  compinit -C
+  compinit -C -u
 fi
 
 # vim mode
@@ -69,7 +66,18 @@ export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 # --- DotNet Environment ---
 if command -v dotnet >/dev/null 2>&1; then
   export DOTNET_ROOT="/usr/local/share/dotnet"
-  export MSBuildSDKsPath="$DOTNET_ROOT/sdk/$(dotnet --version)/Sdks"
+  
+  # Cache dotnet version to avoid slow $(dotnet --version)
+  DOTNET_VER_CACHE="$HOME/.cache/dotnet_version"
+  if [[ ! -f "$DOTNET_VER_CACHE" ]]; then
+    mkdir -p "$(dirname "$DOTNET_VER_CACHE")"
+    dotnet --version > "$DOTNET_VER_CACHE" 2>/dev/null
+  fi
+  
+  if [[ -f "$DOTNET_VER_CACHE" ]]; then
+    read -r DOTNET_VER < "$DOTNET_VER_CACHE"
+    export MSBuildSDKsPath="$DOTNET_ROOT/sdk/$DOTNET_VER/Sdks"
+  fi
   export PATH="$DOTNET_ROOT:$PATH"
 fi
 
@@ -157,11 +165,15 @@ export PATH="$HOME/.jbang/bin:$PATH"
 
 alias claude-mem='bun "/Users/andregaudencio/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 
-# OpenClaw Completion (only if installed)
-command -v openclaw &>/dev/null && source <(openclaw completion --shell zsh)
+# only for when we have 2 instances of claude, to avoid conflicts with the config dir
+alias claude-2="CLAUDE_CONFIG_DIR=~/.claude-2 command claude"
 
 # Source private secrets (gitignored)
 [ -f ~/.secrets ] && source ~/.secrets || true
 
-# --- Final Profiling Output (optional) ---
-# zprof
+# OpenClaw Completion
+# source "/Users/andregaudencio/.openclaw/completions/openclaw.zsh"
+#
+# OpenClaw Completion (only if installed)
+command -v openclaw &>/dev/null && source <(openclaw completion --shell zsh)
+
