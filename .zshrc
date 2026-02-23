@@ -2,8 +2,8 @@
 BREW_PREFIX="/opt/homebrew"
 
 # --- PATH and MANPATH: GNU Utilities First ---
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/opt/grep/libexec/gnubin:$PATH"
-export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+export PATH="$BREW_PREFIX/opt/coreutils/libexec/gnubin:$BREW_PREFIX/opt/gnu-sed/libexec/gnubin:$BREW_PREFIX/opt/grep/libexec/gnubin:$PATH"
+export MANPATH="$BREW_PREFIX/opt/coreutils/libexec/gnuman:$MANPATH"
 
 # --- Language & Editor ---
 export LANG="en_US.UTF-8"
@@ -12,12 +12,8 @@ export VISUAL="$EDITOR"
 
 # --- Zsh Completion System (early, so SDKMAN/plugins skip their own compinit) ---
 autoload -Uz compinit
-# Only do full compinit once a day; otherwise use cached dump
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  compinit -u
-else
-  compinit -C -u
-fi
+# Always use cached dump (-C skips security check, -u allows insecure dirs)
+compinit -C -u
 
 # vim mode
 source "$BREW_PREFIX/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
@@ -171,9 +167,15 @@ alias claude-2="CLAUDE_CONFIG_DIR=~/.claude-2 command claude"
 # Source private secrets (gitignored)
 [ -f ~/.secrets ] && source ~/.secrets || true
 
-# OpenClaw Completion
-# source "/Users/andregaudencio/.openclaw/completions/openclaw.zsh"
-#
-# OpenClaw Completion (only if installed)
-command -v openclaw &>/dev/null && source <(openclaw completion --shell zsh) || true
+# OpenClaw Completion (cached for performance)
+if command -v openclaw &>/dev/null; then
+  OPENCLAW_COMP_CACHE="$HOME/.cache/openclaw_completion"
+  # Regenerate if cache doesn't exist or is older than 30 days
+  if [[ ! -f "$OPENCLAW_COMP_CACHE" ]] || \
+     [[ -n "$(find "$OPENCLAW_COMP_CACHE" -mtime +30 2>/dev/null)" ]]; then
+    mkdir -p "$(dirname "$OPENCLAW_COMP_CACHE")"
+    openclaw completion --shell zsh > "$OPENCLAW_COMP_CACHE" 2>/dev/null
+  fi
+  [[ -f "$OPENCLAW_COMP_CACHE" ]] && source "$OPENCLAW_COMP_CACHE"
+fi
 
