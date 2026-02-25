@@ -39,18 +39,6 @@ sdk() {
   sdk "$@"
 }
 
-# --- Lazy-load NVM ---
-nvm() {
-  unset -f nvm node npm npx
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$BREW_PREFIX/opt/nvm/nvm.sh" ] && . "$BREW_PREFIX/opt/nvm/nvm.sh"
-  [ -s "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && . "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
-  nvm "$@"
-}
-node() { nvm "$@"; }
-npm() { nvm "$@"; }
-npx() { nvm "$@"; }
-
 # --- fzf Integration ---
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh || true
 
@@ -62,16 +50,16 @@ export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
 # --- DotNet Environment ---
 if command -v dotnet >/dev/null 2>&1; then
   export DOTNET_ROOT="/usr/local/share/dotnet"
-  
+
   # Cache dotnet version to avoid slow $(dotnet --version)
   DOTNET_VER_CACHE="$HOME/.cache/dotnet_version"
   if [[ ! -f "$DOTNET_VER_CACHE" ]]; then
     mkdir -p "$(dirname "$DOTNET_VER_CACHE")"
-    dotnet --version > "$DOTNET_VER_CACHE" 2>/dev/null
+    dotnet --version >"$DOTNET_VER_CACHE" 2>/dev/null
   fi
-  
+
   if [[ -f "$DOTNET_VER_CACHE" ]]; then
-    read -r DOTNET_VER < "$DOTNET_VER_CACHE"
+    read -r DOTNET_VER <"$DOTNET_VER_CACHE"
     export MSBuildSDKsPath="$DOTNET_ROOT/sdk/$DOTNET_VER/Sdks"
   fi
   export PATH="$DOTNET_ROOT:$PATH"
@@ -171,11 +159,36 @@ alias claude-2="CLAUDE_CONFIG_DIR=~/.claude-2 command claude"
 if command -v openclaw &>/dev/null; then
   OPENCLAW_COMP_CACHE="$HOME/.cache/openclaw_completion"
   # Regenerate if cache doesn't exist or is older than 30 days
-  if [[ ! -f "$OPENCLAW_COMP_CACHE" ]] || \
-     [[ -n "$(find "$OPENCLAW_COMP_CACHE" -mtime +30 2>/dev/null)" ]]; then
+  if [[ ! -f "$OPENCLAW_COMP_CACHE" ]] ||
+    [[ -n "$(find "$OPENCLAW_COMP_CACHE" -mtime +30 2>/dev/null)" ]]; then
     mkdir -p "$(dirname "$OPENCLAW_COMP_CACHE")"
-    openclaw completion --shell zsh > "$OPENCLAW_COMP_CACHE" 2>/dev/null
+    openclaw completion --shell zsh >"$OPENCLAW_COMP_CACHE" 2>/dev/null
   fi
   [[ -f "$OPENCLAW_COMP_CACHE" ]] && source "$OPENCLAW_COMP_CACHE"
 fi
 
+# --- NVM (lazy-loaded for fast shell startup) ---
+export NVM_DIR="$HOME/.nvm"
+
+# Make node/npm/npx available immediately by adding default version to PATH
+# Resolves the latest installed version (handles alias "node" = latest)
+NVM_DEFAULT_PATH="$(ls -d "$NVM_DIR/versions/node/"v* 2>/dev/null | sort -V | tail -1)/bin"
+[ -d "$NVM_DEFAULT_PATH" ] && export PATH="$NVM_DEFAULT_PATH:$PATH"
+
+# Only source nvm.sh when `nvm` command is actually called
+_lazy_load_nvm() {
+  unset -f nvm
+  [ -s "$BREW_PREFIX/opt/nvm/nvm.sh" ] && . "$BREW_PREFIX/opt/nvm/nvm.sh"
+  [ -s "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && . "$BREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+}
+nvm() { _lazy_load_nvm && nvm "$@"; }
+
+# Auto-switch node version on directory change (loads nvm on first trigger)
+autoload -U add-zsh-hook
+_lazy_load_nvmrc() {
+  if [ -f ".nvmrc" ] || [ -f ".node-version" ]; then
+    _lazy_load_nvm  # ensure nvm is loaded
+    nvm use --silent 2>/dev/null
+  fi
+}
+add-zsh-hook chpwd _lazy_load_nvmrc
