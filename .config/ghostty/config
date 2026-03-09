@@ -4,6 +4,11 @@ font-size = 13
 font-style = "Medium"
 font-style-italic = "Medium Italic"
 adjust-cell-height = 10%
+# adjust-cell-height = 11%
+# adjust-cell-width = "7%"
+# font-thicken-strength = 31
+# Force higher contrast
+minimum-contrast = 1.1
 
 # Font rendering (sharp/crisp)
 font-thicken = true
@@ -12,6 +17,17 @@ font-feature = zero
 font-feature = ss04
 font-feature = cv16
 font-feature = cv14
+
+
+# some example font rendering 
+# font-size = 14
+# adjust-cell-width = -7%
+# font-thicken = true
+# font-feature = -calt
+# font-feature = -liga
+# font-feature = -dlig
+# window-padding-x = 10
+# window-padding-y = 10
 
 # Catppuccin Macchiato with OLED black background
 theme = Catppuccin Macchiato
@@ -24,7 +40,7 @@ window-padding-y = 0,16
 
 # Others
 copy-on-select = true
-working-directory = ~/.dotfiles
+# working-directory = ~/.dotfiles
 
 # adjustment cell width
 adjust-cell-width = "-1%"

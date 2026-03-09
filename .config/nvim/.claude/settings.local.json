@@ -1,0 +1,12 @@
+{
+  "enabledMcpjsonServers": [
+    "code-search",
+    "memory",
+    "fetch",
+    "terraform",
+    "opentofu",
+    "atlassian",
+    "aws-mcp",
+    "skillsmp"
+  ]
+}

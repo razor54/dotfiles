@@ -29,3 +29,5 @@
 |----|------|---|-------|------|
 | #2024 | 9:26 AM | 🔵 | Global Settings Symlinked to Dotfiles Directory Configuration | ~326 |
 </claude-mem-context>
+
+@RTK.md
