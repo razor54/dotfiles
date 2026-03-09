@@ -1,7 +1,7 @@
 {
   "plugin": [
     "oh-my-opencode",
-    "opencode-antigravity-auth@1.4.3",
+    "opencode-antigravity-auth@1.6.0",
     "cc-safety-net",
     "opencode-agent-skills"
   ],
