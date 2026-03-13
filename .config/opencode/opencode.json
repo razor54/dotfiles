@@ -1,12 +1,28 @@
 {
   "plugin": [
     "oh-my-opencode",
-    "opencode-antigravity-auth@1.6.0",
     "cc-safety-net",
-    "opencode-agent-skills"
+    "opencode-agent-skills",
+    "opencode-anthropic-context-1m"
   ],
   "$schema": "https://opencode.ai/config.json",
   "provider": {
+    "anthropic": {
+      "models": {
+        "claude-opus-4-6": {
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "claude-sonnet-4-6": {
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        }
+      }
+    },
     "github-copilot": {
       "name": "GitHub Copilot",
       "models": {
@@ -57,8 +73,14 @@
             "output": 65535
           },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           }
         },
         "antigravity-gemini-3-pro-low": {
@@ -70,8 +92,14 @@
             "output": 65535
           },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           }
         },
         "antigravity-gemini-3-flash": {
@@ -82,8 +110,14 @@
             "output": 65536
           },
           "modalities": {
-            "input": ["text", "image", "pdf"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
           }
         }
       }
@@ -102,7 +136,11 @@
       "type": "local"
     },
     "opentofu": {
-      "command": ["npx", "-y", "@opentofu/opentofu-mcp-server"],
+      "command": [
+        "npx",
+        "-y",
+        "@opentofu/opentofu-mcp-server"
+      ],
       "enabled": false,
       "type": "local"
     },
@@ -135,12 +173,19 @@
       "type": "local"
     },
     "memory": {
-      "command": ["npx", "-y", "@modelcontextprotocol/server-memory"],
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
       "enabled": true,
       "type": "local"
     },
     "fetch": {
-      "command": ["uvx", "mcp-server-fetch"],
+      "command": [
+        "uvx",
+        "mcp-server-fetch"
+      ],
       "enabled": true,
       "type": "local"
     }

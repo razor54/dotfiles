@@ -1,0 +1,163 @@
+# ── Dippy global config ─────────────────────────────────────
+# ~/.dippy/config — managed via dotfiles
+# Last match wins. Broad rules first, exceptions after.
+
+# ── Defaults ────────────────────────────────────────────────
+set default ask
+
+# ── Safe: read-only shell commands ──────────────────────────
+allow ls
+allow cat
+allow head
+allow tail
+allow find
+allow which
+allow echo
+allow pwd
+allow wc
+allow sort
+allow uniq
+allow diff
+allow grep
+allow rg
+allow ag
+allow jq
+allow yq
+allow sed
+allow awk
+allow cut
+allow tr
+allow file
+allow stat
+allow env
+allow printenv
+allow whoami
+allow hostname
+allow uname
+allow date
+allow tree
+allow eza
+allow bat
+allow fd
+
+# ── Safe: git read operations ───────────────────────────────
+allow git status
+allow git log
+allow git diff
+allow git show
+allow git branch
+allow git remote
+allow git tag
+allow git stash list
+allow git rev-parse
+allow git config --get
+allow git ls-files
+allow git blame
+
+# ── Safe: git write operations ──────────────────────────────
+allow git add
+allow git commit
+allow git checkout
+allow git switch
+allow git stash
+allow git fetch
+allow git pull
+allow git rebase
+allow git merge
+
+# ── Safe: build tools & runtimes ────────────────────────────
+allow go
+allow make
+allow npm
+allow yarn
+allow pnpm
+allow bun
+allow pip
+allow node
+allow cargo
+allow rustc
+allow uv
+
+# ── Safe: infra read-only ──────────────────────────────────
+allow docker ps
+allow docker logs
+allow docker images
+allow docker inspect
+allow terraform init
+allow terraform plan
+allow terraform validate
+allow terraform fmt
+allow terraform show
+allow terraform state list
+allow terraform state show
+allow terraform output
+allow tofu init
+allow tofu plan
+allow tofu validate
+allow tofu fmt
+allow tofu show
+allow tofu state list
+allow tofu state show
+allow tofu output
+allow kubectl get
+allow kubectl describe
+allow kubectl logs
+allow helm list
+allow helm status
+allow aws sts
+allow aws s3 ls
+allow aws s3 cp
+allow aws ec2 describe
+allow aws ecs describe
+allow aws ecs list
+allow aws iam list
+allow aws iam get
+allow aws cloudformation describe
+allow aws cloudformation list
+allow aws logs
+allow aws ssm get
+allow aws route53 list
+
+# ── Safe: misc tools ───────────────────────────────────────
+allow tmux
+allow rtk
+allow gh
+
+# ── Deny: destructive operations ───────────────────────────
+deny rm -rf "Use trash instead — rm -rf is irreversible"
+deny python "Use uv run python — runs in project venv"
+deny python3 "Use uv run python3 — runs in project venv"
+deny git push --force "Use --force-with-lease instead"
+deny git reset --hard "Destructive — consider git stash first"
+
+# ── Deny: infra mutations ──────────────────────────────────
+deny terraform destroy "Requires manual confirmation outside Claude"
+deny terraform apply "Requires manual confirmation outside Claude"
+deny tofu destroy "Requires manual confirmation outside Claude"
+deny tofu apply "Requires manual confirmation outside Claude"
+deny kubectl delete "Destructive — requires manual confirmation"
+deny kubectl apply "Mutates cluster state — requires manual confirmation"
+deny helm install "Mutates cluster state — requires manual confirmation"
+deny helm upgrade "Mutates cluster state — requires manual confirmation"
+deny helm uninstall "Destructive — requires manual confirmation"
+
+# ── Deny: dangerous docker ops ─────────────────────────────
+deny docker rm "Destructive — removes containers"
+deny docker rmi "Destructive — removes images"
+deny docker stop "Stops running containers — confirm first"
+deny docker kill "Kills running containers — confirm first"
+
+# ── Deny: dangerous AWS mutations ──────────────────────────
+deny aws * create- "AWS resource creation — requires manual confirmation"
+deny aws * delete- "AWS resource deletion — requires manual confirmation"
+deny aws * terminate- "AWS resource termination — requires manual confirmation"
+deny aws * modify- "AWS resource modification — requires manual confirmation"
+deny aws * update- "AWS resource update — requires manual confirmation"
+deny aws cloudformation create "Stack creation — requires manual confirmation"
+deny aws cloudformation delete "Stack deletion — requires manual confirmation"
+deny aws cloudformation update "Stack update — requires manual confirmation"
+
+# ── File write controls ────────────────────────────────────
+deny-redirect **/.env* "Never write secrets — ask me to do it"
+deny-redirect **/*credentials* "Never write credentials — ask me to do it"
+deny-redirect **/*secret* "Never write secret files — ask me to do it"

@@ -143,5 +143,18 @@
     "atlassian",
     "aws-mcp",
     "skillsmp"
-  ]
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dippy"
+          }
+        ]
+      }
+    ]
+  }
 }

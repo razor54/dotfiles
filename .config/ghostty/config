@@ -3,7 +3,7 @@ font-family = "JetBrainsMono Nerd Font"
 font-size = 13
 font-style = "Medium"
 font-style-italic = "Medium Italic"
-adjust-cell-height = 10%
+# adjust-cell-height = 10%
 # adjust-cell-height = 11%
 # adjust-cell-width = "7%"
 # font-thicken-strength = 31
@@ -12,11 +12,12 @@ minimum-contrast = 1.1
 
 # Font rendering (sharp/crisp)
 font-thicken = true
-font-thicken-strength = 255
-font-feature = zero
-font-feature = ss04
-font-feature = cv16
-font-feature = cv14
+font-thicken-strength = 180
+# font-thicken-strength = 255
+# font-feature = zero
+# font-feature = ss04
+# font-feature = cv16
+# font-feature = cv14
 
 
 # some example font rendering 
@@ -41,6 +42,7 @@ window-padding-y = 0,16
 # Others
 copy-on-select = true
 # working-directory = ~/.dotfiles
+working-directory = ~/
 
 # adjustment cell width
-adjust-cell-width = "-1%"
+# adjust-cell-width = "-1%"

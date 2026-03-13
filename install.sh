@@ -66,6 +66,11 @@ link_file "$DOTFILES_DIR/.config/bat/themes"       "$HOME_DIR/.config/bat/themes
 link_file "$DOTFILES_DIR/.config/ghostty/config"   "$HOME_DIR/.config/ghostty/config"
 link_file "$DOTFILES_DIR/.config/oh-my-posh"       "$HOME_DIR/.config/oh-my-posh"
 
+# ── ~/.dippy ──────────────────────────────────────────────────
+echo ""
+echo "~/.dippy:"
+link_file "$DOTFILES_DIR/.dippy/config"          "$HOME_DIR/.dippy/config"
+
 # ── ~/.claude ──────────────────────────────────────────────────
 echo ""
 echo "~/.claude:"

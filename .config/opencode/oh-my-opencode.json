@@ -15,10 +15,19 @@
       "model": "github-copilot/claude-opus-4.5"
     },
     "document-writer": {
-      "model": "github-copilot/gpt-5.2"
+      "model": "anthropic/claude-sonnet-4-20250514"
     },
     "multimodal-looker": {
       "model": "github-copilot/gemini-3-pro"
+    },
+    "sisyphus-junior": {
+      "model": "anthropic/claude-sonnet-4-20250514"
+    },
+    "momus": {
+      "model": "anthropic/claude-sonnet-4-20250514"
+    },
+    "metis": {
+      "model": "anthropic/claude-sonnet-4-20250514"
     }
   }
 }
