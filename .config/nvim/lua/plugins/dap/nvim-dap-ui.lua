@@ -6,7 +6,16 @@ return {
     vim.keymap.set(
       "n",
       "<leader>dc",
-      "<cmd>lua require'dap'.continue()<cr>",
+      function()
+        local dap = require("dap")
+        local go_dap = package.loaded["plugins.dap.settings.go-debug-adapter"]
+        if go_dap and go_dap.continue_with_go_defaults then
+          if go_dap.continue_with_go_defaults() then
+            return
+          end
+        end
+        dap.continue()
+      end,
       { desc = "DAP | Continue", silent = true }
     )
 

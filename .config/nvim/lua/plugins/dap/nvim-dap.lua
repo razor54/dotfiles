@@ -6,7 +6,12 @@ return {
     -- NOTE: Check out this for guide
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
     local dap = require("dap")
-    vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+    require("dap").set_log_level("DEBUG")
+    -- Override nvim-dap's default "B" text sign after it loads
+    vim.fn.sign_define("DapBreakpoint",         { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+    vim.fn.sign_define("DapBreakpointCondition", { text = "◆", texthl = "DiagnosticSignWarn",  linehl = "", numhl = "" })
+    vim.fn.sign_define("DapBreakpointRejected",  { text = "○", texthl = "DiagnosticSignHint",  linehl = "", numhl = "" })
+    vim.fn.sign_define("DapStopped",             { text = "→", texthl = "DiagnosticSignInfo",  linehl = "debugPC", numhl = "" })
 
     local dapui = require("dapui")
     dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -33,7 +38,7 @@ return {
     require("plugins.dap.settings.java-debug")
     --require("plugins.dap.settings.node-debug2")
     --require("plugins.dap.settings.debugpy")
-    require("plugins.dap.settings.go-debug-adapter")
+    require("plugins.dap.settings.go-debug-adapter").setup()
     --require("plugins.dap.settings.js-debug")
   end,
 }
