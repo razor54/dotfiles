@@ -14,7 +14,7 @@ return {
         sh = { "beautysh", "shfmt" },
         python = { "black" },
         json = { "clang-format", "prettierd" },
-        java = { "clang-format" },
+        java = {},
         javascript = { "clang-format", "prettierd" },
         html = { "prettierd" },
         markdown = { "prettierd" },

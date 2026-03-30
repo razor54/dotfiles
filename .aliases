@@ -142,4 +142,7 @@ alias lta='lt -a'
 # alias docker='podman'
 
 # opencode
-alias oc='opencode'
+alias oc='CLAUDE_PROXY_PASSTHROUGH=1 opencode'
+
+# clean clipboard CRLF (browsers copy with \r\n, terminals expect \n)
+alias clipfix='pbpaste | tr -d "\r" | pbcopy && echo "clipboard cleaned"'

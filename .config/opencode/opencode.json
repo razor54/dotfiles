@@ -3,11 +3,16 @@
     "oh-my-opencode",
     "cc-safety-net",
     "opencode-agent-skills",
-    "opencode-anthropic-context-1m"
+    "opencode-anthropic-context-1m",
+    "opencode-with-claude"
   ],
   "$schema": "https://opencode.ai/config.json",
   "provider": {
     "anthropic": {
+      "options": {
+        "baseURL": "http://127.0.0.1:3456",
+        "apiKey": "dummy"
+      },
       "models": {
         "claude-opus-4-6": {
           "limit": {
@@ -188,6 +193,11 @@
       ],
       "enabled": true,
       "type": "local"
+    },
+    "dataqdog-mcp": {
+      "url": "https://mcp.datadoghq.eu/api/unstable/mcp-server/mcp",
+      "enabled": true,
+      "type": "remote"
     }
   }
 }

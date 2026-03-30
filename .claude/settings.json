@@ -1,16 +1,18 @@
 {
   "attribution": {
-    "commit": "",
-    "pr": "Generated without any assistance from Claude Opus"
+    "commit": "Lovingly crafted by human hands — no silicon was involved",
+    "pr": "100% organic, free-range, human-written code — no AIs were harmed or consulted"
   },
+  "model": "opus[1m]",
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/andregaudencio/.claude/hooks/rtk-rewrite.sh"
+            "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-prompt-guard.js\"",
+            "timeout": 5
           }
         ]
       }
@@ -30,9 +32,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-context-monitor.js\""
+            "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-context-monitor.js\"",
+            "timeout": 10
           }
-        ]
+        ],
+        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task"
       }
     ]
   },
@@ -46,7 +50,6 @@
     "lua-lsp@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "claude-hud@claude-hud": true,
     "pyright-lsp@claude-plugins-official": true,
     "jdtls-lsp@claude-plugins-official": true
   },
@@ -64,5 +67,9 @@
       }
     }
   },
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_ENABLE_AUTO_MODE": "1"
+  }
 }

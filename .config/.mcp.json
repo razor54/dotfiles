@@ -66,11 +66,6 @@
       ],
       "env": {},
       "disabled": true
-    },
-    "skillsmp": {
-      "type": "sse",
-      "url": "https://skillsmp.com/mcp",
-      "disabled": true
     }
   }
 }

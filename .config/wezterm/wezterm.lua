@@ -17,6 +17,9 @@ catppuccinCustom.tab_bar.new_tab = catppuccinCustom.tab_bar.new_tab or {}
 catppuccinCustom.tab_bar.new_tab.bg_color = "#000000"
 
 local config = {
+  -- Normalize pasted line endings to LF (fixes blank lines when pasting
+  -- CRLF content from browsers like AWS Console credentials)
+  canonicalize_pasted_newlines = "LineFeed",
   enable_tab_bar = true,
   hide_tab_bar_if_only_one_tab = true,
   use_fancy_tab_bar = false,
@@ -64,6 +67,21 @@ local config = {
   webgpu_power_preference = "HighPerformance",
   bold_brightens_ansi_colors = true,
   keys = {
+    -- Clean paste: strip blank lines and trailing newline from clipboard
+    -- Fixes AWS Identity Center exports (and any browser-copied multiline text)
+    {
+      key = "v",
+      mods = "CMD",
+      action = wezterm.action_callback(function(_, pane)
+        local success, stdout, _ = wezterm.run_child_process({ "pbpaste" })
+        if success and stdout then
+          local text = stdout:gsub("\r\n", "\n"):gsub("\r", "\n")
+          text = text:gsub("\n[ \t]*\n", "\n") -- collapse blank lines
+          text = text:gsub("\n$", "")           -- strip trailing newline
+          pane:send_paste(text)
+        end
+      end),
+    },
     {
       key = "d",
       mods = "CMD",

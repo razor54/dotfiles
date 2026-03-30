@@ -1,8 +1,8 @@
 return {
   "saghen/blink.cmp",
   lazy = true,
-  --event = { "InsertEnter" },
-  event = { "LspAttach" },
+  event = { "InsertEnter" },
+  --event = { "LspAttach" },
   --optional = true, -- todo: maybe just remove this
   dependencies = {
     { "L3MON4D3/LuaSnip", version = "v2.*" },
@@ -30,7 +30,7 @@ return {
       ghost_text = { enabled = true, show_with_menu = true },
       menu = { auto_show = true },
       list = { selection = { preselect = true, auto_insert = true } },
-      trigger = { prefetch_on_insert = false },
+      trigger = { prefetch_on_insert = true },
     },
     keymap = {
       ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
@@ -77,6 +77,7 @@ return {
           module = "blink-cmp-copilot",
           score_offset = 100,
           async = true,
+          timeout_ms = 2000,
         },
         lazydev = {
           name = "LazyDev",
@@ -118,13 +119,6 @@ return {
           min_keyword_length = 2,
           module = "blink.cmp.sources.snippets",
           score_offset = 85,
-        },
-        minuet = {
-          name = "minuet",
-          module = "minuet.blink",
-          async = true,
-          timeout_ms = 3000,
-          score_offset = 50,
         },
       },
     },

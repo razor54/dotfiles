@@ -16,6 +16,8 @@ autoload -Uz compinit
 compinit -C -u
 
 # vim mode
+ZVM_READKEY_ENGINE=zle
+ZVM_INIT_MODE=sourcing
 source "$BREW_PREFIX/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
 
 # --- History Options ---
@@ -192,3 +194,4 @@ _lazy_load_nvmrc() {
   fi
 }
 add-zsh-hook chpwd _lazy_load_nvmrc
+
