@@ -91,8 +91,7 @@ end
 
 function M.get_fg(name)
   ---@type {foreground?:number}?
-  ---@diagnostic disable-next-line: deprecated
-  local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name }) or vim.api.nvim_get_hl_by_name(name, true)
+  local hl = vim.api.nvim_get_hl(0, { name = name })
   ---@diagnostic disable-next-line: undefined-field
   local fg = hl and (hl.fg or hl.foreground)
   return fg and { fg = string.format("#%06x", fg) } or nil
@@ -184,10 +183,10 @@ local function get_cwd()
     if path == "" or path == nil then
       return nil
     end
-    return vim.loop.fs_realpath(path) or path
+    return vim.uv.fs_realpath(path) or path
   end
 
-  return realpath(vim.loop.cwd()) or ""
+  return realpath(vim.uv.cwd()) or ""
 end
 
 ---@return fun():string
