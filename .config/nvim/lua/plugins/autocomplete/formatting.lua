@@ -32,7 +32,7 @@ return {
           return
         end
         return {
-          lsp_fallback = true,
+          lsp_format = "fallback",
           async = false,
           timeout_ms = 500,
         }
@@ -51,7 +51,7 @@ return {
       "<leader>mf",
       function()
         require("conform").format({
-          lsp_fallback = true,
+          lsp_format = "fallback",
           async = false,
           timeout_ms = 500,
         })

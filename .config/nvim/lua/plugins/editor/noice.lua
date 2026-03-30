@@ -34,7 +34,6 @@ return {
       override = {
         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
         ["vim.lsp.util.stylize_markdown"] = true,
-        ["cmp.entry.get_documentation"] = true,
       },
       hover = { enabled = true },
       signature = { enabled = true },
@@ -60,7 +59,7 @@ return {
         size = { width = "60%" },
       },
     },
-    popupmenu = { backend = "cmp" },
+    popupmenu = { backend = "nui" },
     presets = {
       -- bottom_search = true,
       command_palette = true,

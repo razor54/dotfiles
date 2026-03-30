@@ -371,8 +371,8 @@ end
 function M.LSP()
   if rawget(vim, "lsp") then
     local padding = 1
-    for _, client in ipairs(vim.lsp.get_clients()) do
-      if client.attached_buffers[stbufnr()] and client.name ~= "null-ls" then
+    for _, client in ipairs(vim.lsp.get_clients({ bufnr = stbufnr() })) do
+      if client.name ~= "null-ls" then
         return (vim.o.columns > 100 and " 󰄭  " .. client.name .. string.rep(" ", padding))
           or (" 󰄭  LSP" .. string.rep(" ", padding))
       end
