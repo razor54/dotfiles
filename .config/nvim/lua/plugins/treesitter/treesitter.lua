@@ -28,6 +28,7 @@ return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     {
       "nvim-treesitter/nvim-treesitter-context",
+      enabled = false,
       init = function()
         vim.keymap.set(
           "n",
@@ -87,7 +88,18 @@ return {
     },
     auto_install = true,
     sync_install = true,
-    highlight = { enable = true },
+    highlight = {
+      enable = true,
+      disable = function(lang, buf)
+        local ft = vim.bo[buf].filetype
+        return lang == "markdown"
+          or lang == "markdown_inline"
+          or ft == "markdown"
+          or ft == "md"
+          or ft == "rmd"
+          or ft == "quarto"
+      end,
+    },
     indent = {
       enable = true,
       disable = { "yaml" },

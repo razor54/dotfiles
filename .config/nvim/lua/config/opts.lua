@@ -48,3 +48,27 @@ opt.sessionoptions = {
   "globals",
   "resize",
 }
+
+if not vim.g._ts_markdown_guard then
+  vim.g._ts_markdown_guard = true
+  local ts_start = vim.treesitter.start
+  vim.treesitter.start = function(bufnr, lang)
+    local target_buf = bufnr or 0
+    local ok, ft = pcall(function()
+      return vim.bo[target_buf].filetype
+    end)
+
+    local target_lang = lang or (ok and ft) or ""
+    if target_lang == "markdown"
+      or target_lang == "markdown_inline"
+      or ft == "markdown"
+      or ft == "md"
+      or ft == "rmd"
+      or ft == "quarto"
+    then
+      return
+    end
+
+    return ts_start(bufnr, lang)
+  end
+end
