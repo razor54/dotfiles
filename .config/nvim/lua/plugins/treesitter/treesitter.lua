@@ -48,6 +48,95 @@ return {
 
   enabled = true,
   config = function(_, opts)
+    local function setup_query_directive_compat()
+      local ok_query, query = pcall(require, "vim.treesitter.query")
+      if not ok_query or type(query.add_directive) ~= "function" then
+        return
+      end
+
+      pcall(require, "nvim-treesitter.query_predicates")
+
+      local html_script_type_languages = {
+        importmap = "json",
+        module = "javascript",
+        ["application/ecmascript"] = "javascript",
+        ["text/ecmascript"] = "javascript",
+      }
+
+      local non_filetype_match_injection_language_aliases = {
+        ex = "elixir",
+        pl = "perl",
+        sh = "bash",
+        uxn = "uxntal",
+        ts = "typescript",
+      }
+
+      local function get_parser_from_markdown_info_string(injection_alias)
+        local match = vim.filetype.match({ filename = "a." .. injection_alias })
+        return match or non_filetype_match_injection_language_aliases[injection_alias] or injection_alias
+      end
+
+      local function normalize_capture_node(value)
+        if value == nil then
+          return nil
+        end
+
+        if type(value) == "table" then
+          return value[1]
+        end
+
+        return value
+      end
+
+      local function get_capture_node(match, capture_id)
+        local capture = match and match[capture_id]
+        return normalize_capture_node(capture)
+      end
+
+      local directive_opts = { force = true, all = false }
+
+      query.add_directive("set-lang-from-mimetype!", function(match, _, bufnr, pred, metadata)
+        local node = get_capture_node(match, pred[2])
+        if not node then
+          return
+        end
+
+        local type_attr_value = vim.treesitter.get_node_text(node, bufnr)
+        local configured = html_script_type_languages[type_attr_value]
+        if configured then
+          metadata["injection.language"] = configured
+          return
+        end
+
+        local parts = vim.split(type_attr_value, "/", {})
+        metadata["injection.language"] = parts[#parts]
+      end, directive_opts)
+
+      query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
+        local node = get_capture_node(match, pred[2])
+        if not node then
+          return
+        end
+
+        local injection_alias = vim.treesitter.get_node_text(node, bufnr):lower()
+        metadata["injection.language"] = get_parser_from_markdown_info_string(injection_alias)
+      end, directive_opts)
+
+      query.add_directive("downcase!", function(match, _, bufnr, pred, metadata)
+        local id = pred[2]
+        local node = get_capture_node(match, id)
+        if not node then
+          return
+        end
+
+        local node_metadata = metadata[id]
+        local text = vim.treesitter.get_node_text(node, bufnr, { metadata = node_metadata }) or ""
+        metadata[id] = node_metadata or {}
+        metadata[id].text = string.lower(text)
+      end, directive_opts)
+    end
+
+    setup_query_directive_compat()
     require("nvim-treesitter.configs").setup(opts)
 
     -- register sh filetype to use bash parser
@@ -90,15 +179,7 @@ return {
     sync_install = true,
     highlight = {
       enable = true,
-      disable = function(lang, buf)
-        local ft = vim.bo[buf].filetype
-        return lang == "markdown"
-          or lang == "markdown_inline"
-          or ft == "markdown"
-          or ft == "md"
-          or ft == "rmd"
-          or ft == "quarto"
-      end,
+      disable = {},
     },
     indent = {
       enable = true,
