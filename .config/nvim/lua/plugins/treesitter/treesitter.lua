@@ -25,7 +25,10 @@ return {
         },
       },
     },
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      branch = "main",
+    },
     {
       "nvim-treesitter/nvim-treesitter-context",
       enabled = false,
@@ -142,6 +145,72 @@ return {
     -- register sh filetype to use bash parser
     -- TODO: review if there is an easier way
     vim.treesitter.language.register("bash", "sh")
+
+    -- Compatibility shim for nvim-treesitter-textobjects move module
+    -- Neovim 0.12 changed capture shapes so match.node can be nil or a table.
+    -- This wraps the filter/scoring functions to handle both old and new shapes.
+    local function setup_textobjects_move_compat()
+      local ok, move = pcall(require, "nvim-treesitter.textobjects.move")
+      if not ok then
+        return
+      end
+
+      local ok_queries, queries = pcall(require, "nvim-treesitter.query")
+      if not ok_queries then
+        return
+      end
+
+      local function normalize_node(node)
+        if node == nil then
+          return nil
+        end
+        if type(node) == "table" and node[1] ~= nil then
+          return node[1]
+        end
+        return node
+      end
+
+      local function safe_range(node)
+        node = normalize_node(node)
+        if not node then
+          return nil
+        end
+        if type(node.range) == "function" then
+          return { node:range() }
+        end
+        return nil
+      end
+
+      local original_find_best_match = queries.find_best_match
+      queries.find_best_match = function(bufnr, capture_string, query_group, filter_predicate, scoring_function, root)
+        local wrapped_filter = function(match)
+          if not match then
+            return false
+          end
+
+          local node = match.node
+          local range = safe_range(node)
+          if not range then
+            return false
+          end
+
+          return filter_predicate(match)
+        end
+
+        local wrapped_score = function(match)
+          local node = normalize_node(match.node)
+          if not node then
+            return -1
+          end
+
+          return scoring_function(match)
+        end
+
+        return original_find_best_match(bufnr, capture_string, query_group, wrapped_filter, wrapped_score, root)
+      end
+    end
+
+    setup_textobjects_move_compat()
   end,
   --	--lazy = true,
   event = {
