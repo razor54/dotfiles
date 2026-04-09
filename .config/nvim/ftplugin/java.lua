@@ -1,3 +1,10 @@
+local java_mason = require("utils.java_mason")
+local java_runtime = java_mason.inspect_runtime()
+
+vim.api.nvim_buf_create_user_command(0, "JdtHealth", function()
+  print(vim.inspect(java_mason.readiness_summary()))
+end, {})
+
 local status_ok, jdtls = pcall(require, "jdtls")
 if not status_ok then
   return
@@ -50,39 +57,36 @@ local function java_keymaps()
     "<Esc><Cmd> lua require('jdtls').extract_constant(true)<CR>",
     { desc = "[J]ava Extract [C]onstant" }
   )
-  -- Set a Vim motion to <Space> + <Shift>J + t to run the test method currently under the cursor
-  vim.keymap.set(
-    "n",
-    "<leader>Jt",
-    "<Cmd> lua require('jdtls').test_nearest_method()<CR>",
-    { desc = "[J]ava [T]est Method" }
-  )
-  -- Set a Vim motion to <Space> + <Shift>J + t to run the test method that is currently selected in visual mode
-  vim.keymap.set(
-    "v",
-    "<leader>Jt",
-    "<Esc><Cmd> lua require('jdtls').test_nearest_method(true)<CR>",
-    { desc = "[J]ava [T]est Method" }
-  )
-  -- Set a Vim motion to <Space> + <Shift>J + <Shift>T to run an entire test suite (class)
-  vim.keymap.set("n", "<leader>JT", "<Cmd> lua require('jdtls').test_class()<CR>", { desc = "[J]ava [T]est Class" })
+  if java_runtime.bundles_ready then
+    -- Set a Vim motion to <Space> + <Shift>J + t to run the test method currently under the cursor
+    vim.keymap.set(
+      "n",
+      "<leader>Jt",
+      "<Cmd> lua require('jdtls').test_nearest_method()<CR>",
+      { desc = "[J]ava [T]est Method" }
+    )
+    -- Set a Vim motion to <Space> + <Shift>J + t to run the test method that is currently selected in visual mode
+    vim.keymap.set(
+      "v",
+      "<leader>Jt",
+      "<Esc><Cmd> lua require('jdtls').test_nearest_method(true)<CR>",
+      { desc = "[J]ava [T]est Method" }
+    )
+    -- Set a Vim motion to <Space> + <Shift>J + <Shift>T to run an entire test suite (class)
+    vim.keymap.set("n", "<leader>JT", "<Cmd> lua require('jdtls').test_class()<CR>", { desc = "[J]ava [T]est Class" })
+  end
   -- Set a Vim motion to <Space> + <Shift>J + u to update the project configuration
   vim.keymap.set("n", "<leader>Ju", "<Cmd> JdtUpdateConfig<CR>", { desc = "[J]ava [U]pdate Config" })
+end
+
+if not java_runtime.jdtls_ready then
+  return
 end
 
 local on_attach = function(_, bufnr)
   -- Map the Java specific key mappings once the server is attached
   java_keymaps()
 
-  -- Setup the java debug adapter of the JDTLS server
-  --require("jdtls.dap").setup_dap()
-  require("jdtls.dap").setup_dap({ hotcodereplace = "auto" })
-
-  -- Find the main method(s) of the application so the debug adapter can successfully start up the application
-  -- Sometimes this will randomly fail if language server takes to long to startup for the project, if a ClassDefNotFoundException occurs when running
-  -- the debug tool, attempt to run the debug tool while in the main class of the application, or restart the neovim instance
-  -- Unfortunately I have not found an elegant way to ensure this works 100%
-  --require("jdtls.dap").setup_dap_main_class_configs()
   -- Enable jdtls commands to be used in Neovim
   require("jdtls.setup").add_commands()
   -- Refresh the codelens
@@ -91,111 +95,51 @@ local on_attach = function(_, bufnr)
 
   -- Setup a function that automatically runs every time a java file is saved to refresh the code lens
   vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = { "*.java" },
+    buffer = bufnr,
     callback = function()
       local _, _ = pcall(vim.lsp.codelens.refresh)
     end,
   })
 
-  -- Load .vscode/launch.json configurations
-  --require("dap.ext.vscode").load_launchjs(nil, { java = { "java" } }) -- <-- HERE
+  if not java_runtime.bundles_ready then
+    return
+  end
+
+  require("jdtls.dap").setup_dap({ hotcodereplace = "auto" })
 
   require("jdtls.dap").setup_dap_main_class_configs()
-
-  -- Delay config generation to ensure LSP is fully initialized
-  -- vim.defer_fn(function()
-  --   require("jdtls.dap").setup_dap_main_class_configs()
-  --   --vim.cmd("JdtUpdateDebugConfigs") -- Now works after LSP init
-  -- end, 3000) -- 3-second delay
-
-  -- Your existing jdtls config
-
-  -- Optional: Load project-specific launch.json
-  --require("dap.ext.vscode").load_launchjs()
-end
-
-local bufnr = vim.api.nvim_get_current_buf()
-
-local java_debug_path = vim.fn.stdpath("data") .. "/mason/packages/java-debug-adapter/"
-local java_test_path = vim.fn.stdpath("data") .. "/mason/packages/java-test/"
-local jdtls_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls/"
---local lombok_path = vim.fn.stdpath("data") .. "/mason/packages/lombok-nightly/"
-
-local lombok_jar = vim.fn.stdpath("data") .. "/mason/packages/lombok-nightly/lombok.jar"
---if vim.fn.empty(vim.fn.glob(lombok_jar)) > 0 then
---  vim.fn.system({
---    "curl",
---    "-L",
---    "https://projectlombok.org/downloads/lombok.jar",
---    "-o",
---    lombok_jar,
---  })
---end
-
-local bundles = {
-  vim.fn.glob(java_debug_path .. "extension/server/com.microsoft.java.debug.plugin-*.jar", true),
-  vim.fn.glob(java_test_path .. "/extension/server/*.jar", true),
-}
-vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "extension/server/*.jar", true), "\n"))
-
--- NOTE: Decrease the amount of files to improve speed(Experimental).
--- INFO: It's annoying to edit the version again and again.
-local equinox_path = vim.split(vim.fn.glob(vim.fn.stdpath("data") .. "/mason/packages/jdtls/plugins/*jar"), "\n")
-local equinox_launcher = ""
-
-for _, file in pairs(equinox_path) do
-  if file:match("launcher_") then
-    equinox_launcher = file
-    break
-  end
 end
 
 WORKSPACE_PATH = vim.fn.stdpath("data") .. "/workspace/"
 --WORKSPACE_PATH = vim.fn.stdpath("data")
-local SYSTEM = "linux"
-if vim.fn.has("mac") == 1 then
-  SYSTEM = "mac"
-end
 
-local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
+local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle", "build.gradle.kts", "settings.gradle.kts" }
 
-local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+local root_dir = require("jdtls.setup").find_root(root_markers)
+local resolved_root_dir = vim.uv.fs_realpath(root_dir or vim.fn.getcwd()) or root_dir or vim.fn.getcwd()
+local workspace_name = resolved_root_dir:gsub("[/\\:]", "_")
 
-local workspace_dir = WORKSPACE_PATH .. project_name
+local workspace_dir = WORKSPACE_PATH .. workspace_name
 
 local config = {
   cmd = {
-    -- 💀
-    "java", -- or '/path/to/java17_or_newer/bin/java'
-    -- depends on if `java` is in your $PATH env variable and if it points to the right version.
-
+    java_runtime.java_executable,
     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
     "-Dosgi.bundles.defaultStartLevel=4",
     "-Declipse.product=org.eclipse.jdt.ls.core.product",
     "-Dlog.protocol=true",
     "-Dlog.level=ALL",
-    --"-javaagent:" .. lombok_path .. "lombok.jar",
-    "-javaagent:" .. lombok_jar,
+    "-javaagent:" .. java_runtime.lombok_jar,
     "-Xms1g",
     "--add-modules=ALL-SYSTEM",
     "--add-opens",
     "java.base/java.util=ALL-UNNAMED",
     "--add-opens",
     "java.base/java.lang=ALL-UNNAMED",
-    -- 💀
     "-jar",
-    equinox_launcher,
-    -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
-    -- Must point to the                                                     Change this to
-    -- eclipse.jdt.ls installation                                           the actual version
-    -- 💀
+    java_runtime.equinox_launcher,
     "-configuration",
-    jdtls_path .. "config_" .. SYSTEM,
-
-    -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
-    -- Must point to the                      Change to one of `linux`, `win` or `mac`
-    -- eclipse.jdt.ls installation            Depending on your system.
-
+    java_runtime.paths.jdtls_config,
     "-data",
     workspace_dir,
   },
@@ -210,10 +154,7 @@ local config = {
   -- 💀
   -- This is the default if not provided, you can remove it. Or adjust as needed.
   -- One dedicated LSP server & client will be started per unique root_dir
-  root_dir = require("jdtls.setup").find_root(root_markers),
-  init_options = {
-    bundles = bundles,
-  },
+  root_dir = root_dir,
   settings = {
     eclipse = {
       downloadSources = true,
@@ -244,6 +185,12 @@ local config = {
     allow_incremental_sync = true,
   },
 }
+
+if java_runtime.bundles_ready then
+  config.init_options = {
+    bundles = java_runtime.bundles,
+  }
+end
 
 --local keymap = vim.keymap.set
 --

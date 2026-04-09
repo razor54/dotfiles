@@ -1,3 +1,10 @@
+local java_mason_install_intent = {
+  lsp = { "jdtls" },
+  runtime = { "java-debug-adapter", "java-test", "lombok-nightly" },
+}
+
+vim.g.java_mason_install_intent = vim.deepcopy(java_mason_install_intent)
+
 return {
   {
     "mason-org/mason.nvim",
@@ -14,7 +21,7 @@ return {
     "mason-org/mason-lspconfig.nvim",
     dependencies = { "mason-org/mason.nvim" },
     opts = {
-      ensure_installed = {
+      ensure_installed = vim.list_extend(vim.deepcopy(java_mason_install_intent.lsp), {
         "gopls",
         "ts_ls",
         "terraformls",
@@ -26,7 +33,7 @@ return {
         "jsonls",
         -- "csharp_ls",
         -- "roslyn", -- Apparently we have to install this manually:w
-      },
+      }),
       automatic_enable = {
         exclude = { "jdtls" }, -- Exclude servers you want manual control
       },
@@ -41,7 +48,7 @@ return {
       -- ensure the java debug adapter is installed
       require("mason-nvim-dap").setup({
         -- TODO: Apparently this is not installing automatically
-        ensure_installed = { "java-debug-adapter", "java-test", "delve", "lombok-nightly", "go-debug-adapter", "delve" },
+        ensure_installed = vim.list_extend(vim.deepcopy(java_mason_install_intent.runtime), { "delve", "go-debug-adapter" }),
         automatic_installation = true,
         handlers = {
           --java = function(source_name)
