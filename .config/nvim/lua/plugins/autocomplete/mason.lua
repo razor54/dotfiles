@@ -3,6 +3,10 @@ local java_mason_install_intent = {
   runtime = { "java-debug-adapter", "java-test", "lombok-nightly" },
 }
 
+local mason_lsp_servers = vim.tbl_filter(function(server_name)
+  return server_name ~= "jdtls"
+end, vim.deepcopy(java_mason_install_intent.lsp))
+
 vim.g.java_mason_install_intent = vim.deepcopy(java_mason_install_intent)
 
 return {
@@ -21,7 +25,7 @@ return {
     "mason-org/mason-lspconfig.nvim",
     dependencies = { "mason-org/mason.nvim" },
     opts = {
-      ensure_installed = vim.list_extend(vim.deepcopy(java_mason_install_intent.lsp), {
+      ensure_installed = vim.list_extend(mason_lsp_servers, {
         "gopls",
         "ts_ls",
         "terraformls",
