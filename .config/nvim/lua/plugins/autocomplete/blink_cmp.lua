@@ -1,9 +1,30 @@
+local copilot_toggle_var = "blink_copilot_enabled"
+
+local function is_copilot_available()
+  if vim.g[copilot_toggle_var] == false then
+    return false
+  end
+
+  local ok, copilot_client = pcall(require, "copilot.client")
+  if not ok then
+    return false
+  end
+
+  local client = type(copilot_client.get) == "function" and copilot_client.get() or nil
+  return client ~= nil and copilot_client.initialized == true
+end
+
 return {
   "saghen/blink.cmp",
   lazy = true,
   --event = { "InsertEnter" },
   event = { "LspAttach" },
   --optional = true, -- todo: maybe just remove this
+  init = function()
+    if vim.g[copilot_toggle_var] == nil then
+      vim.g[copilot_toggle_var] = true
+    end
+  end,
   dependencies = {
     { "L3MON4D3/LuaSnip", version = "v2.*" },
     --"rafamadriz/friendly-snippets",
@@ -75,6 +96,9 @@ return {
         copilot = {
           name = "copilot",
           module = "blink-cmp-copilot",
+          enabled = function()
+            return is_copilot_available()
+          end,
           score_offset = 100,
           async = true,
         },
