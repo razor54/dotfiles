@@ -95,3 +95,26 @@ set("n", "<leader>tf", function()
   vim.g.autoformat = not vim.g.autoformat
   vim.cmd('echo "Autoformat ' .. (vim.g.autoformat and "true" or "false") .. '"')
 end, { desc = "Toggle format on save" })
+
+set("n", "<leader>tc", function()
+  vim.g.blink_copilot_enabled = vim.g.blink_copilot_enabled == nil and false or not vim.g.blink_copilot_enabled
+
+  local ok, blink = pcall(require, "blink.cmp")
+  if ok then
+    if type(blink.cancel) == "function" then
+      blink.cancel()
+    elseif type(blink.hide) == "function" then
+      blink.hide()
+    end
+
+    if type(blink.reload) == "function" then
+      blink.reload("copilot")
+    end
+  end
+
+  vim.notify(
+    "Blink Copilot completions " .. (vim.g.blink_copilot_enabled and "enabled" or "disabled"),
+    vim.log.levels.INFO,
+    { title = "Blink" }
+  )
+end, { desc = "Toggle Copilot completions" })

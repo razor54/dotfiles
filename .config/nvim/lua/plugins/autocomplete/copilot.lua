@@ -1,5 +1,6 @@
 return {
   "zbirenbaum/copilot.lua",
+  event = { "BufReadPost", "BufNewFile" },
   cmd = "Copilot",
   dependencies = {
     "AndreM222/copilot-lualine",

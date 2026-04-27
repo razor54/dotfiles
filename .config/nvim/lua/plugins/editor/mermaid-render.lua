@@ -20,8 +20,65 @@ return {
     max_width_window_percentage = 80,
   },
   config = function(_, opts)
-    local image = require("image")
-    image.setup(opts)
+    local function terminal_ui_ready()
+      local uis = vim.api.nvim_list_uis()
+      if #uis == 0 then
+        return false
+      end
+
+      local ui = uis[1]
+      return type(ui.width) == "number"
+        and type(ui.height) == "number"
+        and ui.width > 0
+        and ui.height > 0
+    end
+
+    local function backend_ready(backend)
+      if backend ~= "kitty" then
+        return true
+      end
+
+      local term = vim.env.TERM or ""
+      local term_program = vim.env.TERM_PROGRAM or ""
+
+      return vim.env.KITTY_WINDOW_ID ~= nil
+        or term_program == "WezTerm"
+        or term:match("kitty") ~= nil
+    end
+
+    local function render_ready()
+      if not terminal_ui_ready() then
+        return false
+      end
+
+      if vim.fn.executable("mmdc") ~= 1 then
+        return false
+      end
+
+      if opts.processor == "magick_cli" and vim.fn.executable("magick") ~= 1 then
+        return false
+      end
+
+      if not backend_ready(opts.backend) then
+        return false
+      end
+
+      return true
+    end
+
+    if not render_ready() then
+      return
+    end
+
+    local ok, image = pcall(require, "image")
+    if not ok then
+      return
+    end
+
+    local setup_ok = pcall(image.setup, opts)
+    if not setup_ok then
+      return
+    end
 
     local ns_conceal = vim.api.nvim_create_namespace("MermaidRenderConceal")
 
