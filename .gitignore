@@ -1,6 +1,13 @@
 # Secrets - never commit
 .secrets
 .env.local
+.pi/agent/auth.json
+
+# Pi runtime/cache - never commit
+.pi/agent/sessions/
+.pi/agent/git/
+.pi/agent/*.bak*
+.pi/agent/**/*.bak*
 
 # macOS
 .DS_Store

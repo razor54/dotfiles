@@ -79,6 +79,13 @@ link_file "$DOTFILES_DIR/.claude/settings.local.json"  "$HOME_DIR/.claude/settin
 link_file "$DOTFILES_DIR/.claude/CLAUDE.md"            "$HOME_DIR/.claude/CLAUDE.md"
 link_file "$DOTFILES_DIR/.config/.mcp.json"            "$HOME_DIR/.claude/.mcp.json"
 
+# ── ~/.pi ─────────────────────────────────────────────────────
+echo ""
+echo "~/.pi:"
+link_file "$DOTFILES_DIR/.pi/agent/settings.json"  "$HOME_DIR/.pi/agent/settings.json"
+link_file "$DOTFILES_DIR/.pi/agent/extensions/pi-rtk-optimizer/config.json"  "$HOME_DIR/.pi/agent/extensions/pi-rtk-optimizer/config.json"
+link_file "$DOTFILES_DIR/.pi/agent/bin/rtk"  "$HOME_DIR/.pi/agent/bin/rtk"
+
 # ── Claude MCP servers ────────────────────────────────────────
 echo ""
 echo "Claude MCP servers:"

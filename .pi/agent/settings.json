@@ -1,0 +1,59 @@
+{
+  "lastChangelogVersion": "0.74.0",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "high",
+  "hideThinkingBlock": false,
+  "compaction": {
+    "enabled": false,
+    "keepRecentTokens": 80000
+  },
+  "packages": [
+    "npm:pi-rtk-optimizer",
+    "git:github.com/elpapi42/pi-fork",
+    "git:github.com/sanathks/pi-tokyo-night-storm",
+    "git:git@github.com:elpapi42/pi-codex-usage",
+    "git:git@github.com:elpapi42/pi-codemapper.git",
+    "git:github.com/elpapi42/pi-minimal-subagent",
+    "npm:pi-observational-memory"
+  ],
+  "quietStartup": true,
+  "pi-minimal-subagent": {
+    "model": null,
+    "extensions": [
+      "git:git@github.com:elpapi42/pi-codemapper.git",
+      "npm:pi-rtk-optimizer"
+    ]
+  },
+  "observational-memory": {
+    "observationThresholdTokens": 10000,
+    "compactionThresholdTokens": 160000,
+    "reflectionThresholdTokens": 40000,
+    "compactionModel": {
+      "provider": "openai-codex",
+      "id": "gpt-5.5"
+    }
+  },
+  "pi-fork": {
+    "environment": {
+      "PI_OBSERVATIONAL_MEMORY_PASSIVE": 1
+    },
+    "costFooter": true,
+    "extensions": [
+      "git:git@github.com:elpapi42/pi-codemapper.git",
+      "npm:pi-rtk-optimizer",
+      "git:github.com/elpapi42/pi-observational-memory"
+    ]
+  },
+  "enabledModels": [
+    "openai-codex/gpt-5.5",
+    "anthropic/claude-opus-4-7",
+    "openrouter/z-ai/glm-5.1",
+    "openrouter/minimax/minimax-m2.7"
+  ],
+  "theme": "tokyo-night-storm",
+  "pi-codex-usage": {
+    "usageMode": "left",
+    "refreshWindow": "7d"
+  }
+}
