@@ -8,16 +8,28 @@ return {
     keys = "<Esc>",
   },
   config = function()
+    local function esc_with_blink_dismiss()
+      local ok, blink = pcall(require, "blink.cmp")
+      if ok then
+        blink.cancel()
+        -- catch async completions triggered by the 'j' keystroke resolving late
+        vim.schedule(function()
+          if blink.is_visible() then
+            blink.cancel()
+          end
+        end)
+      end
+      return "<Esc>"
+    end
+
     require("better_escape").setup({
-      timeout = vim.o.timeoutlen, -- after `timeout` passes, you can press the escape key and the plugin will ignore it
-      default_mappings = true, -- setting this to false removes all the default mappings
+      timeout = vim.o.timeoutlen,
+      default_mappings = true,
       mappings = {
-        -- i for insert
         i = {
           j = {
-            -- These can all also be functions
-            k = "<Esc>",
-            j = "<Esc>",
+            k = esc_with_blink_dismiss,
+            j = esc_with_blink_dismiss,
           },
         },
         c = {

@@ -198,6 +198,20 @@
       "url": "https://mcp.datadoghq.eu/api/unstable/mcp-server/mcp",
       "enabled": true,
       "type": "remote"
+    },
+    "azure-devops": {
+      "command": [
+        "npx",
+        "-y",
+        "@azure-devops/mcp",
+        "Yotta-Alloy",
+        "-d",
+        "core",
+        "work",
+        "work-items"
+      ],
+      "enabled": false,
+      "type": "local"
     }
   }
 }

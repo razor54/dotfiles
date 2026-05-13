@@ -143,6 +143,10 @@ alias lta='lt -a'
 
 # opencode
 alias oc='CLAUDE_PROXY_PASSTHROUGH=1 opencode'
+alias opencode='CLAUDE_PROXY_PASSTHROUGH=1 opencode'
+
+# claude 
+alias claude='claude --enable-auto-mode'
 
 # clean clipboard CRLF (browsers copy with \r\n, terminals expect \n)
 alias clipfix='pbpaste | tr -d "\r" | pbcopy && echo "clipboard cleaned"'

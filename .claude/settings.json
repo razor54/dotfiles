@@ -1,9 +1,16 @@
 {
-  "attribution": {
-    "commit": "Lovingly crafted by human hands — no silicon was involved",
-    "pr": "100% organic, free-range, human-written code — no AIs were harmed or consulted"
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_ENABLE_AUTO_MODE": "1"
   },
-  "model": "opus[1m]",
+  "attribution": {
+    "commit": "Co-authored with AI",
+    "pr": "Human-directed, AI-assisted development"
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "claude-opus-4-6[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -29,14 +36,14 @@
     ],
     "PostToolUse": [
       {
+        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task",
         "hooks": [
           {
             "type": "command",
             "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-context-monitor.js\"",
             "timeout": 10
           }
-        ],
-        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task"
+        ]
       }
     ]
   },
@@ -46,12 +53,13 @@
   },
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
-    "claude-mem@thedotmack": true,
+    "claude-mem@thedotmack": false,
     "lua-lsp@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "jdtls-lsp@claude-plugins-official": true
+    "jdtls-lsp@claude-plugins-official": true,
+    "caveman@caveman": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
@@ -65,11 +73,14 @@
         "source": "github",
         "repo": "thedotmack/claude-mem"
       }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
     }
   },
   "effortLevel": "high",
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_ENABLE_AUTO_MODE": "1"
-  }
+  "skipAutoPermissionPrompt": true
 }
