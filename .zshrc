@@ -90,6 +90,12 @@ source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 source "$BREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
 
+# --- Atuin (Ctrl-R only; leave Up arrow to history-substring-search) ---
+command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh --disable-up-arrow)"
+
+# --- Zoxide (smart cd → use `z` / `zi`, no cd alias) ---
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
@@ -124,8 +130,9 @@ fi
 
 # search history using Up and Down keys
 # >>> up arrow | down arrow
-bindkey "^[[A" history-beginning-search-backward
-bindkey "^[[B" history-beginning-search-forward
+# Disabled: overrides zsh-history-substring-search binds set above. Re-enable to switch to beginning-search.
+# bindkey "^[[A" history-beginning-search-backward
+# bindkey "^[[B" history-beginning-search-forward
 
 # jump to the start and end of the command line
 # >>> CTRL + A | CTRL + E

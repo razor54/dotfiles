@@ -10,7 +10,6 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "claude-opus-4-6[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -18,7 +17,37 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-prompt-guard.js\"",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/andregaudencio/.claude/hooks/gsd-prompt-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/andregaudencio/.claude/hooks/gsd-read-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/andregaudencio/.claude/hooks/gsd-workflow-guard.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/andregaudencio/.claude/hooks/gsd-validate-commit.sh\"",
             "timeout": 5
           }
         ]
@@ -29,7 +58,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-check-update.js\""
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/andregaudencio/.claude/hooks/gsd-check-update.js\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/andregaudencio/.claude/hooks/gsd-session-state.sh\""
           }
         ]
       }
@@ -40,8 +77,28 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"/Users/andregaudencio/.claude/hooks/gsd-context-monitor.js\"",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/andregaudencio/.claude/hooks/gsd-context-monitor.js\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/opt/homebrew/bin/node\" \"/Users/andregaudencio/.claude/hooks/gsd-read-injection-scanner.js\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/andregaudencio/.claude/hooks/gsd-phase-boundary.sh\"",
+            "timeout": 5
           }
         ]
       }
@@ -82,5 +139,7 @@
     }
   },
   "effortLevel": "high",
-  "skipAutoPermissionPrompt": true
+  "teammateMode": "tmux",
+  "skipAutoPermissionPrompt": true,
+  "model": "sonnet"
 }
