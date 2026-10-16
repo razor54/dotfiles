@@ -70,6 +70,9 @@ fi
 # --- Additional PATH additions ---
 export PATH="$HOME/.local/bin:/usr/local/sbin:/usr/local/opt/python/libexec/bin:$PATH"
 
+# --- XDG Base Directory (some tools rely on this being set) ---
+export XDG_DATA_DIRS="/usr/local/share:$HOME/.local/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+
 # --- Homebrew Cask Options ---
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 

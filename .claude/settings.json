@@ -10,6 +10,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "hooks": {
     "PreToolUse": [
       {
@@ -69,6 +70,16 @@
             "command": "bash \"/Users/andregaudencio/.claude/hooks/gsd-session-state.sh\""
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/andregaudencio/.claude/hooks/git-sync.sh\"",
+            "timeout": 30,
+            "statusMessage": "Syncing git..."
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -116,7 +127,9 @@
     "typescript-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "jdtls-lsp@claude-plugins-official": true,
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "swift-lsp@claude-plugins-official": true,
+    "datadog@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
@@ -139,7 +152,8 @@
     }
   },
   "effortLevel": "high",
+  "advisorModel": "opus",
+  "tui": "default",
   "teammateMode": "tmux",
-  "skipAutoPermissionPrompt": true,
-  "model": "sonnet"
+  "skipAutoPermissionPrompt": true
 }

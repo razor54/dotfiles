@@ -35,7 +35,13 @@
       "ToolSearch",
       "ReadMcpResourceTool",
       "ListMcpResourcesTool",
-      "mcp__*"
+      "mcp__code-search__*",
+      "mcp__memory__*",
+      "mcp__fetch__*",
+      "mcp__terraform__*",
+      "mcp__opentofu__*",
+      "mcp__atlassian__*",
+      "mcp__aws-mcp__*"
     ],
     "deny": [
       "Bash(rm -rf:*)",
